@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-class SimpleNeo4jKG:
+class neo4j_processor:
     def __init__(self):
         # Neo4j connection
         self.uri = os.getenv('NEO4J_URI', 'bolt://localhost:7687')
@@ -35,7 +35,6 @@ class SimpleNeo4jKG:
             # add elements if provided
             if elements:
                 for element in elements:
-                    # NOTE: Assuming 'id' is a unique property you want to use for identification
                     element_id = element.get('id')
                     if not element_id:
                         print("Warning: Skipping element without a valid 'id'.")
@@ -59,7 +58,6 @@ class SimpleNeo4jKG:
     
     def search(self, query_text, limit=5):
         with self.driver.session() as session:
-            # For now, use simple text search since GDS plugin isn't available
             search_query = """
             MATCH (p:Page)
             WHERE p.content CONTAINS $query_text
@@ -72,9 +70,6 @@ class SimpleNeo4jKG:
             return [dict(record) for record in result]
 
     def find_shortest_path(self, start_id, end_id):
-        """
-        Finds the shortest path between any two nodes given their identifying properties.
-        """
         query = """
         MATCH (start)
         WHERE (start:Page AND start.url = $start_id) OR (start:Element AND start.id = $start_id)
@@ -98,26 +93,23 @@ class SimpleNeo4jKG:
     def close(self):
         self.driver.close()
 
-# --- Example of how to use the new method ---
 
 if __name__ == '__main__':
-    kg = SimpleNeo4jKG()
+    kg = neo4j_processor()
 
-    # Start node is a Page, identified by its url
     start_id = "http://shop.com/homepage"
-    # End node is an Element, identified by its id property
     end_id = "btn-buy-p001"
 
     print(f"Searching for shortest path from '{start_id}' to '{end_id}'...")
     path_nodes = kg.find_shortest_path(start_id, end_id)
 
     if path_nodes:
-        print("Shortest path found! 🎉")
+        print("Shortest path found!")
         for i, node in enumerate(path_nodes):
             labels = list(node.labels) if hasattr(node, 'labels') else ['No Label']
             node_id = node.get('url') or node.get('id') or node.get('name') or 'N/A'
             print(f"  Step {i+1}: {node_id} ({labels[0]})")
     else:
-        print("No path was found between the specified nodes. 😢")
+        print("No path was found between the specified nodes.")
 
     kg.close()
