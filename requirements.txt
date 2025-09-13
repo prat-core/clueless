@@ -1,0 +1,7 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-SocketIO==5.3.6
+requests==2.31.0
+neo4j==5.15.0
+sentence-transformers==2.2.2
+numpy==1.24.3
