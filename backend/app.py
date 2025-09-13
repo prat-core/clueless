@@ -84,13 +84,13 @@ def user_speech_input():
 
 def process_with_wispr(audio_data, audio_format):
     try:
-        # Prepare audio data for Wispr API
+        # prepare audio data for wispr api
         if isinstance(audio_data, bytes):
             audio_base64 = base64.b64encode(audio_data).decode('utf-8')
         else:
             audio_base64 = audio_data
         
-        # Wispr API request
+        # wispr api request
         headers = {
             'Authorization': f'Bearer {WISPR_API_KEY}',
             'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ def process_with_wispr(audio_data, audio_format):
         payload = {
             'audio': audio_base64,
             'format': audio_format,
-            'stream': False  # Set to True for real-time streaming
+            'stream': False
         }
         
         response = requests.post(
@@ -129,7 +129,7 @@ def process_with_wispr(audio_data, audio_format):
 
 def process_speech_fallback():
     try:
-        # Check if audio file is present
+        # check if audio file is present
         if 'audio' not in request.files:
             return jsonify({'error': 'No audio file provided'}), 400
         
@@ -138,19 +138,19 @@ def process_speech_fallback():
         if audio_file.filename == '':
             return jsonify({'error': 'No audio file selected'}), 400
         
-        # Save audio file temporarily
+        # save audio file temporarily
         with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
             audio_file.save(temp_file.name)
             
             try:
-                # Use speech recognition to convert speech to text
+                # use speech recognition to convert speech to text
                 with sr.AudioFile(temp_file.name) as source:
-                    # Adjust for ambient noise
+                    # adjust for ambient noise
                     recognizer.adjust_for_ambient_noise(source)
-                    # Record the audio
+                    # record the audio
                     audio_data = recognizer.record(source)
                     
-                    # Recognize speech using Google's service
+                    # recognize speech using google's service
                     user_speech_text = recognizer.recognize_google(audio_data)
                 
                 # Process the speech input here
@@ -168,7 +168,7 @@ def process_speech_fallback():
             except sr.RequestError as e:
                 return jsonify({'error': f'Speech recognition service error: {str(e)}'}), 500
             finally:
-                # Clean up temporary file
+                # clean up temporary file
                 os.unlink(temp_file.name)
                 
     except Exception as e:
@@ -188,5 +188,4 @@ def health_check():
     return jsonify({'status': 'healthy', 'message': 'Flask API is running'}), 200
 
 if __name__ == '__main__':
-    # Run with SocketIO support for real-time features
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
