@@ -6,26 +6,27 @@ from flask import request, jsonify
 import speech_recognition as sr
 import tempfile
 import base64
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 
 app = flask.Flask(__name__)
 cors = flask_cors.CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Initialize speech recognizer
+# initialize speech recognizer
 recognizer = sr.Recognizer()
 
-# Wispr Flow API configuration
+# wispr flow api configuration
 WISPR_API_KEY = os.getenv('WISPR_API_KEY', '')
 WISPR_API_URL = "https://api.wisprflow.ai/v1"
+
+# claude api configuration
+CLAUDE_API_KEY = os.getenv('CLAUDE_API_KEY', '')
+CLAUDE_API_URL = "https://api.anthropic.com/v1"
+
 
 # flask API routes
 @app.route('/user_text_input', methods=['POST'])
 def user_text_input():
-    """
-    Handle text input from user.
-    Expects JSON payload with 'text' field.
-    """
     try:
         data = request.get_json()
         if not data or 'text' not in data:
@@ -33,8 +34,7 @@ def user_text_input():
         
         user_text = data['text']
         
-        # Process the text input here
-        # For now, just return the received text
+        # added logs for debugging
         response = {
             'message': 'Text input received successfully',
             'user_input': user_text,
@@ -50,7 +50,6 @@ def user_text_input():
 @app.route('/user_speech_input', methods=['POST'])
 def user_speech_input():
     try:
-        # check if we have wispr api key
         if not WISPR_API_KEY:
             # fallback to google speech recognition if no wispr api key
             return process_speech_fallback()
