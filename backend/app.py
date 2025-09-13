@@ -7,6 +7,7 @@ import speech_recognition as sr
 import tempfile
 import base64
 from flask_socketio import SocketIO
+from backend.ai.neo4j_processor import SimpleNeo4jKG
 
 app = flask.Flask(__name__)
 cors = flask_cors.CORS(app)
@@ -22,6 +23,9 @@ WISPR_API_URL = "https://api.wisprflow.ai/v1"
 # claude api configuration
 CLAUDE_API_KEY = os.getenv('CLAUDE_API_KEY', '')
 CLAUDE_API_URL = "https://api.anthropic.com/v1"
+
+# neo4j knowledge graph
+kg = SimpleNeo4jKG()
 
 
 # flask API routes
@@ -180,6 +184,40 @@ def get_wispr_config():
         'api_url': WISPR_API_URL,
         'fallback_available': True
     })
+
+# knowledge graph endpoints
+@app.route('/kg/add', methods=['POST'])
+def add_to_kg():
+    try:
+        data = request.get_json()
+        url = data.get('url')
+        content = data.get('content')
+        elements = data.get('elements', [])
+        
+        if not url or not content:
+            return jsonify({'error': 'URL and content are required'}), 400
+        
+        kg.add_data(url, content, elements)
+        return jsonify({'message': 'Data added to knowledge graph successfully'}), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'Error adding to knowledge graph: {str(e)}'}), 500
+
+@app.route('/kg/search', methods=['POST'])
+def search_kg():
+    try:
+        data = request.get_json()
+        query = data.get('query')
+        limit = data.get('limit', 5)
+        
+        if not query:
+            return jsonify({'error': 'Query is required'}), 400
+        
+        results = kg.search(query, limit)
+        return jsonify({'results': results}), 200
+        
+    except Exception as e:
+        return jsonify({'error': f'Error searching knowledge graph: {str(e)}'}), 500
 
 # just to check if the flask server is running
 @app.route('/health', methods=['GET'])
