@@ -400,33 +400,46 @@ const Content: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual backend API call
-      // const response = await fetch('/api/generate-guide', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     prompt: userMessage,
-      //     currentUrl: window.location.href,
-      //   }),
-      // });
-      // 
-      // if (!response.ok) {
-      //   throw new Error('Failed to generate guide');
+      // Call the Flask backend API
+      const response = await fetch('http://localhost:5001/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          use_retrieval: true,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.status === 'error') {
+        throw new Error(data.error || 'Unknown error from backend');
+      }
+      
+      // Add assistant response to chat
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: data.response
+      }]);
+      
+      // For now, we'll parse the response to extract HTML elements or guide steps
+      // This is a placeholder - you might want to enhance this based on your specific needs
+      // const htmlList = extractHtmlFromResponse(data.response);
+      // if (htmlList.length > 0) {
+      //   await startGuide(htmlList);
       // }
-      // 
-      // const data = await response.json();
-      // const htmlList = data.steps || [];
-
-      // Temporary placeholder - remove when backend is ready
-      throw new Error('Backend API not yet implemented');
 
     } catch (error) {
       console.error('Guide generation error:', error);
       setChatMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Backend API is not yet connected. Please implement the API endpoint to generate guides.'
+        content: `Sorry, I encountered an error: ${error.message}. Please make sure the backend server is running on localhost:5001.`
       }]);
     } finally {
       setIsLoading(false);
