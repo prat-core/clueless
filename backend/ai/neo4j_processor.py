@@ -49,18 +49,16 @@ class SimpleNeo4jKG:
     
     def search(self, query_text, limit=5):
         with self.driver.session() as session:
-            query_vector = self.embedding_model.encode(query_text).tolist()
-            
+            # For now, use simple text search since GDS plugin isn't available
             search_query = """
             MATCH (p:Page)
-            WHERE p.vector IS NOT NULL
-            WITH p, gds.similarity.cosine(p.vector, $query_vector) as similarity
-            ORDER BY similarity DESC
+            WHERE p.content CONTAINS $query_text
+            RETURN p.url as url, p.content as content, 1.0 as similarity
+            ORDER BY p.content
             LIMIT $limit
-            RETURN p.url as url, p.content as content, similarity
             """
             
-            result = session.run(search_query, query_vector=query_vector, limit=limit)
+            result = session.run(search_query, query_text=query_text, limit=limit)
             return [dict(record) for record in result]
     
     def close(self):
