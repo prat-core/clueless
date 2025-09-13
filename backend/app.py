@@ -41,57 +41,11 @@ def user_text_input():
     except Exception as e:
         return jsonify({'error': f'Error processing text input: {str(e)}'}), 500
 
-# knowledge graph endpoints
-@app.route('/kg/add', methods=['POST'])
-def add_to_kg():
-    if not NEO4J_AVAILABLE:
-        return jsonify({'error': 'Neo4j not available. Please install and start Neo4j.'}), 500
-    
-    try:
-        data = request.get_json()
-        url = data.get('url')
-        content = data.get('content')
-        elements = data.get('elements', [])
-        
-        if not url or not content:
-            return jsonify({'error': 'URL and content are required'}), 400
-        
-        kg.add_data(url, content, elements)
-        return jsonify({'message': 'Data added to knowledge graph successfully'}), 200
-        
-    except Exception as e:
-        return jsonify({'error': f'Error adding to knowledge graph: {str(e)}'}), 500
-
-@app.route('/kg/search', methods=['POST'])
-def search_kg():
-    if not NEO4J_AVAILABLE:
-        return jsonify({'error': 'Neo4j not available. Please install and start Neo4j.'}), 500
-    
-    try:
-        data = request.get_json()
-        query = data.get('query')
-        limit = data.get('limit', 5)
-        
-        if not query:
-            return jsonify({'error': 'Query is required'}), 400
-        
-        results = kg.search(query, limit)
-        return jsonify({'results': results}), 200
-        
-    except Exception as e:
-        return jsonify({'error': f'Error searching knowledge graph: {str(e)}'}), 500
-
-@app.route('/kg/status', methods=['GET'])
-def kg_status():
-    return jsonify({
-        'neo4j_available': NEO4J_AVAILABLE,
-        'message': 'Neo4j is available' if NEO4J_AVAILABLE else 'Neo4j not available'
-    })
-
 # just to check if the flask server is running
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status': 'healthy', 'message': 'Flask API is running'}), 200
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
