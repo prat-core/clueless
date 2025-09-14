@@ -11,8 +11,8 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 try:
-    from ai.neo4j_processor import SimpleNeo4jKG
-    kg = SimpleNeo4jKG()
+    from ai.neo4j_processor import neo4j_processor
+    kg = neo4j_processor()
     NEO4J_AVAILABLE = True
 except Exception as e:
     print(f"⚠️  Neo4j not available: {e}")
