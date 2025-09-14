@@ -408,3 +408,340 @@ class WebCrawler:
             })
 
         return elements
+
+    def generate_embedding(self, text):
+        """
+        Generate text embedding using OpenAI API.
+
+        Args:
+            text (str): Text content to embed
+
+        Returns:
+            list: Embedding vector
+        """
+        if not text or not text.strip():
+            return []
+
+        try:
+            # Clean and truncate text if needed
+            cleaned_text = text.strip()
+            # OpenAI has token limits, roughly 1 token = 4 chars
+            max_chars = 8000 * 4  # Safe limit for text-embedding-3-small
+            if len(cleaned_text) > max_chars:
+                cleaned_text = cleaned_text[:max_chars]
+
+            response = self.openai_client.embeddings.create(
+                model="text-embedding-3-small",
+                input=cleaned_text
+            )
+
+            embedding = response.data[0].embedding
+            return embedding
+
+        except Exception as e:
+            print(f"Error generating embedding: {str(e)}")
+            return []
+
+    def is_valid_url(self, url):
+        """Check if URL is valid and should be crawled."""
+        try:
+            parsed = urlparse(url)
+            # Must have scheme and netloc
+            if not parsed.scheme or not parsed.netloc:
+                return False
+            # Only http/https
+            if parsed.scheme not in ['http', 'https']:
+                return False
+            return True
+        except:
+            return False
+
+    def should_crawl(self, url, current_depth, max_depth):
+        """
+        Determine if a URL should be crawled based on rules.
+
+        Args:
+            url (str): URL to check
+            current_depth (int): Current crawl depth
+            max_depth (int): Maximum allowed depth
+
+        Returns:
+            bool: True if URL should be crawled
+        """
+        # Check depth limit
+        if current_depth >= max_depth:
+            return False
+
+        # Check if already visited or failed
+        if url in self.visited_urls or url in self.failed_urls:
+            return False
+
+        # Check if valid URL
+        if not self.is_valid_url(url):
+            return False
+
+        # Check domain boundary
+        url_domain = self.extract_domain(url)
+        if url_domain != self.base_domain:
+            return False
+
+        # Skip common non-content URLs
+        skip_patterns = [
+            '#',  # Anchors
+            'javascript:',  # JavaScript links
+            'mailto:',  # Email links
+            '.pdf', '.doc', '.docx', '.xls', '.xlsx',  # Documents
+            '.jpg', '.jpeg', '.png', '.gif', '.svg',  # Images
+            '.mp4', '.avi', '.mov',  # Videos
+            '.zip', '.tar', '.gz', '.rar'  # Archives
+        ]
+
+        url_lower = url.lower()
+        for pattern in skip_patterns:
+            if pattern in url_lower:
+                return False
+
+        return True
+
+    def normalize_url(self, url):
+        """Normalize URL for consistency."""
+        try:
+            parsed = urlparse(url.lower())
+            # Remove fragment
+            normalized = urlunparse((
+                parsed.scheme,
+                parsed.netloc,
+                parsed.path.rstrip('/'),
+                parsed.params,
+                parsed.query,
+                ''  # Remove fragment
+            ))
+            return normalized
+        except:
+            return url
+
+    def store_to_neo4j(self, page_data, links_data):
+        """
+        Store page data and relationships to Neo4j.
+
+        Args:
+            page_data (dict): Page information
+            links_data (list): List of links found on the page
+        """
+        try:
+            # Create or update the page node
+            with self.driver.session() as session:
+                # Store the main page
+                cypher_query = """
+                MERGE (p:Page {url: $url})
+                SET p.domain = $domain,
+                    p.path = $path,
+                    p.title = $title,
+                    p.meta_description = $meta_description,
+                    p.content_text = $content_text,
+                    p.content_vector = $content_vector,
+                    p.http_status = $http_status,
+                    p.response_time_ms = $response_time_ms,
+                    p.last_crawled = datetime(),
+                    p.content_length = $content_length,
+                    p.link_count = $link_count,
+                    p.image_count = $image_count
+                """
+
+                parsed_url = urlparse(page_data['url'])
+
+                session.run(cypher_query, {
+                    'url': page_data['url'],
+                    'domain': parsed_url.netloc,
+                    'path': parsed_url.path,
+                    'title': page_data.get('title', ''),
+                    'meta_description': page_data.get('meta_description', ''),
+                    'content_text': page_data.get('content_text', ''),
+                    'content_vector': page_data.get('content_vector', []),
+                    'http_status': page_data.get('http_status', 200),
+                    'response_time_ms': page_data.get('response_time_ms', 0),
+                    'content_length': page_data.get('content_length', 0),
+                    'link_count': page_data.get('link_count', 0),
+                    'image_count': page_data.get('image_count', 0)
+                })
+
+                # Create relationships for links
+                for link in links_data:
+                    link_url = link['url']
+
+                    if link['is_external']:
+                        # Create external link node and relationship
+                        cypher_external = """
+                        MATCH (from:Page {url: $from_url})
+                        MERGE (to:ExternalLink {url: $to_url})
+                        ON CREATE SET to.domain = $to_domain,
+                                     to.first_seen = datetime()
+                        MERGE (from)-[:LINKS_TO_EXTERNAL]->(to)
+                        """
+                        session.run(cypher_external, {
+                            'from_url': page_data['url'],
+                            'to_url': link_url,
+                            'to_domain': urlparse(link_url).netloc
+                        })
+                    else:
+                        # Create internal link relationship (node will be created when crawled)
+                        cypher_internal = """
+                        MATCH (from:Page {url: $from_url})
+                        MERGE (to:Page {url: $to_url})
+                        MERGE (from)-[:LINKS_TO]->(to)
+                        """
+                        session.run(cypher_internal, {
+                            'from_url': page_data['url'],
+                            'to_url': link_url
+                        })
+
+                print(f"Stored page data for: {page_data['url']}")
+
+        except Exception as e:
+            print(f"Error storing to Neo4j: {str(e)}")
+
+    def update_queue(self, new_urls, current_depth):
+        """
+        Add new URLs to the crawl queue.
+
+        Args:
+            new_urls (list): List of URLs to add
+            current_depth (int): Depth of the current page
+        """
+        next_depth = current_depth + 1
+
+        for url in new_urls:
+            normalized_url = self.normalize_url(url)
+
+            # Check if should add to queue
+            if normalized_url not in self.visited_urls and \
+               normalized_url not in self.failed_urls and \
+               normalized_url not in [item[0] for item in self.url_queue]:
+
+                self.url_queue.append((normalized_url, next_depth))
+
+    def crawl(self, max_pages=1000, max_depth=10):
+        """
+        Main crawling method that orchestrates the entire crawling process.
+
+        Args:
+            max_pages (int): Maximum number of pages to crawl
+            max_depth (int): Maximum depth to crawl
+
+        Returns:
+            dict: Crawl statistics
+        """
+        print(f"Starting crawl from: {self.base_url}")
+        print(f"Max pages: {max_pages}, Max depth: {max_depth}")
+
+        stats = {
+            'pages_crawled': 0,
+            'pages_failed': 0,
+            'total_links_found': 0,
+            'external_links_found': 0,
+            'start_time': time.time()
+        }
+
+        try:
+            while self.url_queue and stats['pages_crawled'] < max_pages:
+                # Get next URL from queue
+                current_url, current_depth = self.url_queue.popleft()
+
+                # Skip if shouldn't crawl
+                if not self.should_crawl(current_url, current_depth, max_depth):
+                    continue
+
+                # Mark as visited
+                self.visited_urls.add(current_url)
+
+                print(f"\nCrawling [{current_depth}/{max_depth}]: {current_url}")
+
+                # Fetch the page
+                page_response = self.fetch_page(current_url)
+
+                if page_response['error']:
+                    print(f"Failed to fetch: {page_response['error']}")
+                    self.failed_urls.add(current_url)
+                    stats['pages_failed'] += 1
+                    continue
+
+                # Parse the page
+                parsed_data = self.parse_page(
+                    page_response['html_content'],
+                    page_response['url']
+                )
+
+                # Generate embedding for content
+                embedding = []
+                if parsed_data['content_text']:
+                    embedding = self.generate_embedding(parsed_data['content_text'])
+
+                # Prepare page data for storage
+                page_data = {
+                    'url': page_response['url'],
+                    'title': parsed_data['title'],
+                    'meta_description': parsed_data['meta_description'],
+                    'content_text': parsed_data['content_text'][:5000],  # Limit for Neo4j
+                    'content_vector': embedding,
+                    'http_status': page_response['http_status'],
+                    'response_time_ms': page_response['response_time_ms'],
+                    'content_length': parsed_data['content_length'],
+                    'link_count': parsed_data['link_count'],
+                    'image_count': parsed_data['image_count']
+                }
+
+                # Store to Neo4j
+                self.store_to_neo4j(page_data, parsed_data['links'])
+
+                # Update statistics
+                stats['pages_crawled'] += 1
+                stats['total_links_found'] += len(parsed_data['links'])
+                stats['external_links_found'] += sum(
+                    1 for link in parsed_data['links'] if link['is_external']
+                )
+
+                # Add internal links to queue
+                internal_links = [
+                    link['url'] for link in parsed_data['links']
+                    if not link['is_external']
+                ]
+                self.update_queue(internal_links, current_depth)
+
+                # Progress update
+                if stats['pages_crawled'] % 10 == 0:
+                    elapsed = time.time() - stats['start_time']
+                    rate = stats['pages_crawled'] / elapsed if elapsed > 0 else 0
+                    print(f"\nProgress: {stats['pages_crawled']} pages crawled ({rate:.2f} pages/sec)")
+                    print(f"Queue size: {len(self.url_queue)}")
+
+                # Small delay to be respectful
+                time.sleep(0.5)
+
+        except KeyboardInterrupt:
+            print("\n\nCrawl interrupted by user")
+
+        except Exception as e:
+            print(f"\n\nCrawl error: {str(e)}")
+
+        finally:
+            # Clean up
+            if self.selenium_driver:
+                self.selenium_driver.quit()
+                print("Selenium driver closed")
+
+            # Final statistics
+            elapsed = time.time() - stats['start_time']
+            stats['elapsed_time'] = elapsed
+            stats['pages_per_second'] = stats['pages_crawled'] / elapsed if elapsed > 0 else 0
+
+            print("\n" + "="*50)
+            print("CRAWL COMPLETE")
+            print("="*50)
+            print(f"Pages crawled: {stats['pages_crawled']}")
+            print(f"Pages failed: {stats['pages_failed']}")
+            print(f"Total links found: {stats['total_links_found']}")
+            print(f"External links found: {stats['external_links_found']}")
+            print(f"Time elapsed: {elapsed:.2f} seconds")
+            print(f"Rate: {stats['pages_per_second']:.2f} pages/second")
+
+            return stats
