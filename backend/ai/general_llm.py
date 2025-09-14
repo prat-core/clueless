@@ -205,14 +205,22 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
                     'error': 'RAG tool initialization failed',
                     'tool_used': 'rag_tool'
                 }
-            response = rag_tool.process_query(user_query)
+            rag_response = rag_tool.process_query(user_query)
+            
+            # Extract the actual response text from the RAG tool response
+            response_text = rag_response.get('response', 'No response generated')
             
             return {
-                'response': response,
-                'status': 'success',
+                'response': response_text,
+                'status': rag_response.get('status', 'success'),
                 'tool_used': 'rag_tool',
                 'user_query': user_query,
-                'routing_timestamp': self._get_timestamp()
+                'routing_timestamp': self._get_timestamp(),
+                'rag_metadata': {
+                    'model': rag_response.get('model', 'unknown'),
+                    'context_used': rag_response.get('context_used', 0),
+                    'retrieval_used': rag_response.get('retrieval_used', False)
+                }
             }
             
         except Exception as e:

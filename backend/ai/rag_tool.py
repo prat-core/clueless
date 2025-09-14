@@ -292,7 +292,25 @@ class RAGTool:
             context = self.search_documents(query, k=6)
             
             if not context:
-                return "No relevant information found. Please make sure the vector database is populated with data."
+                # Provide a general AI response when no context is found
+                logger.info("No context found, providing general AI response")
+                messages = [
+                    {
+                        'role': 'system',
+                        'content': f"You are a helpful AI assistant. The user asked: '{query}'. Provide a helpful response based on your general knowledge. If this seems to be about a specific website or page, mention that you don't have access to the current page content but can help with general questions."
+                    },
+                    {
+                        'role': 'user',
+                        'content': query
+                    }
+                ]
+                
+                response = self.client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=messages,
+                )
+                
+                return response.choices[0].message.content
             
             # Format the prompt like your working code
             formatted_user_query = f"""
