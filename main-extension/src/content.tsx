@@ -112,30 +112,75 @@ function resolveHtmlStringsToElements(htmlList: string[]) {
     // 2) match by href (or anchor inside)
     const href = parsed.getAttribute("href") ?? parsed.querySelector("a")?.getAttribute("href");
     if (href) {
-      try {
-        const found = document.querySelector<HTMLElement>(`[href="${CSS.escape ? CSS.escape(href) : href}"]`) || document.querySelector<HTMLElement>(`a[href="${href}"]`);
-        if (found) {
-          console.log(`✅ Found element ${idx + 1} by href: ${href}`);
-          results.push(found);
-          return;
+      console.log(`🔗 Looking for href: ${href}`);
+      
+      // Try multiple strategies to find the link
+      let found: HTMLElement | null = null;
+      
+      // Strategy 1: Exact href match
+      found = document.querySelector<HTMLElement>(`a[href="${href}"]`);
+      
+      // Strategy 2: Partial href match (for relative URLs)
+      if (!found) {
+        const urlPath = href.replace(/^https?:\/\/[^\/]+/, ''); // Extract path from full URL
+        found = document.querySelector<HTMLElement>(`a[href="${urlPath}"]`);
+        if (found) console.log(`  Found by path: ${urlPath}`);
+      }
+      
+      // Strategy 3: Check if href ends with the path
+      if (!found) {
+        const links = Array.from(document.querySelectorAll('a')) as HTMLAnchorElement[];
+        found = links.find(link => {
+          const linkHref = link.getAttribute('href') || '';
+          // Check if the link href ends with our target path
+          return linkHref && (
+            linkHref === href ||
+            href.endsWith(linkHref) ||
+            linkHref.endsWith(href.replace(/^https?:\/\/[^\/]+/, ''))
+          );
+        }) || null;
+        if (found) console.log(`  Found by partial match`);
+      }
+      
+      // Strategy 4: Match by text content if href has recognizable text
+      if (!found) {
+        const textMatch = parsed.textContent?.trim();
+        if (textMatch) {
+          found = Array.from(document.querySelectorAll('a')).find(a => 
+            a.textContent?.trim() === textMatch
+          ) as HTMLElement || null;
+          if (found) console.log(`  Found by text content: ${textMatch}`);
         }
-      } catch (e) {
-        // CSS.escape may not be available in some environments; fall back later
-        const fallback = Array.from(document.querySelectorAll("a")).find(a => (a as HTMLAnchorElement).getAttribute("href") === href) as HTMLElement | undefined;
-        if (fallback) {
-          results.push(fallback);
-          return;
-        }
+      }
+      
+      if (found) {
+        console.log(`✅ Found element ${idx + 1} by href: ${href}`);
+        results.push(found);
+        return;
+      } else {
+        console.log(`❌ Could not find element with href: ${href}`);
       }
     }
 
-    // 3) match by data-title
-    const dataTitle = parsed.getAttribute("data-title") ?? parsed.querySelector("[data-title]")?.getAttribute("data-title");
-    if (dataTitle) {
-      const found = document.querySelector<HTMLElement>(`[data-title="${dataTitle}"]`);
-      if (found) {
-        results.push(found);
-        return;
+    // 3) match by data attributes (data-step, data-type, etc.)
+    const dataStep = parsed.getAttribute("data-step");
+    const dataType = parsed.getAttribute("data-type");
+    const dataTitle = parsed.getAttribute("data-title");
+    
+    // Try to find by data attributes if they exist
+    if (dataStep || dataType || dataTitle) {
+      let selector = '';
+      if (dataStep) selector += `[data-step="${dataStep}"]`;
+      if (dataType) selector += `[data-type="${dataType}"]`;
+      if (dataTitle) selector += `[data-title="${dataTitle}"]`;
+      
+      if (selector) {
+        const found = document.querySelector<HTMLElement>(selector);
+        if (found) {
+          console.log(`✅ Found element ${idx + 1} by data attributes: ${selector}`);
+          results.push(found);
+          return;
+        }
       }
     }
 
@@ -504,21 +549,30 @@ const Content: React.FC = () => {
     };
   }, []);
 
-  // Move to next step when handler called
+  // Advance to the next step
   const advance = async () => {
-    const newIndex = index + 1;
-    
-    if (newIndex >= originalHtmlList.length) {
-      // Guide completed
+    console.log("Advancing to next step");
+    const nextIndex = index + 1;
+    if (nextIndex < steps.length) {
+      setIndex(nextIndex);
+      // Save state with new index
+      await saveGuideState(originalHtmlList, nextIndex, true);
+      
+      // Add progress message to chat
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `✅ Step ${index + 1} completed. Now on step ${nextIndex + 1} of ${originalHtmlList.length}.`
+      }]);
+    } else {
       console.log("Guide completed!");
       setIsActive(false);
       await clearGuideState();
-    } else {
-      console.log("Advancing to step", newIndex, "of", originalHtmlList.length);
-      // Save state BEFORE navigation happens
-      await saveGuideState(originalHtmlList, newIndex, true);
-      // Then update local index
-      setIndex(newIndex);
+      
+      // Add completion message to chat
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `🎉 Guide completed! All ${originalHtmlList.length} steps finished.`
+      }]);
     }
   };
 
@@ -530,15 +584,20 @@ const Content: React.FC = () => {
       console.log(`   ${index + 1}. ${html}`);
     });
     
-    console.log("Starting guide with", htmlList.length, "steps");
+    // Store the original HTML list
     setOriginalHtmlList(htmlList);
     
-    const resolved = resolveHtmlStringsToElements(htmlList);
-    console.log("Resolved elements:", resolved.length);
-    
-    setSteps(resolved);
+    const resolvedElements = resolveHtmlStringsToElements(htmlList);
+    console.log("✅ Resolved elements:", resolvedElements.length, "out of", htmlList.length);
+    setSteps(resolvedElements);
     setIndex(0);
     setIsActive(true);
+    
+    // Add initial guide message with step count
+    setChatMessages(prev => [...prev, {
+      role: 'assistant',
+      content: `🚀 Guide started! Step 1 of ${htmlList.length}. Click the highlighted element to continue.`
+    }]);
     
     // Save initial state
     await saveGuideState(htmlList, 0, true);
@@ -662,6 +721,7 @@ const Content: React.FC = () => {
         body: JSON.stringify({
           message: userMessage,
           use_retrieval: true,
+          current_url: window.location.href,
         }),
       });
       
@@ -706,13 +766,22 @@ const Content: React.FC = () => {
       // Add assistant response to chat with enhanced formatting for step-by-step navigation
       let responseContent = data.response || data.message || 'I found some information for you.';
       
+      // Log the complete backend response for debugging
+      console.log('📦 Complete backend response:', JSON.stringify(data, null, 2));
+      
       // If this is a navigation response with step-by-step instructions, format it nicely
       if (data.tool_used === 'navigation_tool' && data.status === 'success' && data.response) {
         responseContent = formatNavigationResponse(data.response);
         
         // Check if HTML elements are directly in the response
         if (data.html_elements && data.html_elements.length > 0) {
-          console.log('🎯 Navigation response with HTML elements:', data.html_elements);
+          console.log('🎯 Navigation response with HTML elements:');
+          console.log('📝 HTML Elements Array:', data.html_elements);
+          console.log('📊 Number of elements:', data.html_elements.length);
+          data.html_elements.forEach((html, index) => {
+            console.log(`   ${index + 1}. ${html}`);
+          });
+          
           await startGuide(data.html_elements);
           responseContent += '\n\n🎯 **Interactive guide started!** Follow the highlighted elements on the page.';
         } else {
