@@ -54,6 +54,7 @@ def chat_with_claude():
         
         user_message = data['message']
         use_retrieval = data.get('use_retrieval', True)  # Optional parameter
+        current_url = data.get('current_url', None)  # Current page URL from frontend
         
         if not AI_AVAILABLE:
             return jsonify({
@@ -62,7 +63,7 @@ def chat_with_claude():
             }), 503
         
         # Process the query with proper tool calling (navigation vs RAG)
-        result = ai_processor.route_query(user_message)
+        result = ai_processor.route_query(user_message, current_url=current_url)
         
         return jsonify(result), 200
         

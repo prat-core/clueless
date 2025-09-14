@@ -107,13 +107,13 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
         logger.info("🔀 Query classified as RAG_TOOL (default)")
         return "RAG_TOOL"
     
-    def route_query(self, user_query: str, start_location: Optional[str] = None) -> Dict[str, Any]:
+    def route_query(self, user_query: str, current_url: Optional[str] = None) -> Dict[str, Any]:
         """
         Main method to route user queries to appropriate tools
         
         Args:
             user_query: The user's input text
-            start_location: Optional starting location for navigation queries
+            current_url: Optional current page URL for navigation queries
             
         Returns:
             Dictionary containing the tool response and metadata
@@ -126,7 +126,7 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
             
             # Step 2: Route to appropriate tool
             if tool_name == "NAVIGATION_TOOL":
-                return self._call_navigation_tool(user_query, start_location)
+                return self._call_navigation_tool(user_query, current_url)
             else:  # RAG_TOOL
                 return self._call_rag_tool(user_query)
                 
@@ -140,13 +140,13 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
                 "timestamp": self._get_timestamp()
             }
     
-    def _call_navigation_tool(self, user_query: str, start_location: Optional[str] = None) -> Dict[str, Any]:
+    def _call_navigation_tool(self, user_query: str, current_url: Optional[str] = None) -> Dict[str, Any]:
         """
         Call the navigation tool
         
         Args:
             user_query: User's navigation request
-            start_location: Optional starting location
+            current_url: Optional current page URL from frontend
             
         Returns:
             Navigation tool response
@@ -163,7 +163,7 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
                 }
             
             # Process the navigation query
-            result = nav_tool.process_navigation_query(user_query, start_location)
+            result = nav_tool.process_navigation_query(user_query, current_url)
             
             # Close the navigation tool
             nav_tool.close()
