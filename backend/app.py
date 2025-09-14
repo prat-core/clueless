@@ -2,6 +2,7 @@ import flask
 import flask_cors
 import os
 import requests
+from datetime import datetime
 from flask import request, jsonify
 from flask_socketio import SocketIO
 
@@ -19,15 +20,19 @@ except Exception as e:
     kg = None
     NEO4J_AVAILABLE = False
 
-# Initialize RAG processor
+# Initialize AI processor with tool calling
 try:
-    from ai.rag_process import rag_processor
-    RAG_AVAILABLE = True
-    print("✅ RAG processor initialized successfully")
+    from ai.general_llm import QueryRouter
+    ai_processor = QueryRouter()
+    AI_AVAILABLE = ai_processor is not None
+    if AI_AVAILABLE:
+        print("✅ AI processor with tool calling initialized successfully")
+    else:
+        print("⚠️  AI processor initialization failed - check environment variables")
 except Exception as e:
-    print(f"⚠️  RAG processor not available: {e}")
-    rag_processor = None
-    RAG_AVAILABLE = False
+    print(f"⚠️  AI processor not available: {e}")
+    ai_processor = None
+    AI_AVAILABLE = False
 
 
 # flask API routes
@@ -44,14 +49,14 @@ def chat_with_claude():
         user_message = data['message']
         use_retrieval = data.get('use_retrieval', True)  # Optional parameter
         
-        if not RAG_AVAILABLE:
+        if not AI_AVAILABLE:
             return jsonify({
-                'error': 'RAG processor not available. Please check your configuration.',
+                'error': 'AI processor not available. Please check your configuration.',
                 'status': 'error'
             }), 503
         
-        # Process the query with RAG
-        result = rag_processor.process_query(user_message, use_retrieval=use_retrieval)
+        # Process the query with proper tool calling (navigation vs RAG)
+        result = ai_processor.route_query(user_message)
         
         return jsonify(result), 200
         
@@ -80,11 +85,12 @@ def user_text_input():
             'status': 'success'
         }
         
-        # Optional Claude processing
-        if use_claude and RAG_AVAILABLE:
-            claude_result = rag_processor.process_query(user_text, use_retrieval=False)
-            response['claude_response'] = claude_result.get('response')
-            response['claude_status'] = claude_result.get('status')
+        # Optional AI processing
+        if use_claude and AI_AVAILABLE:
+            ai_result = ai_processor.route_query(user_text)
+            response['ai_response'] = ai_result.get('response')
+            response['ai_status'] = ai_result.get('status')
+            response['tool_used'] = ai_result.get('tool_used', 'unknown')
         
         return jsonify(response), 200
         
