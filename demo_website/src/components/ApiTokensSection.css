@@ -1,0 +1,135 @@
+.api-tokens-section {
+  max-width: 1000px;
+  width: 100%;
+}
+
+.api-tokens-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.header-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.username {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.separator {
+  color: #666;
+  font-size: 20px;
+}
+
+.section-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.new-token-btn {
+  background-color: #333;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.new-token-btn:hover {
+  background-color: #444;
+  border-color: #555;
+}
+
+.tokens-description {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.tokens-table-container {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tokens-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tokens-table-header {
+  background-color: #222;
+  border-bottom: 1px solid #333;
+}
+
+.tokens-table-header-cell {
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  padding: 16px 20px;
+  border-right: 1px solid #333;
+}
+
+.tokens-table-header-cell:last-child {
+  border-right: none;
+}
+
+.tokens-table-row {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.tokens-table-row:last-child {
+  border-bottom: none;
+}
+
+.tokens-table-row:hover {
+  background-color: #222;
+}
+
+.tokens-table-cell {
+  color: #fff;
+  font-size: 14px;
+  padding: 16px 20px;
+  border-right: 1px solid #333;
+}
+
+.tokens-table-cell:last-child {
+  border-right: none;
+}
+
+.token-id {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #4ade80;
+}
