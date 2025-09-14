@@ -116,6 +116,82 @@ def user_text_input():
     except Exception as e:
         return jsonify({'error': f'Error processing text input: {str(e)}'}), 500
 
+@app.route('/get-html-elements', methods=['POST'])
+def get_html_elements():
+    """
+    New endpoint to convert navigation path to HTML elements for startGuide function
+    """
+    try:
+        data = request.get_json()
+        if not data or 'user_query' not in data:
+            return jsonify({'error': 'No user_query provided'}), 400
+        
+        user_query = data['user_query']
+        start_location = data.get('start_location', None)
+        
+        if not AGENT_AVAILABLE:
+            return jsonify({
+                'error': 'Navigation agent not available. Please check your configuration.',
+                'status': 'error'
+            }), 503
+        
+        # Get the navigation path using existing navigation agent
+        from ai.navigation_tool import create_navigation_tool, convert_nodes_to_html_list
+        from ai.neo4j_processor import neo4j_processor
+        
+        # Create navigation tool and get path
+        nav_tool = create_navigation_tool()
+        if not nav_tool:
+            return jsonify({
+                'error': 'Failed to create navigation tool',
+                'status': 'error'
+            }), 503
+        
+        # Process navigation query to get the path
+        nav_result = nav_tool.process_navigation_query(user_query, start_location)
+        
+        if nav_result['status'] != 'success':
+            return jsonify({
+                'error': nav_result.get('message', 'Navigation failed'),
+                'status': 'error',
+                'details': nav_result
+            }), 400
+        
+        # Extract the raw path nodes and convert to HTML
+        navigation_path = nav_result.get('navigation_path', [])
+        if not navigation_path:
+            return jsonify({
+                'error': 'No navigation path found',
+                'status': 'error'
+            }), 400
+        
+        # Extract raw node data from navigation steps
+        raw_nodes = []
+        for step in navigation_path:
+            if 'node_data' in step:
+                raw_nodes.append(step['node_data'])
+        
+        # Convert nodes to HTML elements
+        html_elements = convert_nodes_to_html_list(raw_nodes)
+        
+        # Close navigation tool
+        nav_tool.close()
+        
+        return jsonify({
+            'status': 'success',
+            'html_elements': html_elements,
+            'step_count': len(html_elements),
+            'user_query': user_query,
+            'navigation_response': nav_result.get('response', ''),
+            'timestamp': nav_result.get('timestamp')
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            'error': f'Error processing HTML elements request: {str(e)}',
+            'status': 'error'
+        }), 500
+
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status': 'healthy', 'message': 'Flask API is running'}), 200

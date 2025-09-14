@@ -387,14 +387,46 @@ const Content: React.FC = () => {
               }
               return response.json();
             })
-            .then(data => {
+            .then(async data => {
               if (data.status === 'error') {
                 throw new Error(data.error || 'Unknown error from backend');
               }
               
+              let responseContent = data.response || 'I found some information for you.';
+              
+              // If this is a navigation response, try to get HTML elements and start guide
+              if (data.tool_used === 'navigation_tool' && data.status === 'success' && data.response) {
+                responseContent = formatNavigationResponse(data.response);
+                
+                try {
+                  console.log('🚀 Navigation response detected (speech), fetching HTML elements...');
+                  const htmlResponse = await fetch('http://localhost:5001/get-html-elements', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      user_query: userMessage,
+                    }),
+                  });
+                  
+                  if (htmlResponse.ok) {
+                    const htmlData = await htmlResponse.json();
+                    
+                    if (htmlData.status === 'success' && htmlData.html_elements && htmlData.html_elements.length > 0) {
+                      console.log('✅ Got HTML elements (speech), starting guide:', htmlData.html_elements);
+                      await startGuide(htmlData.html_elements);
+                      responseContent += '\n\n🎯 **Interactive guide started!** Follow the highlighted elements on the page.';
+                    }
+                  }
+                } catch (htmlError) {
+                  console.error('❌ Error fetching HTML elements (speech):', htmlError);
+                }
+              }
+              
               setChatMessages(prev => [...prev, {
                 role: 'assistant',
-                content: data.response
+                content: responseContent
               }]);
             })
             .catch(error => {
@@ -492,6 +524,12 @@ const Content: React.FC = () => {
 
   // Start a new guide
   const startGuide = async (htmlList: string[]) => {
+    console.log("🎯 startGuide called with HTML list:", htmlList);
+    console.log("📝 HTML elements received:");
+    htmlList.forEach((html, index) => {
+      console.log(`   ${index + 1}. ${html}`);
+    });
+    
     console.log("Starting guide with", htmlList.length, "steps");
     setOriginalHtmlList(htmlList);
     
@@ -671,19 +709,45 @@ const Content: React.FC = () => {
       // If this is a navigation response with step-by-step instructions, format it nicely
       if (data.tool_used === 'navigation_tool' && data.status === 'success' && data.response) {
         responseContent = formatNavigationResponse(data.response);
+        
+        // Automatically get HTML elements and start guide for navigation responses
+        try {
+          console.log('🚀 Navigation response detected, fetching HTML elements...');
+          const htmlResponse = await fetch('http://localhost:5001/get-html-elements', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_query: userMessage,
+            }),
+          });
+          
+          if (htmlResponse.ok) {
+            const htmlData = await htmlResponse.json();
+            
+            if (htmlData.status === 'success' && htmlData.html_elements && htmlData.html_elements.length > 0) {
+              console.log('✅ Got HTML elements, starting guide:', htmlData.html_elements);
+              await startGuide(htmlData.html_elements);
+              
+              // Add a note to the response that the guide has started
+              responseContent += '\n\n🎯 **Interactive guide started!** Follow the highlighted elements on the page.';
+            } else {
+              console.log('⚠️ No HTML elements received or empty list');
+            }
+          } else {
+            console.log('⚠️ Failed to fetch HTML elements:', htmlResponse.status);
+          }
+        } catch (htmlError) {
+          console.error('❌ Error fetching HTML elements:', htmlError);
+          // Don't break the main flow if HTML element fetching fails
+        }
       }
       
       setChatMessages(prev => [...prev, {
         role: 'assistant',
         content: responseContent
       }]);
-      
-      // For now, we'll parse the response to extract HTML elements or guide steps
-      // This is a placeholder - you might want to enhance this based on your specific needs
-      // const htmlList = extractHtmlFromResponse(data.response);
-      // if (htmlList.length > 0) {
-      //   await startGuide(htmlList);
-      // }
 
     } catch (error) {
       console.error('Guide generation error:', error);

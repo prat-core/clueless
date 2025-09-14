@@ -424,6 +424,111 @@ class NavigationTool:
             logger.error(f"❌ Error closing navigation tool: {e}")
 
 
+def convert_nodes_to_html_list(path_nodes: List[Dict[str, Any]]) -> List[str]:
+    """
+    Convert Neo4j path nodes to HTML element strings for frontend startGuide function
+    
+    Args:
+        path_nodes: List of Neo4j nodes from find_shortest_path
+        
+    Returns:
+        List of HTML element strings ready for frontend consumption
+    """
+    html_elements = []
+    
+    try:
+        logger.info(f"🔄 Converting {len(path_nodes)} nodes to HTML elements...")
+        
+        for i, node in enumerate(path_nodes):
+            html_element = _convert_node_to_html_element(node, i)
+            if html_element:
+                html_elements.append(html_element)
+                logger.debug(f"✅ Converted node {i+1}: {html_element[:100]}...")
+        
+        logger.info(f"✅ Successfully converted {len(html_elements)} nodes to HTML elements")
+        return html_elements
+        
+    except Exception as e:
+        logger.error(f"❌ Error converting nodes to HTML: {e}")
+        return []
+
+
+def _convert_node_to_html_element(node: Dict[str, Any], index: int) -> Optional[str]:
+    """
+    Convert a single Neo4j node to an HTML element string
+    
+    Args:
+        node: Neo4j node data
+        index: Node index in the path
+        
+    Returns:
+        HTML element string or None if conversion fails
+    """
+    try:
+        # Handle Page nodes (URLs)
+        if 'url' in node:
+            url = node.get('url', '')
+            title = node.get('title', url)
+            return f'<a href="{url}" data-step="{index+1}" data-type="page">{title}</a>'
+        
+        # Handle Element nodes (buttons, links, forms, etc.)
+        element_type = node.get('type', 'element')
+        element_id = node.get('id', '')
+        element_class = node.get('class', '')
+        element_text = node.get('text', f'Element {index+1}')
+        
+        # Build attributes string
+        attributes = []
+        
+        if element_id:
+            attributes.append(f'id="{element_id}"')
+        
+        if element_class:
+            if isinstance(element_class, list):
+                element_class = ' '.join(element_class)
+            attributes.append(f'class="{element_class}"')
+        
+        # Add data attributes for frontend identification
+        attributes.append(f'data-step="{index+1}"')
+        attributes.append(f'data-type="{element_type}"')
+        
+        # Handle different element types
+        if element_type == 'button' or 'button' in element_type.lower():
+            # Handle button elements
+            onclick = node.get('onclick', '')
+            if onclick:
+                attributes.append(f'onclick="{onclick}"')
+            
+            attrs_str = ' '.join(attributes)
+            return f'<button {attrs_str}>{element_text}</button>'
+            
+        elif element_type == 'link' or 'link' in element_type.lower():
+            # Handle link elements
+            href = node.get('href', '#')
+            attrs_str = ' '.join(attributes)
+            return f'<a href="{href}" {attrs_str}>{element_text}</a>'
+            
+        elif element_type == 'form' or 'form' in element_type.lower():
+            # Handle form elements
+            action = node.get('action', '')
+            method = node.get('method', 'GET')
+            if action:
+                attributes.append(f'action="{action}"')
+            attributes.append(f'method="{method}"')
+            
+            attrs_str = ' '.join(attributes)
+            return f'<form {attrs_str}><input type="submit" value="{element_text}"></form>'
+            
+        else:
+            # Generic clickable element
+            attrs_str = ' '.join(attributes)
+            return f'<div {attrs_str} role="button" tabindex="0">{element_text}</div>'
+            
+    except Exception as e:
+        logger.error(f"❌ Error converting node to HTML: {e}")
+        return None
+
+
 # Factory function to create navigation tool instance
 def create_navigation_tool() -> Optional[NavigationTool]:
     """
