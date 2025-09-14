@@ -19,9 +19,9 @@ class SimilarNodesResponse(Model):
 
 search_agent = Agent(
     name="end_node_search_agent",
-    seed="end_node_search_agent_seed_phrase",
-    mailbox=True
-    )
+    seed="end_node_search_agent_seed_phrase_v3",
+    mailbox=True,
+)
 
 semantic_search = SemanticSearch()
 

@@ -278,8 +278,9 @@ interface GuideState {
   timestamp: number;
 }
 
-// Storage key for guide state
+// Storage keys
 const GUIDE_STATE_KEY = 'clueless_guide_state';
+const CHAT_MESSAGES_KEY = 'clueless_chat_messages';
 
 // Check if chrome.storage is available, otherwise use localStorage
 const hasChrome = typeof chrome !== 'undefined' && chrome?.storage?.local;
@@ -346,7 +347,7 @@ const loadGuideState = async (): Promise<GuideState | null> => {
   }
 };
 
-// Clear guide state from storage
+// Clear guide state from storage (but keep chat messages)
 const clearGuideState = async () => {
   try {
     if (hasChrome) {
@@ -357,6 +358,61 @@ const clearGuideState = async () => {
     console.log("Guide state cleared");
   } catch (error) {
     console.error("Failed to clear guide state:", error);
+  }
+};
+
+// Save chat messages separately
+const saveChatMessages = async (messages: Array<{role: 'user' | 'assistant', content: string}>) => {
+  try {
+    const chatData = {
+      messages,
+      timestamp: Date.now()
+    };
+    
+    if (hasChrome) {
+      await chrome.storage.local.set({ [CHAT_MESSAGES_KEY]: chatData });
+    } else {
+      localStorage.setItem(CHAT_MESSAGES_KEY, JSON.stringify(chatData));
+    }
+    console.log("Chat messages saved:", messages.length);
+  } catch (error) {
+    console.error("Failed to save chat messages:", error);
+  }
+};
+
+// Load chat messages
+const loadChatMessages = async (): Promise<Array<{role: 'user' | 'assistant', content: string}> | null> => {
+  try {
+    let chatData: any;
+    
+    if (hasChrome) {
+      const result = await chrome.storage.local.get(CHAT_MESSAGES_KEY);
+      chatData = result[CHAT_MESSAGES_KEY];
+    } else {
+      const stored = localStorage.getItem(CHAT_MESSAGES_KEY);
+      if (stored) {
+        chatData = JSON.parse(stored);
+      }
+    }
+    
+    if (chatData && chatData.messages) {
+      // Check if messages are not too old (24 hours)
+      const isExpired = Date.now() - chatData.timestamp > 24 * 60 * 60 * 1000;
+      if (isExpired) {
+        if (hasChrome) {
+          await chrome.storage.local.remove(CHAT_MESSAGES_KEY);
+        } else {
+          localStorage.removeItem(CHAT_MESSAGES_KEY);
+        }
+        return null;
+      }
+      console.log("Chat messages loaded:", chatData.messages.length);
+      return chatData.messages;
+    }
+    return null;
+  } catch (error) {
+    console.error("Failed to load chat messages:", error);
+    return null;
   }
 };
 
@@ -373,6 +429,7 @@ const Content: React.FC = () => {
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMinimized, setIsMinimized] = useState<boolean>(false);
+  const [chatInitialized, setChatInitialized] = useState<boolean>(false);
 
   // Speech recognition states
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -502,6 +559,28 @@ const Content: React.FC = () => {
     }
   }, []);
 
+  // Load chat messages on mount
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (!chatInitialized) {
+        const savedMessages = await loadChatMessages();
+        if (savedMessages && savedMessages.length > 0) {
+          console.log("📨 Restoring", savedMessages.length, "chat messages");
+          setChatMessages(savedMessages);
+        }
+        setChatInitialized(true);
+      }
+    };
+    loadMessages();
+  }, []);
+
+  // Save chat messages whenever they change
+  useEffect(() => {
+    if (chatInitialized && chatMessages.length > 0) {
+      saveChatMessages(chatMessages);
+    }
+  }, [chatMessages, chatInitialized]);
+
   // Load guide state on mount
   useEffect(() => {
     console.log("Content component mounted, DOM ready state:", document.readyState);
@@ -556,14 +635,16 @@ const Content: React.FC = () => {
     const nextIndex = index + 1;
     if (nextIndex < steps.length) {
       setIndex(nextIndex);
-      // Save state with new index
-      await saveGuideState(originalHtmlList, nextIndex, true);
       
       // Add progress message to chat
-      setChatMessages(prev => [...prev, {
-        role: 'assistant',
+      const newMessages = [...chatMessages, {
+        role: 'assistant' as const,
         content: `✅ Step ${index + 1} completed. Now on step ${nextIndex + 1} of ${originalHtmlList.length}.`
-      }]);
+      }];
+      setChatMessages(newMessages);
+      
+      // Save state with new index
+      await saveGuideState(originalHtmlList, nextIndex, true);
     } else {
       console.log("Guide completed!");
       setIsActive(false);
@@ -585,23 +666,35 @@ const Content: React.FC = () => {
       console.log(`   ${index + 1}. ${html}`);
     });
     
+    // Skip the first step if it's on the current page
+    let startIndex = 0;
+    const resolvedElements = resolveHtmlStringsToElements(htmlList);
+    
+    // Check if the first element exists on the current page (meaning we should skip it)
+    if (resolvedElements.length > 0 && resolvedElements[0] && document.contains(resolvedElements[0])) {
+      console.log("📌 First element is on current page, starting from step 2");
+      startIndex = 1;
+    }
+    
     // Store the original HTML list
     setOriginalHtmlList(htmlList);
     
-    const resolvedElements = resolveHtmlStringsToElements(htmlList);
     console.log("✅ Resolved elements:", resolvedElements.length, "out of", htmlList.length);
     setSteps(resolvedElements);
-    setIndex(0);
+    setIndex(startIndex);
     setIsActive(true);
     
     // Add initial guide message with step count
-    setChatMessages(prev => [...prev, {
-      role: 'assistant',
-      content: `🚀 Guide started! Step 1 of ${htmlList.length}. Click the highlighted element to continue.`
-    }]);
+    const newMessages = [...chatMessages, {
+      role: 'assistant' as const,
+      content: startIndex === 0 
+        ? `🚀 Guide started! Step 1 of ${htmlList.length}. Click the highlighted element to continue.`
+        : `🚀 Guide started! Skipping step 1 (current page). Now on step ${startIndex + 1} of ${htmlList.length}. Click the highlighted element to continue.`
+    }];
+    setChatMessages(newMessages);
     
     // Save initial state
-    await saveGuideState(htmlList, 0, true);
+    await saveGuideState(htmlList, startIndex, true);
   };
 
   // Stop the guide
