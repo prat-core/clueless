@@ -15,7 +15,7 @@ import re
 
 
 class WebCrawler:
-    def __init__(self, neo4j_uri, neo4j_auth, openai_api_key, base_url):
+    def __init__(self, neo4j_uri, neo4j_auth, openai_api_key, base_url, blacklist=None):
         """
         Initialize the WebCrawler with necessary configurations.
 
@@ -24,6 +24,7 @@ class WebCrawler:
             neo4j_auth (tuple): Neo4j authentication (username, password)
             openai_api_key (str): OpenAI API key for embeddings
             base_url (str): Starting URL to crawl
+            blacklist (list): List of URL patterns or paths to exclude from crawling
         """
         # Database and API configuration
         self.neo4j_uri = neo4j_uri
@@ -40,6 +41,7 @@ class WebCrawler:
         # Crawling configuration
         self.base_url = base_url
         self.base_domain = self.extract_domain(base_url)
+        self.blacklist = blacklist or []
 
         # URL management
         self.url_queue = deque([(base_url, 0)])  # (url, depth)
@@ -56,6 +58,45 @@ class WebCrawler:
         """Extract domain from URL."""
         parsed = urlparse(url)
         return parsed.netloc.lower()
+
+    def is_blacklisted(self, url):
+        """
+        Check if URL matches any blacklist pattern.
+
+        Args:
+            url (str): URL to check against blacklist
+
+        Returns:
+            bool: True if URL should be blacklisted, False otherwise
+        """
+        if not self.blacklist:
+            return False
+
+        parsed_url = urlparse(url.lower())
+        url_path = parsed_url.path
+        full_url_lower = url.lower()
+
+        for pattern in self.blacklist:
+            pattern_lower = pattern.lower()
+
+            # Check if pattern matches the path
+            if url_path.startswith(pattern_lower):
+                return True
+
+            # Check if pattern is contained in the full URL
+            if pattern_lower in full_url_lower:
+                return True
+
+            # Check if pattern matches with regex (if it looks like a regex)
+            if any(char in pattern for char in ['*', '?', '[', ']', '^', '$']):
+                try:
+                    if re.search(pattern_lower, full_url_lower):
+                        return True
+                except re.error:
+                    # If regex is invalid, treat as literal string
+                    continue
+
+        return False
 
     def _get_selenium_driver(self):
         """Initialize and return Selenium Firefox driver with profile."""
@@ -485,6 +526,10 @@ class WebCrawler:
         if url_domain != self.base_domain:
             return False
 
+        # Check if URL is blacklisted
+        if self.is_blacklisted(url):
+            return False
+
         # Skip common non-content URLs
         skip_patterns = [
             '#',  # Anchors
@@ -649,6 +694,9 @@ class WebCrawler:
 
                 # Skip if shouldn't crawl
                 if not self.should_crawl(current_url, current_depth, max_depth):
+                    # Check if it was blacklisted for better logging
+                    if self.is_blacklisted(current_url):
+                        print(f"Skipping blacklisted URL: {current_url}")
                     continue
 
                 # Mark as visited

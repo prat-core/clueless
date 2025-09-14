@@ -86,7 +86,7 @@ def test_openai_connection(api_key):
         return False
 
 
-def crawl_website(url, config, max_pages=1000, max_depth=10):
+def crawl_website(url, config, max_pages=1000, max_depth=10, blacklist=None):
     """
     Main function to crawl a website and build knowledge graph.
 
@@ -95,6 +95,7 @@ def crawl_website(url, config, max_pages=1000, max_depth=10):
         config (dict): Configuration dictionary
         max_pages (int): Maximum number of pages to crawl
         max_depth (int): Maximum depth to crawl
+        blacklist (list): List of URL patterns or paths to exclude from crawling
 
     Returns:
         dict: Crawl statistics
@@ -104,7 +105,8 @@ def crawl_website(url, config, max_pages=1000, max_depth=10):
         neo4j_uri=config['neo4j_uri'],
         neo4j_auth=(config['neo4j_user'], config['neo4j_password']),
         openai_api_key=config['openai_api_key'],
-        base_url=url
+        base_url=url,
+        blacklist=blacklist or []
     )
 
     # Start crawling
@@ -204,6 +206,12 @@ def main():
         action='store_true',
         help='Query and display graph statistics'
     )
+    parser.add_argument(
+        '--blacklist',
+        nargs='*',
+        default=[],
+        help='URL patterns or paths to exclude from crawling (e.g., /admin /private /blacklist)'
+    )
 
     args = parser.parse_args()
 
@@ -255,11 +263,14 @@ def main():
         else:
             # Start crawling
             logging.info(f"Starting crawl of {args.url}")
+            if args.blacklist:
+                logging.info(f"Blacklisted patterns: {args.blacklist}")
             stats = crawl_website(
                 args.url,
                 config,
                 max_pages=args.max_pages,
-                max_depth=args.max_depth
+                max_depth=args.max_depth,
+                blacklist=args.blacklist
             )
 
             # Display final statistics
