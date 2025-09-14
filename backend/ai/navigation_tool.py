@@ -292,9 +292,23 @@ class NavigationTool:
             
             # Step 4: Determine starting location
             if not current_url:
-                # Try to get current page from context or use a default
+                # Try to get current page from context
                 current_url = self._get_current_location()
-            
+                if not current_url:
+                    # Return error if we can't determine current location
+                    logger.error("Cannot determine current location - frontend must provide current_url")
+                    return {
+                        'status': 'error',
+                        'message': 'Current location not provided. Please ensure the browser extension sends the current URL.',
+                        'intent': intent_data,
+                        'target_found': best_match,
+                        'user_query': user_query,
+                        'timestamp': datetime.now().isoformat(),
+                        'error_type': 'missing_current_url'
+                    }
+
+            logger.info(f"Using current URL: {current_url}")
+
             # Step 5: Get navigation path
             navigation_path = self.get_navigation_path(current_url, target_node_id)
             
@@ -411,16 +425,16 @@ class NavigationTool:
         
         return "\n".join(response_parts)
     
-    def _get_current_location(self) -> str:
+    def _get_current_location(self) -> Optional[str]:
         """
-        Get current location (placeholder for future implementation)
-        
+        Get current location from session or context
+
         Returns:
-            Current location identifier
+            Current location identifier or None if not available
         """
-        # TODO: Implement logic to get actual current location
-        # This could come from browser extension, session data, etc.
-        # For now, return None so the frontend can pass the current URL
+        # This method should return None if we can't determine the current location
+        # The frontend should always provide the current URL
+        logger.warning("Current location not provided by frontend")
         return None
     
     def close(self):

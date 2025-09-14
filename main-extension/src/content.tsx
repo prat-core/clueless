@@ -379,6 +379,7 @@ const Content: React.FC = () => {
               body: JSON.stringify({
                 message: userMessage,
                 use_retrieval: true,
+                current_url: window.location.href,
               }),
             })
             .then(response => {
@@ -407,6 +408,7 @@ const Content: React.FC = () => {
                     },
                     body: JSON.stringify({
                       user_query: userMessage,
+                      start_location: window.location.href,
                     }),
                   });
                   
@@ -662,6 +664,7 @@ const Content: React.FC = () => {
         body: JSON.stringify({
           message: userMessage,
           use_retrieval: true,
+          current_url: window.location.href,
         }),
       });
       
@@ -726,6 +729,7 @@ const Content: React.FC = () => {
               },
               body: JSON.stringify({
                 user_query: userMessage,
+                start_location: window.location.href,
               }),
             });
             

@@ -114,8 +114,28 @@ class WebCrawler:
            # Create Firefox driver with profile
             self.selenium_driver = webdriver.Firefox(options=options)
 
-        return self.selenium_driver
 
+        return self.selenium_driver
+    
+    def _get_selenium_driver(self):
+        """Initialize and return Selenium Firefox driver with profile."""
+ 
+        if self.selenium_driver is None:
+            options = Options()
+
+            # Use specific Firefox profile to preserve cookies and sessions
+            profile_path = os.path.expanduser("~/.mozilla/firefox")
+            specific_profile = os.path.join(profile_path, "708iiqgx.Prat")
+
+            if os.path.exists(specific_profile):
+                options.add_argument("-profile")
+                options.add_argument(specific_profile)
+
+            # Create Firefox driver with profile
+            self.selenium_driver = webdriver.Firefox(options=options)
+
+
+        return self.selenium_driver
     def fetch_page(self, url):
         """
         Fetch page content using Selenium to handle JavaScript rendering.
