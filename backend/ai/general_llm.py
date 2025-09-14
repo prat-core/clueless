@@ -194,15 +194,23 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
             RAG tool response
         """
         try:
-            from .rag_tool_temp import process_info_query
+            from .rag_tool import create_rag_tool
             
-            # Call the temporary RAG tool
-            response = process_info_query(user_query)
+            # Call the RAG tool
+            rag_tool = create_rag_tool()
+            if rag_tool is None:
+                return {
+                    'response': 'RAG tool could not be initialized. Please check your API keys.',
+                    'status': 'error',
+                    'error': 'RAG tool initialization failed',
+                    'tool_used': 'rag_tool'
+                }
+            response = rag_tool.process_query(user_query)
             
             return {
                 'response': response,
                 'status': 'success',
-                'tool_used': 'rag_tool_temp',
+                'tool_used': 'rag_tool',
                 'user_query': user_query,
                 'routing_timestamp': self._get_timestamp()
             }
@@ -213,7 +221,7 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
                 'response': f'Error with RAG tool: {str(e)}',
                 'status': 'error',
                 'error': str(e),
-                'tool_used': 'rag_tool_temp'
+                'tool_used': 'rag_tool'
             }
     
     def _get_timestamp(self) -> str:

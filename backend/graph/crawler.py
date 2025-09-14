@@ -7,6 +7,7 @@ import hashlib
 import logging
 from datetime import datetime
 import time
+import random
 
 class WebCrawler:
     def __init__(
@@ -15,7 +16,7 @@ class WebCrawler:
         neo4j_auth: Tuple[str, str],
         openai_api_key: str,
         base_url: str,
-        user_agent: str = "AI-WebCrawler/1.0",
+        user_agent: str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         delay: float = 1.0,
         timeout: float = 30.0,
         max_retries: int = 3
@@ -47,7 +48,14 @@ class WebCrawler:
         self.content_processor = ContentProcessor(openai_api_key)
 
         self.client = httpx.Client(
-            headers={"User-Agent": self.user_agent},
+            headers={
+                "User-Agent": self.user_agent,
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+            },
             timeout=timeout,
             follow_redirects=True
         )
@@ -141,6 +149,11 @@ class WebCrawler:
             start_time = time.time()
 
             self.logger.info(f"Fetching URL: {url}")
+
+            # Add small random delay before each request to look more human
+            pre_request_delay = random.uniform(0.5, 2.0)
+            self.logger.debug(f"Pre-request delay: {pre_request_delay:.2f}s")
+            time.sleep(pre_request_delay)
 
             # Make the HTTP request with retries
             response = None
@@ -570,9 +583,12 @@ class WebCrawler:
             pages_crawled += 1
             self.logger.info(f"Progress: {pages_crawled}/{max_pages} pages crawled, {len(self.url_queue)} in queue")
 
-            # Respect crawl delay
+            # Respect crawl delay with random variation to look more human
             if self.delay > 0 and self.url_queue:
-                time.sleep(self.delay)
+                # Add random delay between 1-4 seconds to mimic human behavior
+                random_delay = random.uniform(1.0, 4.0)
+                self.logger.debug(f"Sleeping for {random_delay:.2f} seconds (human-like delay)")
+                time.sleep(random_delay)
 
         # Calculate statistics
         elapsed_time = time.time() - start_time

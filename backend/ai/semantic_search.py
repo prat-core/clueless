@@ -62,10 +62,20 @@ class SemanticSearch:
         best_similarity = similarities[best_idx]
         best_node = nodes[best_idx]
         
+        # Clean best_node data to ensure JSON serialization
+        clean_best_node = {}
+        for key, value in best_node.items():
+            if isinstance(value, (str, int, float, bool, type(None))):
+                clean_best_node[key] = value
+            elif hasattr(value, 'isoformat'):  # DateTime objects
+                clean_best_node[key] = value.isoformat()
+            else:
+                clean_best_node[key] = str(value)
+        
         return {
             "end_node": {
                 "id": best_node.get('id') or best_node.get('url') or best_node.get('name'),
-                "data": best_node,
+                "data": clean_best_node,
                 "similarity_score": float(best_similarity)
             },
             "confidence": float(best_similarity),
@@ -115,11 +125,21 @@ class SemanticSearch:
                 # Calculate cosine similarity
                 similarity = cosine_similarity(query_embedding, node_embedding)[0][0]
                 
+                # Clean node data to ensure JSON serialization
+                clean_node_data = {}
+                for key, value in node.items():
+                    if isinstance(value, (str, int, float, bool, type(None))):
+                        clean_node_data[key] = value
+                    elif hasattr(value, 'isoformat'):  # DateTime objects
+                        clean_node_data[key] = value.isoformat()
+                    else:
+                        clean_node_data[key] = str(value)
+                
                 similar_nodes.append({
                     'node_id': node_id,
                     'content': node_content[:500],  # Truncate for response
                     'similarity_score': float(similarity),
-                    'node_data': node
+                    'node_data': clean_node_data
                 })
             
             # Sort by similarity and return top results
@@ -144,9 +164,9 @@ class SemanticSearch:
         try:
             with self.driver.session() as session:
                 query = """
-                MATCH (n)
-                WHERE n.content IS NOT NULL AND n.content <> ''
-                RETURN n.url as url, n.id as id, n.content as content, 
+                MATCH (n:Page)
+                WHERE n.content_text IS NOT NULL AND n.content_text <> ''
+                RETURN n.url as url, n.id as id, n.content_text as content, 
                        labels(n) as labels, properties(n) as properties
                 LIMIT 1000
                 """

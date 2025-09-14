@@ -5,11 +5,13 @@ import requests
 from datetime import datetime
 from flask import request, jsonify
 from flask_socketio import SocketIO
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 try:
     from ai.neo4j_processor import neo4j_processor

@@ -308,10 +308,27 @@ class NavigationTool:
                     'timestamp': datetime.now().isoformat()
                 }
             
-            # Step 6: Return complete navigation response
+            # Clean DateTime objects in navigation path
+            for step in navigation_path:
+                if 'node_data' in step and step['node_data']:
+                    clean_node_data = {}
+                    for key, value in step['node_data'].items():
+                        if isinstance(value, (str, int, float, bool, type(None))):
+                            clean_node_data[key] = value
+                        elif hasattr(value, 'isoformat'):  # DateTime objects
+                            clean_node_data[key] = value.isoformat()
+                        else:
+                            clean_node_data[key] = str(value)
+                    step['node_data'] = clean_node_data
+            
+            # Step 6: Format step-by-step response for frontend
+            step_by_step_response = self._format_step_by_step_response(navigation_path, user_query)
+            
+            # Step 7: Return complete navigation response
             response = {
                 'status': 'success',
-                'navigation_path': navigation_path,
+                'response': step_by_step_response,  # Main response for frontend display
+                'navigation_path': navigation_path,  # Raw path data for debugging
                 'intent': intent_data,
                 'target_match': {
                     'node_id': best_match['node_id'],
@@ -341,6 +358,49 @@ class NavigationTool:
                 'timestamp': datetime.now().isoformat()
             }
     
+    def _format_step_by_step_response(self, navigation_path: List[Dict[str, Any]], user_query: str) -> str:
+        """
+        Format navigation path into a user-friendly step-by-step response
+        
+        Args:
+            navigation_path: List of navigation steps
+            user_query: Original user query
+            
+        Returns:
+            Formatted step-by-step response string
+        """
+        if not navigation_path:
+            return "I couldn't find a path to your destination. Please try rephrasing your request."
+        
+        response_parts = [
+            f"I'll help you with that! Here's how to get to your destination:",
+            ""
+        ]
+        
+        for i, step in enumerate(navigation_path, 1):
+            step_number = step.get('step_number', i)
+            description = step.get('description', f'Step {i}')
+            action = step.get('action', 'navigate')
+            
+            # Format the step based on action type
+            if action == 'start':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            elif action == 'destination':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            elif action == 'navigate':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            elif action == 'click':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            else:
+                response_parts.append(f"**Step {step_number}:** {description}")
+        
+        response_parts.extend([
+            "",
+            "Follow these steps in order to reach your destination. Let me know if you need help with any specific step!"
+        ])
+        
+        return "\n".join(response_parts)
+    
     def _get_current_location(self) -> str:
         """
         Get current location (placeholder for future implementation)
@@ -350,7 +410,7 @@ class NavigationTool:
         """
         # TODO: Implement logic to get actual current location
         # This could come from browser extension, session data, etc.
-        return "homepage"  # Default starting point
+        return "https://www.cvs.com"  # Default starting point - actual CVS homepage
     
     def close(self):
         """Close connections and cleanup resources"""

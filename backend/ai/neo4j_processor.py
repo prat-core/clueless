@@ -18,9 +18,9 @@ class neo4j_processor:
         MATCH (start)
         WHERE (start:Page AND start.url = $start_id) OR (start:Element AND start.id = $start_id)
         MATCH (end)
-        WHERE (end:Page AND end.url = $end_id) OR (end:Element AND end.id = $end_id)
+        WHERE ((end:Page AND end.url = $end_id) OR (end:Element AND end.id = $end_id))
         AND start <> end
-        MATCH p = shortestPath((start)-[:HAS_ELEMENT|NAVIGATES_TO|LINKS_TO|LINKS_TO_EXTERNAL|SIMILAR_TO*]-(end))
+        MATCH p = shortestPath((start)-[:HAS_ELEMENT|LINKS_TO|LINKS_TO_EXTERNAL*1..10]-(end))
         RETURN nodes(p) as path_nodes, relationships(p) as path_relationships
         """
         with self.driver.session() as session:
