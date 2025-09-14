@@ -567,11 +567,11 @@ class WebCrawler:
 
     def store_to_neo4j(self, page_data, links_data):
         """
-        Store page data and relationships to Neo4j.
+        Store page data and detailed link information to Neo4j.
 
         Args:
             page_data (dict): Page information
-            links_data (list): List of links found on the page
+            links_data (list): List of links found on the page with detailed attributes
         """
         try:
             # Create or update the page node
@@ -610,37 +610,123 @@ class WebCrawler:
                     'image_count': page_data.get('image_count', 0)
                 })
 
-                # Create relationships for links
-                for link in links_data:
+                # Store detailed link information
+                for i, link in enumerate(links_data):
                     link_url = link['url']
 
+                    # Create Link element node with all detailed attributes
+                    link_element_id = f"{page_data['url']}#link_{i}"
+
+                    cypher_link_element = """
+                    MERGE (le:LinkElement {id: $link_id})
+                    SET le.url = $url,
+                        le.text = $text,
+                        le.title = $title,
+                        le.is_external = $is_external,
+                        le.class = $class,
+                        le.element_id = $element_id,
+                        le.rel = $rel,
+                        le.target = $target,
+                        le.tabindex = $tabindex,
+                        le.aria_label = $aria_label,
+                        le.role = $role,
+                        le.js_events = $js_events,
+                        le.data_attributes = $data_attributes,
+                        le.download = $download,
+                        le.type = $type,
+                        le.raw_html = $raw_html,
+                        le.first_seen = CASE WHEN le.first_seen IS NULL THEN datetime() ELSE le.first_seen END,
+                        le.last_seen = datetime()
+                    """
+
+                    # Convert lists and dicts to strings for Neo4j storage
+                    js_events_str = str(link.get('js_events', {}))
+                    data_attrs_str = str(link.get('data_attributes', {}))
+                    class_str = ','.join(link.get('class', []) if isinstance(link.get('class', []), list) else [])
+                    rel_str = ','.join(link.get('rel', []) if isinstance(link.get('rel', []), list) else [])
+
+                    session.run(cypher_link_element, {
+                        'link_id': link_element_id,
+                        'url': link_url,
+                        'text': link.get('text', '')[:500],  # Limit text length
+                        'title': link.get('title', ''),
+                        'is_external': link.get('is_external', False),
+                        'class': class_str,
+                        'element_id': link.get('id', ''),
+                        'rel': rel_str,
+                        'target': link.get('target', ''),
+                        'tabindex': link.get('tabindex', ''),
+                        'aria_label': link.get('aria_label', ''),
+                        'role': link.get('role', ''),
+                        'js_events': js_events_str,
+                        'data_attributes': data_attrs_str,
+                        'download': link.get('download', ''),
+                        'type': link.get('type', ''),
+                        'raw_html': link.get('raw_html', '')[:1000]  # Limit HTML length
+                    })
+
+                    # Create relationship from page to link element
+                    cypher_page_to_link = """
+                    MATCH (p:Page {url: $page_url})
+                    MATCH (le:LinkElement {id: $link_id})
+                    MERGE (p)-[:HAS_LINK_ELEMENT]->(le)
+                    """
+
+                    session.run(cypher_page_to_link, {
+                        'page_url': page_data['url'],
+                        'link_id': link_element_id
+                    })
+
+                    # Create relationships for target pages/external links
                     if link['is_external']:
-                        # Create external link node and relationship
+                        # Create external link node and relationship from link element
                         cypher_external = """
-                        MATCH (from:Page {url: $from_url})
+                        MATCH (le:LinkElement {id: $link_id})
                         MERGE (to:ExternalLink {url: $to_url})
                         ON CREATE SET to.domain = $to_domain,
                                      to.first_seen = datetime()
-                        MERGE (from)-[:LINKS_TO_EXTERNAL]->(to)
+                        MERGE (le)-[:TARGETS]->(to)
                         """
                         session.run(cypher_external, {
-                            'from_url': page_data['url'],
+                            'link_id': link_element_id,
                             'to_url': link_url,
                             'to_domain': urlparse(link_url).netloc
                         })
-                    else:
-                        # Create internal link relationship (node will be created when crawled)
-                        cypher_internal = """
+
+                        # Also maintain the direct page-to-external relationship
+                        cypher_page_external = """
                         MATCH (from:Page {url: $from_url})
+                        MATCH (to:ExternalLink {url: $to_url})
+                        MERGE (from)-[:LINKS_TO_EXTERNAL]->(to)
+                        """
+                        session.run(cypher_page_external, {
+                            'from_url': page_data['url'],
+                            'to_url': link_url
+                        })
+                    else:
+                        # Create internal link relationship from link element
+                        cypher_internal = """
+                        MATCH (le:LinkElement {id: $link_id})
                         MERGE (to:Page {url: $to_url})
-                        MERGE (from)-[:LINKS_TO]->(to)
+                        MERGE (le)-[:TARGETS]->(to)
                         """
                         session.run(cypher_internal, {
+                            'link_id': link_element_id,
+                            'to_url': link_url
+                        })
+
+                        # Also maintain the direct page-to-page relationship
+                        cypher_page_internal = """
+                        MATCH (from:Page {url: $from_url})
+                        MATCH (to:Page {url: $to_url})
+                        MERGE (from)-[:LINKS_TO]->(to)
+                        """
+                        session.run(cypher_page_internal, {
                             'from_url': page_data['url'],
                             'to_url': link_url
                         })
 
-                print(f"Stored page data for: {page_data['url']}")
+                print(f"Stored page data and {len(links_data)} detailed links for: {page_data['url']}")
 
         except Exception as e:
             print(f"Error storing to Neo4j: {str(e)}")
