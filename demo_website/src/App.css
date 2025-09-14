@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+body {
+  background-color: rgb(24, 24, 24);
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background-color: rgb(24, 24, 24);
+  min-height: 100vh;
+  padding-top: 158px; /* Space for all three bars (48px + 60px + 50px) */
+}

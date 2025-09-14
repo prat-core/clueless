@@ -1,0 +1,42 @@
+.subnav-bar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(24, 24, 24);
+  border-bottom: 1px solid #333;
+  padding: 0 20px;
+  position: fixed;
+  top: 108px; /* Below both previous bars (48px + 60px) */
+  left: 0;
+  width: 100vw;
+  box-sizing: border-box;
+  z-index: 998;
+  height: 50px;
+}
+
+.subnav-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.subnav-tab {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.subnav-tab:hover {
+  color: #fff;
+  background-color: #333;
+}
+
+.subnav-tab.active {
+  color: #fff;
+  border-bottom-color: #4a90e2;
+  background-color: #333;
+}

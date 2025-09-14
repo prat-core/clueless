@@ -1,0 +1,159 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(24, 24, 24);
+  border-bottom: 1px solid #333;
+  padding: 4px 20px;
+  position: fixed;
+  top: 48px; /* Below the top bar */
+  left: 0;
+  width: 100vw;
+  box-sizing: border-box;
+  z-index: 999;
+  font-size: 14px;
+  height: 60px;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-icon {
+  font-size: 20px;
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.profile-button:hover {
+  background-color: #333;
+}
+
+.username {
+  font-weight: 500;
+  color: #fff;
+}
+
+.plan-badge {
+  background-color: #e8f5e8;
+  color: #2d5a2d;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.workspace-button, .credits-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  color: #fff;
+}
+
+.workspace-button:hover, .credits-button:hover {
+  background-color: #333;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  color: #ccc;
+}
+
+.nav-item {
+  padding: 6px 12px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.nav-item:hover {
+  background-color: #333;
+}
+
+.avatar-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #4a90e2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 1000;
+  margin-top: 4px;
+}
+
+.dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}

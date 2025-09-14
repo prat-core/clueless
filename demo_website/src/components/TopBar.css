@@ -1,0 +1,20 @@
+.top-bar {
+  background-color: #90EE90; /* Light green background */
+  padding: 12px 20px;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  height: 48px;
+}
+
+.credit-message {
+  color: black;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
