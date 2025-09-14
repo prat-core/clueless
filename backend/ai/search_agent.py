@@ -1,5 +1,5 @@
 from uagents import Agent, Bureau, Context, Model
-from .semantic_search import SemanticSearch
+from semantic_search import SemanticSearch
 
 class SearchRequest(Model):
     user_input: str
@@ -19,8 +19,9 @@ class SimilarNodesResponse(Model):
 
 search_agent = Agent(
     name="end_node_search_agent",
-    seed="end_node_search_agent_seed_phrase"
-)
+    seed="end_node_search_agent_seed_phrase",
+    mailbox=True
+    )
 
 semantic_search = SemanticSearch()
 

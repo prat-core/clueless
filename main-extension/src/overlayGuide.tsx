@@ -90,15 +90,15 @@ const OverlayGuide: React.FC<OverlayGuideProps> = ({ target, onComplete, offsetY
         aria-hidden
         style={{
           position: "fixed",
-          top: rect.top - 2,
-          left: rect.left - 2,
-          width: rect.width + 4,
-          height: rect.height + 4,
-          border: "2px solid #111827",
+          top: rect.top - 4,
+          left: rect.left - 4,
+          width: rect.width + 8,
+          height: rect.height + 8,
+          border: "3px solid #ff6b35",
           borderRadius: "12px",
           backgroundColor: "transparent",
-          boxShadow: "0 0 0 1px rgba(17, 24, 39, 0.1)",
-          animation: "minimal-pulse 2s infinite",
+          boxShadow: "0 0 20px rgba(255, 107, 53, 0.4), 0 0 40px rgba(255, 107, 53, 0.2)",
+          animation: "orange-pulse 2s ease-in-out infinite",
           zIndex: 2147483647,
           pointerEvents: "none",
           userSelect: "none",
@@ -131,18 +131,21 @@ const OverlayGuide: React.FC<OverlayGuideProps> = ({ target, onComplete, offsetY
       </div>
 
       <style>{`
-        @keyframes minimal-pulse {
+        @keyframes orange-pulse {
           0% { 
-            border-color: #111827;
-            opacity: 1;
+            border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.4), 0 0 40px rgba(255, 107, 53, 0.2);
+            transform: scale(1);
           }
           50% { 
-            border-color: #374151;
-            opacity: 0.8;
+            border-color: #ff8c5a;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.6), 0 0 60px rgba(255, 107, 53, 0.3);
+            transform: scale(1.02);
           }
           100% { 
-            border-color: #111827;
-            opacity: 1;
+            border-color: #ff6b35;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.4), 0 0 40px rgba(255, 107, 53, 0.2);
+            transform: scale(1);
           }
         }
       `}</style>

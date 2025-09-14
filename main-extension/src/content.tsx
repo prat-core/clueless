@@ -424,6 +424,7 @@ const Content: React.FC = () => {
               body: JSON.stringify({
                 message: userMessage,
                 use_retrieval: true,
+                current_url: window.location.href,
               }),
             })
             .then(response => {
