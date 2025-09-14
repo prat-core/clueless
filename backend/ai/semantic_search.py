@@ -16,7 +16,6 @@ class SemanticSearch:
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
     
     def find_end_node(self, user_input):
-        """Find the most relevant end node based on user input."""
         query = "MATCH (n) RETURN n, labels(n) as labels"
         
         with self.driver.session() as session:
