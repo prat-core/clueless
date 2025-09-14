@@ -834,7 +834,7 @@ const Content: React.FC = () => {
                     fontWeight: 600,
                     color: "#111827",
                     letterSpacing: "-0.01em",
-                  }}>Cluelessly</div>
+                  }}>Clueless</div>
                   <div style={{
                     fontSize: "12px",
                     color: "#6b7280",
