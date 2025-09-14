@@ -3,6 +3,42 @@ import React, { useEffect, useState } from "react";
 import OverlayGuide from "./overlayGuide";
 import type { PlasmoCSConfig } from "plasmo";
 
+// Web Speech API types
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  abort(): void;
+  onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
+  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null;
+  onend: ((this: SpeechRecognition, ev: Event) => any) | null;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message: string;
+}
+
+declare var SpeechRecognition: {
+  prototype: SpeechRecognition;
+  new(): SpeechRecognition;
+};
+
 // Export Plasmo config to ensure proper injection
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"],
@@ -293,6 +329,101 @@ const Content: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMinimized, setIsMinimized] = useState<boolean>(false);
 
+  // Speech recognition states
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+
+  // Initialize speech recognition
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (SpeechRecognition) {
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = true;
+      recognitionInstance.lang = 'en-US';
+      
+      recognitionInstance.onresult = (event) => {
+        let transcript = '';
+        let isFinal = false;
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            isFinal = true;
+          }
+        }
+        
+        console.log('Speech result:', { transcript, isFinal });
+        setChatInput(transcript);
+        
+        // Auto-submit when speech is final and we have content
+        if (isFinal && transcript.trim()) {
+          console.log('Final speech detected, auto-submitting...');
+          setTimeout(() => {
+            setIsRecording(false);
+            // Create a synthetic event to trigger submission
+            const userMessage = transcript.trim();
+            setChatInput("");
+            
+            // Add user message
+            setChatMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+            setIsLoading(true);
+
+            // Call the backend
+            fetch('http://localhost:5001/chat', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                message: userMessage,
+                use_retrieval: true,
+              }),
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.status === 'error') {
+                throw new Error(data.error || 'Unknown error from backend');
+              }
+              
+              setChatMessages(prev => [...prev, {
+                role: 'assistant',
+                content: data.response
+              }]);
+            })
+            .catch(error => {
+              console.error('Guide generation error:', error);
+              setChatMessages(prev => [...prev, {
+                role: 'assistant',
+                content: `Sorry, I encountered an error: ${error.message}. Please make sure the backend server is running on localhost:5001.`
+              }]);
+            })
+            .finally(() => {
+              setIsLoading(false);
+            });
+          }, 1000); // Wait 1 second after final result
+        }
+      };
+      
+      recognitionInstance.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+      };
+      
+      recognitionInstance.onend = () => {
+        setIsRecording(false);
+      };
+      
+      setRecognition(recognitionInstance);
+    }
+  }, []);
+
   // Load guide state on mount
   useEffect(() => {
     console.log("Content component mounted, DOM ready state:", document.readyState);
@@ -411,6 +542,66 @@ const Content: React.FC = () => {
   //     ];
   //   }
   // };
+
+  // Handle microphone toggle
+  const toggleMicrophone = () => {
+    if (!recognition) {
+      console.warn('Speech recognition not supported');
+      return;
+    }
+
+    if (isRecording) {
+      recognition.stop();
+      setIsRecording(false);
+    } else {
+      setChatInput(''); // Clear input when starting recording
+      recognition.start();
+      setIsRecording(true);
+    }
+  };
+
+  // Handle knowledge graph button click
+  const handleKnowledgeGraph = async () => {
+    setIsLoading(true);
+    
+    try {
+      // Call the backend endpoint for knowledge graph
+      const response = await fetch('http://localhost:5001/knowledge-graph', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: window.location.href,
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Knowledge graph request failed: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.status === 'error') {
+        throw new Error(data.error || 'Unknown error from knowledge graph');
+      }
+      
+      // Add knowledge graph response to chat
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: data.response || 'Knowledge graph processed successfully!'
+      }]);
+      
+    } catch (error) {
+      console.error('Knowledge graph error:', error);
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `Sorry, I encountered an error with the knowledge graph: ${error.message}. Please make sure the backend server is running on localhost:5001.`
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Handle chat submission
   const handleChatSubmit = async () => {
@@ -561,20 +752,39 @@ const Content: React.FC = () => {
             borderBottom: "1px solid rgba(0, 0, 0, 0.04)",
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <div style={{
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  color: "#111827",
-                  letterSpacing: "-0.01em",
-                }}>Cluelessly</div>
-                <div style={{
-                  fontSize: "12px",
-                  color: "#6b7280",
-                  marginTop: 2,
-                }}>
-                  {isActive ? `${index + 1}/${originalHtmlList.length}` : "Ready"}
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div>
+                  <div style={{
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    color: "#111827",
+                    letterSpacing: "-0.01em",
+                  }}>Cluelessly</div>
+                  <div style={{
+                    fontSize: "12px",
+                    color: "#6b7280",
+                    marginTop: 2,
+                  }}>
+                    {isActive ? `${index + 1}/${originalHtmlList.length}` : "Ready"}
+                  </div>
                 </div>
+                <button
+                  onClick={handleKnowledgeGraph}
+                  disabled={isLoading}
+                  style={{
+                    padding: "8px 12px",
+                    borderRadius: 8,
+                    background: isLoading ? '#f3f4f6' : '#111827',
+                    color: isLoading ? '#9ca3af' : 'white',
+                    border: "none",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  Knowledge Graph
+                </button>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <div style={{
@@ -779,8 +989,8 @@ const Content: React.FC = () => {
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleChatSubmit()}
-              placeholder="Ask me anything..."
-              disabled={isLoading}
+              placeholder={isRecording ? "Listening..." : "Ask me anything..."}
+              disabled={isLoading || isRecording}
               style={{
                 flex: 1,
                 padding: "12px 16px",
@@ -788,20 +998,40 @@ const Content: React.FC = () => {
                 border: "1px solid rgba(0, 0, 0, 0.08)",
                 fontSize: "13px",
                 outline: "none",
-                background: '#fafafa',
+                background: isRecording ? '#fef3c7' : '#fafafa',
                 color: '#374151',
               }}
             />
             <button
-              onClick={handleChatSubmit}
-              disabled={isLoading || !chatInput.trim()}
+              onClick={toggleMicrophone}
+              disabled={isLoading || !recognition}
               style={{
                 padding: "12px 16px",
                 borderRadius: 12,
-                background: isLoading || !chatInput.trim() ? '#f3f4f6' : '#111827',
-                color: isLoading || !chatInput.trim() ? '#9ca3af' : 'white',
+                background: isRecording ? '#111827' : (isLoading || !recognition ? '#f3f4f6' : '#f9fafb'),
+                color: isRecording ? 'white' : (isLoading || !recognition ? '#9ca3af' : '#374151'),
+                border: isRecording ? "none" : "1px solid rgba(0, 0, 0, 0.06)",
+                cursor: isLoading || !recognition ? "not-allowed" : "pointer",
+                fontSize: "12px",
+                fontWeight: 500,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {isRecording ? "Stop" : "Speak"}
+            </button>
+            <button
+              onClick={handleChatSubmit}
+              disabled={isLoading || !chatInput.trim() || isRecording}
+              style={{
+                padding: "12px 16px",
+                borderRadius: 12,
+                background: isLoading || !chatInput.trim() || isRecording ? '#f3f4f6' : '#111827',
+                color: isLoading || !chatInput.trim() || isRecording ? '#9ca3af' : 'white',
                 border: "none",
-                cursor: isLoading || !chatInput.trim() ? "not-allowed" : "pointer",
+                cursor: isLoading || !chatInput.trim() || isRecording ? "not-allowed" : "pointer",
                 fontSize: "13px",
                 fontWeight: 500,
               }}
