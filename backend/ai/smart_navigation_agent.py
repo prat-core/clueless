@@ -20,10 +20,24 @@ class SmartNavigationAgent:
         self.semantic_search = SemanticSearch()
         
     def is_navigation_prompt_simple(self, user_input):
+        """
+        Simple keyword-based navigation prompt detection (fallback method)
+        
+        Args:
+            user_input: User's input text
+            
+        Returns:
+            Dictionary with navigation detection results
+        """
+        # Comprehensive navigation keywords from both implementations
         navigation_keywords = [
             'go to', 'find', 'navigate', 'get to', 'reach', 'locate',
             'where is', 'how do i', 'show me', 'take me', 'direct me',
-            'path to', 'way to', 'route to', 'get to', 'access'
+            'path to', 'way to', 'route to', 'get to', 'access',
+            'login', 'sign in', 'register', 'sign up', 'checkout', 'buy',
+            'purchase', 'add to cart', 'search for', 'browse', 'explore',
+            'click', 'button', 'link', 'page', 'section', 'how to',
+            'help me', 'navigate to', 'take me to'
         ]
         
         user_lower = user_input.lower()
@@ -154,6 +168,25 @@ class SmartNavigationAgent:
             result["message"] = "Not a navigation prompt - no end node search performed"
         
         return result
+    
+    def classify_query_type(self, user_query: str) -> str:
+        """
+        Classify whether a query is a navigation query or informational query
+        (Consolidated from general_llm.py functionality)
+        
+        Args:
+            user_query: User's input query
+            
+        Returns:
+            "NAVIGATION_TOOL" or "RAG_TOOL"
+        """
+        # First check if it's a navigation prompt
+        nav_result = self.is_navigation_prompt(user_query)
+        
+        if nav_result["is_navigation"]:
+            return "NAVIGATION_TOOL"
+        else:
+            return "RAG_TOOL"
     
     def close(self):
         """Close the semantic search connection."""
