@@ -5,14 +5,14 @@ app = Flask(__name__)
 CORS(app)
 
 try:
-    from backend.ai.semantic_search import SimpleSemanticSearch
-    semantic_search = SimpleSemanticSearch()
-    SEMANTIC_AVAILABLE = True
-    print("✅ Semantic search available")
+    from ai.smart_navigation_agent import SmartNavigationAgent
+    navigation_agent = SmartNavigationAgent()
+    AGENT_AVAILABLE = True
+    print("✅ Smart Navigation Agent available")
 except Exception as e:
-    print(f"⚠️  Semantic search not available: {e}")
-    semantic_search = None
-    SEMANTIC_AVAILABLE = False
+    print(f"⚠️  Smart Navigation Agent not available: {e}")
+    navigation_agent = None
+    AGENT_AVAILABLE = False
 
 @app.route('/user_text_input', methods=['POST'])
 def user_text_input():
@@ -23,19 +23,21 @@ def user_text_input():
         
         user_text = data['text']
         
-        if SEMANTIC_AVAILABLE:
-            search_result = semantic_search.find_end_node(user_text)
+        if AGENT_AVAILABLE:
+            result = navigation_agent.process_user_input(user_text)
             response = {
-                'message': 'Text input processed with semantic search',
-                'user_input': user_text,
-                'end_node': search_result['end_node'],
-                'confidence': search_result['confidence'],
-                'search_message': search_result['message'],
+                'message': result['message'],
+                'user_input': result['user_input'],
+                'is_navigation_prompt': result['is_navigation_prompt'],
+                'claude_confidence': result['claude_confidence'],
+                'claude_reasoning': result['claude_reasoning'],
+                'end_node': result['end_node'],
+                'semantic_confidence': result['semantic_confidence'],
                 'status': 'success'
             }
         else:
             response = {
-                'message': 'Text input received successfully (semantic search unavailable)',
+                'message': 'Text input received successfully (Smart Navigation Agent unavailable)',
                 'user_input': user_text,
                 'status': 'success'
             }
