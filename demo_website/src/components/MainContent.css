@@ -1,0 +1,168 @@
+.main-content {
+  flex: 1;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.content-container {
+  max-width: 800px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.main-heading {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  text-align: left;
+}
+
+.welcome-message {
+  color: #ccc;
+  font-size: 16px;
+  margin: 0 0 32px 0;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.dropdown-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dropdown-box {
+  background-color: #333;
+  border-radius: 8px;
+  border: 1px solid #444;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-header:hover {
+  background-color: #3a3a3a;
+}
+
+.dropdown-title {
+  color: #4ade80;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.dropdown-arrow {
+  color: #ccc;
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+.dropdown-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.dropdown-content {
+  padding: 20px;
+  border-top: 1px solid #444;
+  background-color: #2a2a2a;
+}
+
+.dropdown-content p {
+  color: #ccc;
+  margin: 0;
+  font-size: 14px;
+}
+
+.content-heading {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+}
+
+.content-text {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.code-block {
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.code-block pre {
+  color: #e5e5e5;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0;
+  white-space: pre;
+}
+
+/* VS Code-style syntax highlighting */
+.keyword {
+  color: #569cd6; /* Blue for keywords like import, def, return */
+}
+
+.string {
+  color: #ce9178; /* Orange for strings */
+}
+
+.function {
+  color: #dcdcaa; /* Yellow for function names */
+}
+
+.module {
+  color: #4ec9b0; /* Teal for modules */
+}
+
+.variable {
+  color: #9cdcfe; /* Light blue for variables */
+}
+
+.parameter {
+  color: #9cdcfe; /* Light blue for parameters */
+}
+
+.number {
+  color: #b5cea8; /* Light green for numbers */
+}
+
+.operator {
+  color: #d4d4d4; /* Light grey for operators */
+}
+
+.bracket {
+  color: #ffd700; /* Gold for brackets */
+}
+
+.decorator {
+  color: #569cd6; /* Blue for decorators */
+}
+
+.comment {
+  color: #6a9955; /* Green for comments */
+  font-style: italic;
+}
+
+.command {
+  color: #4fc1ff; /* Light blue for terminal commands */
+}
