@@ -2,14 +2,12 @@ import os
 import logging
 from typing import Dict, List, Optional, Any, Tuple
 from datetime import datetime
-import numpy as np
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 from dotenv import load_dotenv
 
 # Import our existing components
 from .neo4j_processor import neo4j_processor
 from .rag_tool import create_rag_tool
+from .semantic_search import SemanticSearch
 
 # Load environment variables
 load_dotenv()
@@ -39,11 +37,8 @@ class NavigationTool:
             # Initialize Neo4j processor for graph operations
             self.neo4j_processor = neo4j_processor()
             
-            # Initialize sentence transformer for vector operations
-            self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-            
-            # Cache for node embeddings (to avoid recomputing)
-            self._node_embeddings_cache = {}
+            # Initialize semantic search for vector operations
+            self.semantic_search = SemanticSearch()
             
             logger.info("✅ Navigation tool initialized successfully")
             
@@ -144,7 +139,7 @@ class NavigationTool:
     
     def find_similar_nodes(self, intent_data: Dict[str, Any], limit: int = 5) -> List[Dict[str, Any]]:
         """
-        Find nodes similar to the user's intent using vector cosine similarity
+        Find nodes similar to the user's intent using consolidated semantic search
         
         Args:
             intent_data: Extracted intent information
@@ -159,89 +154,17 @@ class NavigationTool:
             
             logger.info(f"🔍 Searching for nodes similar to: {search_query[:100]}...")
             
-            # Get query embedding
-            query_embedding = self.embedding_model.encode([search_query])
+            # Use consolidated semantic search functionality
+            similar_nodes = self.semantic_search.find_similar_nodes(search_query, limit)
             
-            # Get all nodes with their content from Neo4j
-            nodes = self._get_all_nodes_with_content()
+            logger.info(f"✅ Found {len(similar_nodes)} similar nodes using semantic search")
             
-            if not nodes:
-                logger.warning("⚠️ No nodes found in Neo4j database")
-                return []
-            
-            # Calculate similarities
-            similar_nodes = []
-            
-            for node in nodes:
-                node_content = node.get('content', '')
-                node_id = node.get('url') or node.get('id', 'unknown')
-                
-                if not node_content:
-                    continue
-                
-                # Get or compute node embedding
-                if node_id not in self._node_embeddings_cache:
-                    self._node_embeddings_cache[node_id] = self.embedding_model.encode([node_content])
-                
-                node_embedding = self._node_embeddings_cache[node_id]
-                
-                # Calculate cosine similarity
-                similarity = cosine_similarity(query_embedding, node_embedding)[0][0]
-                
-                similar_nodes.append({
-                    'node_id': node_id,
-                    'content': node_content[:500],  # Truncate for response
-                    'similarity_score': float(similarity),
-                    'node_data': node
-                })
-            
-            # Sort by similarity and return top results
-            similar_nodes.sort(key=lambda x: x['similarity_score'], reverse=True)
-            top_nodes = similar_nodes[:limit]
-            
-            logger.info(f"✅ Found {len(top_nodes)} similar nodes (best similarity: {top_nodes[0]['similarity_score']:.3f})")
-            
-            return top_nodes
+            return similar_nodes
             
         except Exception as e:
             logger.error(f"❌ Error finding similar nodes: {e}")
             return []
     
-    def _get_all_nodes_with_content(self) -> List[Dict[str, Any]]:
-        """
-        Get all nodes with content from Neo4j database
-        
-        Returns:
-            List of nodes with their content
-        """
-        try:
-            with self.neo4j_processor.driver.session() as session:
-                query = """
-                MATCH (n)
-                WHERE n.content IS NOT NULL AND n.content <> ''
-                RETURN n.url as url, n.id as id, n.content as content, 
-                       labels(n) as labels, properties(n) as properties
-                LIMIT 1000
-                """
-                
-                result = session.run(query)
-                nodes = []
-                
-                for record in result:
-                    node_data = {
-                        'url': record.get('url'),
-                        'id': record.get('id'),
-                        'content': record.get('content', ''),
-                        'labels': record.get('labels', []),
-                        'properties': dict(record.get('properties', {}))
-                    }
-                    nodes.append(node_data)
-                
-                return nodes
-                
-        except Exception as e:
-            logger.error(f"❌ Error getting nodes from Neo4j: {e}")
-            return []
     
     def get_navigation_path(self, start_node_id: str, target_node_id: str) -> Optional[List[Dict[str, Any]]]:
         """
@@ -385,10 +308,27 @@ class NavigationTool:
                     'timestamp': datetime.now().isoformat()
                 }
             
-            # Step 6: Return complete navigation response
+            # Clean DateTime objects in navigation path
+            for step in navigation_path:
+                if 'node_data' in step and step['node_data']:
+                    clean_node_data = {}
+                    for key, value in step['node_data'].items():
+                        if isinstance(value, (str, int, float, bool, type(None))):
+                            clean_node_data[key] = value
+                        elif hasattr(value, 'isoformat'):  # DateTime objects
+                            clean_node_data[key] = value.isoformat()
+                        else:
+                            clean_node_data[key] = str(value)
+                    step['node_data'] = clean_node_data
+            
+            # Step 6: Format step-by-step response for frontend
+            step_by_step_response = self._format_step_by_step_response(navigation_path, user_query)
+            
+            # Step 7: Return complete navigation response
             response = {
                 'status': 'success',
-                'navigation_path': navigation_path,
+                'response': step_by_step_response,  # Main response for frontend display
+                'navigation_path': navigation_path,  # Raw path data for debugging
                 'intent': intent_data,
                 'target_match': {
                     'node_id': best_match['node_id'],
@@ -418,6 +358,49 @@ class NavigationTool:
                 'timestamp': datetime.now().isoformat()
             }
     
+    def _format_step_by_step_response(self, navigation_path: List[Dict[str, Any]], user_query: str) -> str:
+        """
+        Format navigation path into a user-friendly step-by-step response
+        
+        Args:
+            navigation_path: List of navigation steps
+            user_query: Original user query
+            
+        Returns:
+            Formatted step-by-step response string
+        """
+        if not navigation_path:
+            return "I couldn't find a path to your destination. Please try rephrasing your request."
+        
+        response_parts = [
+            f"I'll help you with that! Here's how to get to your destination:",
+            ""
+        ]
+        
+        for i, step in enumerate(navigation_path, 1):
+            step_number = step.get('step_number', i)
+            description = step.get('description', f'Step {i}')
+            action = step.get('action', 'navigate')
+            
+            # Format the step based on action type
+            if action == 'start':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            elif action == 'destination':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            elif action == 'navigate':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            elif action == 'click':
+                response_parts.append(f"**Step {step_number}:** {description}")
+            else:
+                response_parts.append(f"**Step {step_number}:** {description}")
+        
+        response_parts.extend([
+            "",
+            "Follow these steps in order to reach your destination. Let me know if you need help with any specific step!"
+        ])
+        
+        return "\n".join(response_parts)
+    
     def _get_current_location(self) -> str:
         """
         Get current location (placeholder for future implementation)
@@ -427,16 +410,123 @@ class NavigationTool:
         """
         # TODO: Implement logic to get actual current location
         # This could come from browser extension, session data, etc.
-        return "homepage"  # Default starting point
+        return "https://www.cvs.com"  # Default starting point - actual CVS homepage
     
     def close(self):
         """Close connections and cleanup resources"""
         try:
             if hasattr(self, 'neo4j_processor'):
                 self.neo4j_processor.close()
+            if hasattr(self, 'semantic_search'):
+                self.semantic_search.close()
             logger.info("✅ Navigation tool closed successfully")
         except Exception as e:
             logger.error(f"❌ Error closing navigation tool: {e}")
+
+
+def convert_nodes_to_html_list(path_nodes: List[Dict[str, Any]]) -> List[str]:
+    """
+    Convert Neo4j path nodes to HTML element strings for frontend startGuide function
+    
+    Args:
+        path_nodes: List of Neo4j nodes from find_shortest_path
+        
+    Returns:
+        List of HTML element strings ready for frontend consumption
+    """
+    html_elements = []
+    
+    try:
+        logger.info(f"🔄 Converting {len(path_nodes)} nodes to HTML elements...")
+        
+        for i, node in enumerate(path_nodes):
+            html_element = _convert_node_to_html_element(node, i)
+            if html_element:
+                html_elements.append(html_element)
+                logger.debug(f"✅ Converted node {i+1}: {html_element[:100]}...")
+        
+        logger.info(f"✅ Successfully converted {len(html_elements)} nodes to HTML elements")
+        return html_elements
+        
+    except Exception as e:
+        logger.error(f"❌ Error converting nodes to HTML: {e}")
+        return []
+
+
+def _convert_node_to_html_element(node: Dict[str, Any], index: int) -> Optional[str]:
+    """
+    Convert a single Neo4j node to an HTML element string
+    
+    Args:
+        node: Neo4j node data
+        index: Node index in the path
+        
+    Returns:
+        HTML element string or None if conversion fails
+    """
+    try:
+        # Handle Page nodes (URLs)
+        if 'url' in node:
+            url = node.get('url', '')
+            title = node.get('title', url)
+            return f'<a href="{url}" data-step="{index+1}" data-type="page">{title}</a>'
+        
+        # Handle Element nodes (buttons, links, forms, etc.)
+        element_type = node.get('type', 'element')
+        element_id = node.get('id', '')
+        element_class = node.get('class', '')
+        element_text = node.get('text', f'Element {index+1}')
+        
+        # Build attributes string
+        attributes = []
+        
+        if element_id:
+            attributes.append(f'id="{element_id}"')
+        
+        if element_class:
+            if isinstance(element_class, list):
+                element_class = ' '.join(element_class)
+            attributes.append(f'class="{element_class}"')
+        
+        # Add data attributes for frontend identification
+        attributes.append(f'data-step="{index+1}"')
+        attributes.append(f'data-type="{element_type}"')
+        
+        # Handle different element types
+        if element_type == 'button' or 'button' in element_type.lower():
+            # Handle button elements
+            onclick = node.get('onclick', '')
+            if onclick:
+                attributes.append(f'onclick="{onclick}"')
+            
+            attrs_str = ' '.join(attributes)
+            return f'<button {attrs_str}>{element_text}</button>'
+            
+        elif element_type == 'link' or 'link' in element_type.lower():
+            # Handle link elements
+            href = node.get('href', '#')
+            attrs_str = ' '.join(attributes)
+            return f'<a href="{href}" {attrs_str}>{element_text}</a>'
+            
+        elif element_type == 'form' or 'form' in element_type.lower():
+            # Handle form elements
+            action = node.get('action', '')
+            method = node.get('method', 'GET')
+            if action:
+                attributes.append(f'action="{action}"')
+            attributes.append(f'method="{method}"')
+            
+            attrs_str = ' '.join(attributes)
+            return f'<form {attrs_str}><input type="submit" value="{element_text}"></form>'
+            
+        else:
+            # Generic clickable element
+            attrs_str = ' '.join(attributes)
+            return f'<div {attrs_str} role="button" tabindex="0">{element_text}</div>'
+            
+    except Exception as e:
+        logger.error(f"❌ Error converting node to HTML: {e}")
+        return None
 
 
 # Factory function to create navigation tool instance

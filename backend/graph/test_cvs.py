@@ -90,7 +90,7 @@ def test_cvs_crawler():
             neo4j_auth=(neo4j_user, neo4j_password),
             openai_api_key=openai_api_key,
             base_url=cvs_url,
-            user_agent="Mozilla/5.0 (compatible; AI-WebCrawler/1.0; Educational)",
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             delay=1.5,  # Be respectful with delay between requests
             timeout=30.0,
             max_retries=3

@@ -3,6 +3,7 @@ import logging
 from typing import Dict, List, Optional, Any
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from .smart_navigation_agent import SmartNavigationAgent
 
 # Load environment variables
 load_dotenv()
@@ -17,7 +18,7 @@ class QueryRouter:
     """
     
     def __init__(self):
-        """Initialize the query router with Claude client"""
+        """Initialize the query router with Claude client and navigation agent"""
         self.anthropic_api_key = os.getenv('ANTHROPIC_API_KEY')
         
         if not self.anthropic_api_key:
@@ -31,6 +32,14 @@ class QueryRouter:
                 logger.error(f"❌ Failed to initialize Claude client: {e}")
                 self.client = None
         
+        # Initialize navigation agent for consolidated classification
+        try:
+            self.navigation_agent = SmartNavigationAgent()
+            logger.info("✅ Smart Navigation Agent initialized successfully")
+        except Exception as e:
+            logger.error(f"❌ Failed to initialize Smart Navigation Agent: {e}")
+            self.navigation_agent = None
+        
         # System prompt for tool routing
         self.system_prompt = """You are a query router that determines which tool to use based on user intent.
 
@@ -42,7 +51,7 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
     
     def classify_query(self, user_query: str) -> str:
         """
-        Use Claude LLM to classify the query and determine which tool to use
+        Use consolidated navigation agent to classify the query and determine which tool to use
         
         Args:
             user_query: User's input query
@@ -50,43 +59,24 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
         Returns:
             Tool name: "NAVIGATION_TOOL" or "RAG_TOOL"
         """
-        if not self.client:
-            logger.warning("⚠️ Claude client not available, using keyword-based classification")
-            return self._classify_by_keywords(user_query)
-        
-        try:
-            logger.info(f"🧠 Classifying query: {user_query[:100]}...")
-            
-            # Call Claude API for classification
-            message = self.client.messages.create(
-                model="claude-3-7-sonnet-20250219", 
-                max_tokens=50,
-                system=self.system_prompt,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": user_query
-                    }
-                ]
-            )
-            
-            tool_name = message.content[0].text.strip()
-            
-            # Validate response
-            if tool_name in ["NAVIGATION_TOOL", "RAG_TOOL"]:
+        # Use consolidated navigation agent for classification
+        if self.navigation_agent:
+            try:
+                logger.info(f"🧠 Classifying query using Smart Navigation Agent: {user_query[:100]}...")
+                tool_name = self.navigation_agent.classify_query_type(user_query)
                 logger.info(f"✅ Query classified as: {tool_name}")
                 return tool_name
-            else:
-                logger.warning(f"⚠️ Unexpected tool classification: {tool_name}, defaulting to RAG_TOOL")
-                return "RAG_TOOL"
-                
-        except Exception as e:
-            logger.error(f"❌ Error in query classification: {e}")
-            return self._classify_by_keywords(user_query)  # Fallback to keyword-based
+            except Exception as e:
+                logger.error(f"❌ Error in navigation agent classification: {e}")
+                # Fallback to keyword-based classification
+                return self._classify_by_keywords(user_query)
+        else:
+            logger.warning("⚠️ Navigation agent not available, using keyword-based classification")
+            return self._classify_by_keywords(user_query)
     
     def _classify_by_keywords(self, user_query: str) -> str:
         """
-        Fallback classification using keyword matching
+        Fallback classification using keyword matching (consolidated keywords)
         
         Args:
             user_query: User's input query
@@ -96,12 +86,15 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
         """
         query_lower = user_query.lower()
         
-        # Navigation keywords
+        # Use consolidated navigation keywords from smart_navigation_agent
         navigation_keywords = [
-            'navigate', 'go to', 'take me to', 'find', 'show me', 'help me',
+            'go to', 'find', 'navigate', 'get to', 'reach', 'locate',
+            'where is', 'how do i', 'show me', 'take me', 'direct me',
+            'path to', 'way to', 'route to', 'get to', 'access',
             'login', 'sign in', 'register', 'sign up', 'checkout', 'buy',
             'purchase', 'add to cart', 'search for', 'browse', 'explore',
-            'click', 'button', 'link', 'page', 'section', 'how to'
+            'click', 'button', 'link', 'page', 'section', 'how to',
+            'help me', 'navigate to', 'take me to'
         ]
         
         # Check if query contains navigation keywords
@@ -201,17 +194,33 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
             RAG tool response
         """
         try:
-            from .rag_tool_temp import process_info_query
+            from .rag_tool import create_rag_tool
             
-            # Call the temporary RAG tool
-            response = process_info_query(user_query)
+            # Call the RAG tool
+            rag_tool = create_rag_tool()
+            if rag_tool is None:
+                return {
+                    'response': 'RAG tool could not be initialized. Please check your API keys.',
+                    'status': 'error',
+                    'error': 'RAG tool initialization failed',
+                    'tool_used': 'rag_tool'
+                }
+            rag_response = rag_tool.process_query(user_query)
+            
+            # Extract the actual response text from the RAG tool response
+            response_text = rag_response.get('response', 'No response generated')
             
             return {
-                'response': response,
-                'status': 'success',
-                'tool_used': 'rag_tool_temp',
+                'response': response_text,
+                'status': rag_response.get('status', 'success'),
+                'tool_used': 'rag_tool',
                 'user_query': user_query,
-                'routing_timestamp': self._get_timestamp()
+                'routing_timestamp': self._get_timestamp(),
+                'rag_metadata': {
+                    'model': rag_response.get('model', 'unknown'),
+                    'context_used': rag_response.get('context_used', 0),
+                    'retrieval_used': rag_response.get('retrieval_used', False)
+                }
             }
             
         except Exception as e:
@@ -220,7 +229,7 @@ Respond with ONLY the tool name: either "NAVIGATION_TOOL" or "RAG_TOOL"."""
                 'response': f'Error with RAG tool: {str(e)}',
                 'status': 'error',
                 'error': str(e),
-                'tool_used': 'rag_tool_temp'
+                'tool_used': 'rag_tool'
             }
     
     def _get_timestamp(self) -> str:

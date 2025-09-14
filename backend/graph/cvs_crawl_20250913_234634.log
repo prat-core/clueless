@@ -1,0 +1,952 @@
+2025-09-13 23:46:34,945 - __main__ - INFO - ============================================================
+2025-09-13 23:46:34,945 - __main__ - INFO - CVS Website Crawler Test
+2025-09-13 23:46:34,946 - __main__ - INFO - ============================================================
+2025-09-13 23:46:34,946 - __main__ - INFO - Target URL: https://www.cvs.com
+2025-09-13 23:46:34,946 - __main__ - INFO - Neo4j URI: bolt://localhost:7687
+2025-09-13 23:46:34,946 - __main__ - INFO - Max Depth: 3
+2025-09-13 23:46:34,946 - __main__ - INFO - Max Pages: 100
+2025-09-13 23:46:34,946 - __main__ - INFO - ============================================================
+2025-09-13 23:46:42,326 - __main__ - INFO - Clearing existing database...
+2025-09-13 23:46:42,351 - neo4j_manager - INFO - Successfully connected to Neo4j at bolt://localhost:7687
+2025-09-13 23:46:42,508 - neo4j_manager - INFO - Created constraint/index: page_url_unique
+2025-09-13 23:46:42,586 - neo4j_manager - INFO - Created constraint/index: external_url_unique
+2025-09-13 23:46:42,613 - neo4j_manager - INFO - Created constraint/index: page_domain
+2025-09-13 23:46:42,624 - neo4j_manager - INFO - Created constraint/index: page_crawled
+2025-09-13 23:46:42,644 - neo4j_manager - INFO - Created constraint/index: element_type
+2025-09-13 23:46:42,750 - neo4j_manager - INFO - Created constraint/index: INDEX
+2025-09-13 23:46:42,892 - neo4j_manager - INFO - Neo4j connection closed
+2025-09-13 23:46:42,892 - __main__ - INFO - Database cleared
+2025-09-13 23:46:42,892 - __main__ - INFO - Initializing web crawler...
+2025-09-13 23:46:42,897 - neo4j_manager - INFO - Successfully connected to Neo4j at bolt://localhost:7687
+2025-09-13 23:46:42,908 - neo4j_manager - INFO - Created constraint/index: page_url_unique
+2025-09-13 23:46:42,921 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE CONSTRAINT page_url_unique IF NOT EXISTS FOR (e:Page) REQUIRE (e.url) IS UNIQUE` has no effect.} {description: `CONSTRAINT page_url_unique FOR (e:Page) REQUIRE (e.url) IS UNIQUE` already exists.} {position: None} for query: 'CREATE CONSTRAINT page_url_unique IF NOT EXISTS FOR (p:Page) REQUIRE p.url IS UNIQUE'
+2025-09-13 23:46:42,925 - neo4j_manager - INFO - Created constraint/index: external_url_unique
+2025-09-13 23:46:42,925 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE CONSTRAINT external_url_unique IF NOT EXISTS FOR (e:ExternalLink) REQUIRE (e.url) IS UNIQUE` has no effect.} {description: `CONSTRAINT external_url_unique FOR (e:ExternalLink) REQUIRE (e.url) IS UNIQUE` already exists.} {position: None} for query: 'CREATE CONSTRAINT external_url_unique IF NOT EXISTS FOR (e:ExternalLink) REQUIRE e.url IS UNIQUE'
+2025-09-13 23:46:42,931 - neo4j_manager - INFO - Created constraint/index: page_domain
+2025-09-13 23:46:42,931 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX page_domain IF NOT EXISTS FOR (e:Page) ON (e.domain)` has no effect.} {description: `RANGE INDEX page_domain FOR (e:Page) ON (e.domain)` already exists.} {position: None} for query: 'CREATE INDEX page_domain IF NOT EXISTS FOR (p:Page) ON (p.domain)'
+2025-09-13 23:46:42,934 - neo4j_manager - INFO - Created constraint/index: page_crawled
+2025-09-13 23:46:42,937 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX page_crawled IF NOT EXISTS FOR (e:Page) ON (e.last_crawled)` has no effect.} {description: `RANGE INDEX page_crawled FOR (e:Page) ON (e.last_crawled)` already exists.} {position: None} for query: 'CREATE INDEX page_crawled IF NOT EXISTS FOR (p:Page) ON (p.last_crawled)'
+2025-09-13 23:46:42,946 - neo4j_manager - INFO - Created constraint/index: element_type
+2025-09-13 23:46:42,946 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX element_type IF NOT EXISTS FOR (e:Element) ON (e.type)` has no effect.} {description: `RANGE INDEX element_type FOR (e:Element) ON (e.type)` already exists.} {position: None} for query: 'CREATE INDEX element_type IF NOT EXISTS FOR (e:Element) ON (e.type)'
+2025-09-13 23:46:42,953 - neo4j_manager - INFO - Created constraint/index: INDEX
+2025-09-13 23:46:42,954 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE VECTOR INDEX page_content_vector IF NOT EXISTS FOR (e:Page) ON (e.content_vector) OPTIONS {indexConfig: {`vector.dimensions`: 1536, `vector.similarity_function`: "cosine"}}` has no effect.} {description: `VECTOR INDEX page_content_vector FOR (e:Page) ON (e.content_vector)` already exists.} {position: None} for query: "CREATE VECTOR INDEX page_content_vector IF NOT EXISTS FOR (p:Page) ON p.content_vector OPTIONS {indexConfig: {`vector.dimensions`: 1536, `vector.similarity_function`: 'cosine'}}"
+2025-09-13 23:46:42,999 - content_processor - INFO - ContentProcessor initialized with OpenAI API
+2025-09-13 23:46:43,005 - crawler - INFO - WebCrawler initialized for https://www.cvs.com
+2025-09-13 23:46:43,005 - crawler - INFO - Base domain: www.cvs.com
+2025-09-13 23:46:43,005 - __main__ - INFO - Starting crawl...
+2025-09-13 23:46:43,005 - crawler - INFO - Starting crawl from https://www.cvs.com with max_pages=100, max_depth=3
+2025-09-13 23:46:43,005 - crawler - INFO - Fetching URL: https://www.cvs.com
+2025-09-13 23:46:43,309 - httpx - INFO - HTTP Request: GET https://www.cvs.com "HTTP/1.1 200 OK"
+2025-09-13 23:46:43,669 - crawler - INFO - Successfully fetched https://www.cvs.com - Status: 200, Size: 12376909 bytes, Time: 651.33ms
+2025-09-13 23:46:44,618 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:46:44,621 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:46:46,115 - crawler - INFO - Stored page data for https://www.cvs.com with 169 links
+2025-09-13 23:46:46,116 - crawler - INFO - Progress: 1/100 pages crawled, 112 in queue
+2025-09-13 23:46:47,619 - crawler - INFO - Fetching URL: https://www.cvs.com/rx/dotm/cart?flowType=FS
+2025-09-13 23:46:47,656 - httpx - INFO - HTTP Request: GET https://www.cvs.com/rx/dotm/cart?flowType=FS "HTTP/1.1 403 Forbidden"
+2025-09-13 23:46:47,656 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/rx/dotm/cart?flowType=FS
+2025-09-13 23:46:47,657 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy/v3/dashboard
+2025-09-13 23:46:47,736 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/v3/dashboard "HTTP/1.1 302 Moved Temporarily"
+2025-09-13 23:46:47,794 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/rx/prescriptions "HTTP/1.1 200 OK"
+2025-09-13 23:46:48,237 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy/v3/dashboard - Status: 200, Size: 1917601 bytes, Time: 575.88ms
+2025-09-13 23:46:49,073 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:46:49,076 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:46:49,737 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy/rx/prescriptions with 106 links
+2025-09-13 23:46:49,737 - crawler - INFO - Progress: 2/100 pages crawled, 110 in queue
+2025-09-13 23:46:51,238 - crawler - INFO - Fetching URL: https://www.cvs.com/photo/photo-landing
+2025-09-13 23:46:52,012 - httpx - INFO - HTTP Request: GET https://www.cvs.com/photo/photo-landing "HTTP/1.1 200 OK"
+2025-09-13 23:46:52,015 - crawler - INFO - Successfully fetched https://www.cvs.com/photo/photo-landing - Status: 200, Size: 175473 bytes, Time: 776.41ms
+2025-09-13 23:46:52,819 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:46:52,820 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:46:54,284 - crawler - INFO - Stored page data for https://www.cvs.com/photo/photo-landing with 398 links
+2025-09-13 23:46:54,287 - crawler - INFO - Progress: 3/100 pages crawled, 274 in queue
+2025-09-13 23:46:55,792 - crawler - INFO - Fetching URL: https://www.cvs.com/extracare/home
+2025-09-13 23:46:55,936 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/home "HTTP/1.1 200 OK"
+2025-09-13 23:46:55,996 - crawler - INFO - Successfully fetched https://www.cvs.com/extracare/home - Status: 200, Size: 4103811 bytes, Time: 201.44ms
+2025-09-13 23:46:56,149 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:46:56,152 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:46:56,835 - crawler - INFO - Stored page data for https://www.cvs.com/extracare/home with 108 links
+2025-09-13 23:46:56,836 - crawler - INFO - Progress: 4/100 pages crawled, 273 in queue
+2025-09-13 23:46:58,341 - crawler - INFO - Fetching URL: https://www.cvs.com/shop
+2025-09-13 23:46:58,387 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop "HTTP/1.1 403 Forbidden"
+2025-09-13 23:46:58,388 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop
+2025-09-13 23:46:58,389 - crawler - INFO - Fetching URL: https://www.cvs.com/weeklyad/pageview
+2025-09-13 23:46:59,205 - httpx - INFO - HTTP Request: GET https://www.cvs.com/weeklyad/pageview "HTTP/1.1 200 OK"
+2025-09-13 23:46:59,266 - crawler - INFO - Successfully fetched https://www.cvs.com/weeklyad/pageview - Status: 200, Size: 2001020 bytes, Time: 875.47ms
+2025-09-13 23:47:00,152 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:00,154 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:00,408 - crawler - INFO - Stored page data for https://www.cvs.com/weeklyad/pageview with 35 links
+2025-09-13 23:47:00,408 - crawler - INFO - Progress: 5/100 pages crawled, 271 in queue
+2025-09-13 23:47:01,913 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy?icid=cvs-home-s1-l1-hero-rx-managescripts
+2025-09-13 23:47:02,142 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy?icid=cvs-home-s1-l1-hero-rx-managescripts "HTTP/1.1 200 OK"
+2025-09-13 23:47:02,143 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy?icid=cvs-home-s1-l1-hero-rx-managescripts - Status: 200, Size: 190042 bytes, Time: 229.96ms
+2025-09-13 23:47:02,292 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:02,294 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:02,967 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy?icid=cvs-home-s1-l1-hero-rx-managescripts with 93 links
+2025-09-13 23:47:02,968 - crawler - INFO - Progress: 6/100 pages crawled, 282 in queue
+2025-09-13 23:47:04,471 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s1-l2-hero-imz-fnnl-generalvax
+2025-09-13 23:47:04,611 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s1-l2-hero-imz-fnnl-generalvax "HTTP/1.1 200 OK"
+2025-09-13 23:47:04,612 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s1-l2-hero-imz-fnnl-generalvax - Status: 200, Size: 25603 bytes, Time: 141.02ms
+2025-09-13 23:47:04,640 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s1-l2-hero-imz-fnnl-generalvax with 0 links
+2025-09-13 23:47:04,640 - crawler - INFO - Progress: 7/100 pages crawled, 281 in queue
+2025-09-13 23:47:06,146 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule
+2025-09-13 23:47:06,315 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:47:06,425 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule - Status: 200, Size: 2485088 bytes, Time: 274.52ms
+2025-09-13 23:47:07,196 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:07,199 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:07,836 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule with 114 links
+2025-09-13 23:47:07,836 - crawler - INFO - Progress: 8/100 pages crawled, 306 in queue
+2025-09-13 23:47:09,339 - crawler - INFO - Fetching URL: https://www.cvs.com/shop?icid=cvs-home-s2-l5-tiles-fs-shopall
+2025-09-13 23:47:09,380 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop?icid=cvs-home-s2-l5-tiles-fs-shopall "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:09,380 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop?icid=cvs-home-s2-l5-tiles-fs-shopall
+2025-09-13 23:47:09,381 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/health-medicine?icid=cvs-home-s2-l1-tiles-fs-healthmeds
+2025-09-13 23:47:09,469 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/health-medicine?icid=cvs-home-s2-l1-tiles-fs-healthmeds "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:09,470 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/health-medicine?icid=cvs-home-s2-l1-tiles-fs-healthmeds
+2025-09-13 23:47:09,470 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins
+2025-09-13 23:47:09,680 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:09,680 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins
+2025-09-13 23:47:09,680 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare
+2025-09-13 23:47:09,759 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:09,760 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare
+2025-09-13 23:47:09,760 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals
+2025-09-13 23:47:09,838 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:09,838 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals
+2025-09-13 23:47:09,838 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu
+2025-09-13 23:47:09,961 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu "HTTP/1.1 200 OK"
+2025-09-13 23:47:09,961 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu - Status: 200, Size: 25603 bytes, Time: 123.24ms
+2025-09-13 23:47:09,975 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu with 0 links
+2025-09-13 23:47:09,975 - crawler - INFO - Progress: 9/100 pages crawled, 300 in queue
+2025-09-13 23:47:11,483 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/seasonal-shops/fall?icid=cvs-home-s3-l3-theme-fs-pumpkinfall
+2025-09-13 23:47:11,528 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/seasonal-shops/fall?icid=cvs-home-s3-l3-theme-fs-pumpkinfall "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:11,528 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/seasonal-shops/fall?icid=cvs-home-s3-l3-theme-fs-pumpkinfall
+2025-09-13 23:47:11,528 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s3-l2-theme-fs-fallepic
+2025-09-13 23:47:11,614 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s3-l2-theme-fs-fallepic "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:11,615 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s3-l2-theme-fs-fallepic
+2025-09-13 23:47:11,615 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=cvs-home-s3-l4-theme-mc-sickcare
+2025-09-13 23:47:11,845 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=cvs-home-s3-l4-theme-mc-sickcare "HTTP/1.1 200 OK"
+2025-09-13 23:47:11,989 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=cvs-home-s3-l4-theme-mc-sickcare - Status: 200, Size: 2348421 bytes, Time: 370.08ms
+2025-09-13 23:47:12,634 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:12,635 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:13,397 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=cvs-home-s3-l4-theme-mc-sickcare with 105 links
+2025-09-13 23:47:13,398 - crawler - INFO - Progress: 10/100 pages crawled, 308 in queue
+2025-09-13 23:47:14,900 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts
+2025-09-13 23:47:15,261 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts "HTTP/1.1 200 OK"
+2025-09-13 23:47:15,264 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts - Status: 200, Size: 190040 bytes, Time: 363.27ms
+2025-09-13 23:47:15,585 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:15,587 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:16,092 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts with 93 links
+2025-09-13 23:47:16,092 - crawler - INFO - Progress: 11/100 pages crawled, 307 in queue
+2025-09-13 23:47:17,597 - crawler - INFO - Fetching URL: https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill
+2025-09-13 23:47:17,853 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill "HTTP/1.1 200 OK"
+2025-09-13 23:47:17,856 - crawler - INFO - Successfully fetched https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill - Status: 200, Size: 210181 bytes, Time: 258.51ms
+2025-09-13 23:47:18,107 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:18,108 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:18,732 - crawler - INFO - Stored page data for https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill with 87 links
+2025-09-13 23:47:18,732 - crawler - INFO - Progress: 12/100 pages crawled, 316 in queue
+2025-09-13 23:47:20,237 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy/rxtransfer?icid=cvs-home-s4-l3-rxsrvcs-rx-fnnl-transferscripts
+2025-09-13 23:47:20,327 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/rxtransfer?icid=cvs-home-s4-l3-rxsrvcs-rx-fnnl-transferscripts "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:47:20,373 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/#/pharmacy/rxtransfer "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:47:20,617 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy#/pharmacy/rxtransfer "HTTP/1.1 200 OK"
+2025-09-13 23:47:20,618 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy/rxtransfer?icid=cvs-home-s4-l3-rxsrvcs-rx-fnnl-transferscripts - Status: 200, Size: 190040 bytes, Time: 380.75ms
+2025-09-13 23:47:20,854 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:20,895 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:21,474 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy with 93 links
+2025-09-13 23:47:21,475 - crawler - INFO - Progress: 13/100 pages crawled, 315 in queue
+2025-09-13 23:47:22,980 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy/rx/check-inventory?icid=cvs-home-s4-l4-rxsrvcs-rx-stock
+2025-09-13 23:47:23,089 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/rx/check-inventory?icid=cvs-home-s4-l4-rxsrvcs-rx-stock "HTTP/1.1 200 OK"
+2025-09-13 23:47:23,105 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy/rx/check-inventory?icid=cvs-home-s4-l4-rxsrvcs-rx-stock - Status: 200, Size: 1817250 bytes, Time: 122.53ms
+2025-09-13 23:47:23,322 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:23,323 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:23,874 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy/rx/check-inventory?icid=cvs-home-s4-l4-rxsrvcs-rx-stock with 106 links
+2025-09-13 23:47:23,875 - crawler - INFO - Progress: 14/100 pages crawled, 321 in queue
+2025-09-13 23:47:25,378 - crawler - INFO - Fetching URL: https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap
+2025-09-13 23:47:25,506 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap "HTTP/1.1 404 Not Found"
+2025-09-13 23:47:25,507 - crawler - WARNING - 404 Not Found: https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap
+2025-09-13 23:47:25,507 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s5-l1-bnrshop-fs-epicbeauty
+2025-09-13 23:47:25,562 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s5-l1-bnrshop-fs-epicbeauty "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:25,563 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s5-l1-bnrshop-fs-epicbeauty
+2025-09-13 23:47:25,563 - crawler - INFO - Fetching URL: https://www.cvs.com/photo/cvs-photo-coupons?cid=cvs-home-s5-l2-bnrshop-fs-photo
+2025-09-13 23:47:25,769 - httpx - INFO - HTTP Request: GET https://www.cvs.com/photo/cvs-photo-coupons?cid=cvs-home-s5-l2-bnrshop-fs-photo "HTTP/1.1 200 OK"
+2025-09-13 23:47:25,785 - crawler - INFO - Successfully fetched https://www.cvs.com/photo/cvs-photo-coupons?cid=cvs-home-s5-l2-bnrshop-fs-photo - Status: 200, Size: 156396 bytes, Time: 221.10ms
+2025-09-13 23:47:26,544 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:26,546 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:27,624 - crawler - INFO - Stored page data for https://www.cvs.com/photo/cvs-photo-coupons?cid=cvs-home-s5-l2-bnrshop-fs-photo with 405 links
+2025-09-13 23:47:27,627 - crawler - INFO - Progress: 15/100 pages crawled, 318 in queue
+2025-09-13 23:47:29,132 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween
+2025-09-13 23:47:29,181 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:29,181 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween
+2025-09-13 23:47:29,182 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/extra-big-deals?widgetID=nlvr052j&mc=0&icid=cvs-home-s5-l4-bnrshop-fs-bigdeals
+2025-09-13 23:47:29,266 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/extra-big-deals?widgetID=nlvr052j&mc=0&icid=cvs-home-s5-l4-bnrshop-fs-bigdeals "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:29,267 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/extra-big-deals?widgetID=nlvr052j&mc=0&icid=cvs-home-s5-l4-bnrshop-fs-bigdeals
+2025-09-13 23:47:29,267 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/skin-care-last-chance?widgetID=40eyeyap&icid=cvs-home-s5-l5-bnrshop-fs-last-chance
+2025-09-13 23:47:29,406 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/skin-care-last-chance?widgetID=40eyeyap&icid=cvs-home-s5-l5-bnrshop-fs-last-chance "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:29,407 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/skin-care-last-chance?widgetID=40eyeyap&icid=cvs-home-s5-l5-bnrshop-fs-last-chance
+2025-09-13 23:47:29,407 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/flu?icid=cvs-home-s6-l1-full-imz-flu
+2025-09-13 23:47:29,529 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/flu?icid=cvs-home-s6-l1-full-imz-flu "HTTP/1.1 200 OK"
+2025-09-13 23:47:29,550 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/flu?icid=cvs-home-s6-l1-full-imz-flu - Status: 200, Size: 253199 bytes, Time: 141.89ms
+2025-09-13 23:47:29,794 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:29,796 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:30,704 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/flu?icid=cvs-home-s6-l1-full-imz-flu with 107 links
+2025-09-13 23:47:30,704 - crawler - INFO - Progress: 16/100 pages crawled, 331 in queue
+2025-09-13 23:47:32,207 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax
+2025-09-13 23:47:32,305 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax "HTTP/1.1 200 OK"
+2025-09-13 23:47:32,306 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax - Status: 200, Size: 25603 bytes, Time: 99.62ms
+2025-09-13 23:47:32,323 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax with 0 links
+2025-09-13 23:47:32,323 - crawler - INFO - Progress: 17/100 pages crawled, 330 in queue
+2025-09-13 23:47:33,829 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/get-vaccinated?icid=cvs-home-s6-l3-full-imz-disclaimer
+2025-09-13 23:47:33,910 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/get-vaccinated?icid=cvs-home-s6-l3-full-imz-disclaimer "HTTP/1.1 200 OK"
+2025-09-13 23:47:33,918 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/get-vaccinated?icid=cvs-home-s6-l3-full-imz-disclaimer - Status: 200, Size: 311817 bytes, Time: 89.25ms
+2025-09-13 23:47:34,116 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:34,118 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:35,098 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/get-vaccinated?icid=cvs-home-s6-l3-full-imz-disclaimer with 153 links
+2025-09-13 23:47:35,099 - crawler - INFO - Progress: 18/100 pages crawled, 387 in queue
+2025-09-13 23:47:36,604 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic?icid=cvs-home-s7-l1-icontxtlinks-mc-schedule
+2025-09-13 23:47:36,766 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic?icid=cvs-home-s7-l1-icontxtlinks-mc-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:47:36,883 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic?icid=cvs-home-s7-l1-icontxtlinks-mc-schedule - Status: 200, Size: 2485088 bytes, Time: 274.76ms
+2025-09-13 23:47:37,299 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:37,300 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:37,947 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic?icid=cvs-home-s7-l1-icontxtlinks-mc-schedule with 114 links
+2025-09-13 23:47:37,948 - crawler - INFO - Progress: 19/100 pages crawled, 386 in queue
+2025-09-13 23:47:39,453 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l2-icontxtlinks-mc-generalservices
+2025-09-13 23:47:39,657 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l2-icontxtlinks-mc-generalservices "HTTP/1.1 200 OK"
+2025-09-13 23:47:39,802 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l2-icontxtlinks-mc-generalservices - Status: 200, Size: 2285553 bytes, Time: 346.90ms
+2025-09-13 23:47:40,565 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:40,566 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:41,189 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l2-icontxtlinks-mc-generalservices with 128 links
+2025-09-13 23:47:41,191 - crawler - INFO - Progress: 20/100 pages crawled, 425 in queue
+2025-09-13 23:47:42,696 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss
+2025-09-13 23:47:42,832 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss "HTTP/1.1 200 OK"
+2025-09-13 23:47:42,974 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss - Status: 200, Size: 2347377 bytes, Time: 274.67ms
+2025-09-13 23:47:43,237 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:43,241 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:43,760 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss with 102 links
+2025-09-13 23:47:43,761 - crawler - INFO - Progress: 21/100 pages crawled, 435 in queue
+2025-09-13 23:47:45,266 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=cvs-home-s7-l4-icontxtlinks-mc-physicals
+2025-09-13 23:47:45,367 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=cvs-home-s7-l4-icontxtlinks-mc-physicals "HTTP/1.1 200 OK"
+2025-09-13 23:47:45,493 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=cvs-home-s7-l4-icontxtlinks-mc-physicals - Status: 200, Size: 2255954 bytes, Time: 223.99ms
+2025-09-13 23:47:45,702 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:45,703 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:46,276 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=cvs-home-s7-l4-icontxtlinks-mc-physicals with 114 links
+2025-09-13 23:47:46,277 - crawler - INFO - Progress: 22/100 pages crawled, 452 in queue
+2025-09-13 23:47:47,780 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth
+2025-09-13 23:47:47,997 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth "HTTP/1.1 200 OK"
+2025-09-13 23:47:48,106 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth - Status: 200, Size: 2265331 bytes, Time: 324.18ms
+2025-09-13 23:47:48,753 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:48,755 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:49,438 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth with 125 links
+2025-09-13 23:47:49,439 - crawler - INFO - Progress: 23/100 pages crawled, 474 in queue
+2025-09-13 23:47:50,944 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin
+2025-09-13 23:47:51,136 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin "HTTP/1.1 200 OK"
+2025-09-13 23:47:51,253 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin - Status: 200, Size: 2265171 bytes, Time: 306.83ms
+2025-09-13 23:47:51,523 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:51,525 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:52,180 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin with 115 links
+2025-09-13 23:47:52,181 - crawler - INFO - Progress: 24/100 pages crawled, 498 in queue
+2025-09-13 23:47:53,686 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l7-icontxtlinks-mc-generalservices
+2025-09-13 23:47:53,925 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l7-icontxtlinks-mc-generalservices "HTTP/1.1 200 OK"
+2025-09-13 23:47:54,034 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l7-icontxtlinks-mc-generalservices - Status: 200, Size: 2285553 bytes, Time: 345.09ms
+2025-09-13 23:47:54,365 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:54,366 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:55,128 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services?icid=cvs-home-s7-l7-icontxtlinks-mc-generalservices with 128 links
+2025-09-13 23:47:55,129 - crawler - INFO - Progress: 25/100 pages crawled, 497 in queue
+2025-09-13 23:47:56,634 - crawler - INFO - Fetching URL: https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh
+2025-09-13 23:47:56,701 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh "HTTP/1.1 200 OK"
+2025-09-13 23:47:56,702 - crawler - INFO - Successfully fetched https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh - Status: 200, Size: 194791 bytes, Time: 68.14ms
+2025-09-13 23:47:56,979 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:47:56,981 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:47:57,518 - crawler - INFO - Stored page data for https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh with 90 links
+2025-09-13 23:47:57,518 - crawler - INFO - Progress: 26/100 pages crawled, 498 in queue
+2025-09-13 23:47:59,024 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/new?widgetID=ojdve0je&mc=0&icid=cvs-home-s9-l1-trendcats-fs-new
+2025-09-13 23:47:59,069 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/new?widgetID=ojdve0je&mc=0&icid=cvs-home-s9-l1-trendcats-fs-new "HTTP/1.1 403 Forbidden"
+2025-09-13 23:47:59,070 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/new?widgetID=ojdve0je&mc=0&icid=cvs-home-s9-l1-trendcats-fs-new
+2025-09-13 23:47:59,070 - crawler - INFO - Fetching URL: https://www.cvs.com/photo/photo-landing?cid=cvs-home-s9-l2-trendcats-fs-photo
+2025-09-13 23:47:59,841 - httpx - INFO - HTTP Request: GET https://www.cvs.com/photo/photo-landing?cid=cvs-home-s9-l2-trendcats-fs-photo "HTTP/1.1 200 OK"
+2025-09-13 23:47:59,859 - crawler - INFO - Successfully fetched https://www.cvs.com/photo/photo-landing?cid=cvs-home-s9-l2-trendcats-fs-photo - Status: 200, Size: 175849 bytes, Time: 789.03ms
+2025-09-13 23:48:00,505 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:00,507 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:01,576 - crawler - INFO - Stored page data for https://www.cvs.com/photo/photo-landing?cid=cvs-home-s9-l2-trendcats-fs-photo with 398 links
+2025-09-13 23:48:01,579 - crawler - INFO - Progress: 27/100 pages crawled, 496 in queue
+2025-09-13 23:48:03,080 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s9-l3-trendcats-fs-halloween
+2025-09-13 23:48:03,133 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s9-l3-trendcats-fs-halloween "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,133 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s9-l3-trendcats-fs-halloween
+2025-09-13 23:48:03,133 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins
+2025-09-13 23:48:03,211 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,211 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins
+2025-09-13 23:48:03,211 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/health-medicine?icid=cvs-home-s9-l5-trendcats-fs-healthmeds
+2025-09-13 23:48:03,294 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/health-medicine?icid=cvs-home-s9-l5-trendcats-fs-healthmeds "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,294 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/health-medicine?icid=cvs-home-s9-l5-trendcats-fs-healthmeds
+2025-09-13 23:48:03,294 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual
+2025-09-13 23:48:03,409 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,409 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual
+2025-09-13 23:48:03,409 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty
+2025-09-13 23:48:03,733 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,734 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty
+2025-09-13 23:48:03,734 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/personal-care?icid=cvs-home-s9-l8-trendcats-fs-perscare
+2025-09-13 23:48:03,837 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/personal-care?icid=cvs-home-s9-l8-trendcats-fs-perscare "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,837 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/personal-care?icid=cvs-home-s9-l8-trendcats-fs-perscare
+2025-09-13 23:48:03,838 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/grocery?icid=cvs-home-s9-l9-trendcats-fs-grocery
+2025-09-13 23:48:03,915 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/grocery?icid=cvs-home-s9-l9-trendcats-fs-grocery "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:03,916 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/grocery?icid=cvs-home-s9-l9-trendcats-fs-grocery
+2025-09-13 23:48:03,916 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house
+2025-09-13 23:48:04,159 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:04,160 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house
+2025-09-13 23:48:04,160 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s9-l11-trendcats-fs-weeklydeals
+2025-09-13 23:48:04,236 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s9-l11-trendcats-fs-weeklydeals "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:04,236 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s9-l11-trendcats-fs-weeklydeals
+2025-09-13 23:48:04,236 - crawler - INFO - Fetching URL: https://www.cvs.com/shop?icid=cvs-home-s9-l12-trendcats-fs-shopall
+2025-09-13 23:48:04,321 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop?icid=cvs-home-s9-l12-trendcats-fs-shopall "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:04,321 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop?icid=cvs-home-s9-l12-trendcats-fs-shopall
+2025-09-13 23:48:04,321 - crawler - INFO - Fetching URL: https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis
+2025-09-13 23:48:04,402 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:04,403 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis
+2025-09-13 23:48:04,403 - crawler - INFO - Fetching URL: https://www.cvs.com/mobile-cvs/apps?icid=cvs-home-s10-l2-3crd-gen-app
+2025-09-13 23:48:04,521 - httpx - INFO - HTTP Request: GET https://www.cvs.com/mobile-cvs/apps?icid=cvs-home-s10-l2-3crd-gen-app "HTTP/1.1 200 OK"
+2025-09-13 23:48:04,538 - crawler - INFO - Successfully fetched https://www.cvs.com/mobile-cvs/apps?icid=cvs-home-s10-l2-3crd-gen-app - Status: 200, Size: 181181 bytes, Time: 135.32ms
+2025-09-13 23:48:04,730 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:04,731 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:05,175 - crawler - INFO - Stored page data for https://www.cvs.com/mobile-cvs/apps?icid=cvs-home-s10-l2-3crd-gen-app with 84 links
+2025-09-13 23:48:05,176 - crawler - INFO - Progress: 28/100 pages crawled, 488 in queue
+2025-09-13 23:48:06,681 - crawler - INFO - Fetching URL: https://www.cvs.com/store-locator/landing?icid=cvs-home-s10-l3-3crd-gen-findstore
+2025-09-13 23:48:06,844 - httpx - INFO - HTTP Request: GET https://www.cvs.com/store-locator/landing?icid=cvs-home-s10-l3-3crd-gen-findstore "HTTP/1.1 200 OK"
+2025-09-13 23:48:06,937 - crawler - INFO - Successfully fetched https://www.cvs.com/store-locator/landing?icid=cvs-home-s10-l3-3crd-gen-findstore - Status: 200, Size: 4285572 bytes, Time: 252.15ms
+2025-09-13 23:48:07,236 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:07,237 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:07,924 - crawler - INFO - Stored page data for https://www.cvs.com/store-locator/landing?icid=cvs-home-s10-l3-3crd-gen-findstore with 123 links
+2025-09-13 23:48:07,924 - crawler - INFO - Progress: 29/100 pages crawled, 496 in queue
+2025-09-13 23:48:09,427 - crawler - INFO - Fetching URL: https://www.cvs.com/content/women?icid=cvs-home-s12-l1-3crdimg-gen-commitment
+2025-09-13 23:48:09,531 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/women?icid=cvs-home-s12-l1-3crdimg-gen-commitment "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:09,532 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/women?icid=cvs-home-s12-l1-3crdimg-gen-commitment
+2025-09-13 23:48:09,533 - crawler - INFO - Fetching URL: https://www.cvs.com/content/beauty-mark?icid=cvs-home-s12-l2-3crdimg-gen-pledge
+2025-09-13 23:48:09,658 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/beauty-mark?icid=cvs-home-s12-l2-3crdimg-gen-pledge "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:09,659 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/beauty-mark?icid=cvs-home-s12-l2-3crdimg-gen-pledge
+2025-09-13 23:48:09,659 - crawler - INFO - Fetching URL: https://www.cvs.com/content/tested-trusted?icid=cvs-home-s12-l3-3crdimg-gen-testing
+2025-09-13 23:48:09,804 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/tested-trusted?icid=cvs-home-s12-l3-3crdimg-gen-testing "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:09,805 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/tested-trusted?icid=cvs-home-s12-l3-3crdimg-gen-testing
+2025-09-13 23:48:09,805 - crawler - INFO - Fetching URL: https://www.cvs.com/extracare-cvs/couponpolicy
+2025-09-13 23:48:09,901 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare-cvs/couponpolicy "HTTP/1.1 200 OK"
+2025-09-13 23:48:09,918 - crawler - INFO - Successfully fetched https://www.cvs.com/extracare-cvs/couponpolicy - Status: 200, Size: 179572 bytes, Time: 113.04ms
+2025-09-13 23:48:10,143 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:10,145 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:10,646 - crawler - INFO - Stored page data for https://www.cvs.com/extracare-cvs/couponpolicy with 81 links
+2025-09-13 23:48:10,646 - crawler - INFO - Progress: 30/100 pages crawled, 493 in queue
+2025-09-13 23:48:12,150 - crawler - INFO - Fetching URL: https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms
+2025-09-13 23:48:12,221 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:12,223 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms
+2025-09-13 23:48:12,223 - crawler - INFO - Fetching URL: https://www.cvs.com/Vaccines
+2025-09-13 23:48:12,296 - httpx - INFO - HTTP Request: GET https://www.cvs.com/Vaccines "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:48:12,351 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/get-vaccinated?cid=redir-vaccines "HTTP/1.1 200 OK"
+2025-09-13 23:48:12,372 - crawler - INFO - Successfully fetched https://www.cvs.com/Vaccines - Status: 200, Size: 311817 bytes, Time: 148.94ms
+2025-09-13 23:48:12,620 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:12,620 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:13,660 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/get-vaccinated?cid=redir-vaccines with 153 links
+2025-09-13 23:48:13,661 - crawler - INFO - Progress: 31/100 pages crawled, 491 in queue
+2025-09-13 23:48:15,166 - crawler - INFO - Fetching URL: https://www.cvs.com/content/store-pickup
+2025-09-13 23:48:15,264 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/store-pickup "HTTP/1.1 200 OK"
+2025-09-13 23:48:15,268 - crawler - INFO - Successfully fetched https://www.cvs.com/content/store-pickup - Status: 200, Size: 197430 bytes, Time: 102.23ms
+2025-09-13 23:48:15,981 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:15,982 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:16,507 - crawler - INFO - Stored page data for https://www.cvs.com/content/store-pickup with 93 links
+2025-09-13 23:48:16,508 - crawler - INFO - Progress: 32/100 pages crawled, 504 in queue
+2025-09-13 23:48:18,012 - crawler - INFO - Fetching URL: https://www.cvs.com/content/store-pickup?cid=redir-store-pickup
+2025-09-13 23:48:18,068 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/store-pickup?cid=redir-store-pickup "HTTP/1.1 200 OK"
+2025-09-13 23:48:18,073 - crawler - INFO - Successfully fetched https://www.cvs.com/content/store-pickup?cid=redir-store-pickup - Status: 200, Size: 197430 bytes, Time: 60.91ms
+2025-09-13 23:48:18,281 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:18,282 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:18,920 - crawler - INFO - Stored page data for https://www.cvs.com/content/store-pickup?cid=redir-store-pickup with 93 links
+2025-09-13 23:48:18,921 - crawler - INFO - Progress: 33/100 pages crawled, 503 in queue
+2025-09-13 23:48:20,426 - crawler - INFO - Fetching URL: https://www.cvs.com/content/same-day-delivery
+2025-09-13 23:48:20,653 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/same-day-delivery "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:20,654 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/same-day-delivery
+2025-09-13 23:48:20,654 - crawler - INFO - Fetching URL: https://www.cvs.com/content/tested-trusted
+2025-09-13 23:48:21,056 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/tested-trusted "HTTP/1.1 403 Forbidden"
+2025-09-13 23:48:21,058 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/tested-trusted
+2025-09-13 23:48:21,058 - crawler - INFO - Fetching URL: https://www.cvs.com/account/account-management.jsp
+2025-09-13 23:48:21,134 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account/account-management.jsp "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:48:21,264 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account/dashboard "HTTP/1.1 307 Temporary Redirect"
+2025-09-13 23:48:21,389 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account-login?returnUrl=/account/dashboard "HTTP/1.1 200 OK"
+2025-09-13 23:48:21,389 - crawler - INFO - Successfully fetched https://www.cvs.com/account/account-management.jsp - Status: 200, Size: 6746 bytes, Time: 331.16ms
+2025-09-13 23:48:21,415 - crawler - INFO - Stored page data for https://www.cvs.com/account-login?returnUrl=/account/dashboard with 0 links
+2025-09-13 23:48:21,415 - crawler - INFO - Progress: 34/100 pages crawled, 500 in queue
+2025-09-13 23:48:22,920 - crawler - INFO - Fetching URL: https://www.cvs.com/store-locator/landing
+2025-09-13 23:48:23,050 - httpx - INFO - HTTP Request: GET https://www.cvs.com/store-locator/landing "HTTP/1.1 200 OK"
+2025-09-13 23:48:23,636 - crawler - INFO - Successfully fetched https://www.cvs.com/store-locator/landing - Status: 200, Size: 4279729 bytes, Time: 710.44ms
+2025-09-13 23:48:23,963 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:23,966 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:24,657 - crawler - INFO - Stored page data for https://www.cvs.com/store-locator/landing with 123 links
+2025-09-13 23:48:24,658 - crawler - INFO - Progress: 35/100 pages crawled, 499 in queue
+2025-09-13 23:48:26,163 - crawler - INFO - Fetching URL: https://www.cvs.com/photo
+2025-09-13 23:48:26,237 - httpx - INFO - HTTP Request: GET https://www.cvs.com/photo "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:48:27,007 - httpx - INFO - HTTP Request: GET https://www.cvs.com/photo/photo-landing "HTTP/1.1 200 OK"
+2025-09-13 23:48:27,026 - crawler - INFO - Successfully fetched https://www.cvs.com/photo - Status: 200, Size: 175473 bytes, Time: 861.87ms
+2025-09-13 23:48:27,946 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:27,947 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:28,227 - crawler - INFO - Stored page data for https://www.cvs.com/photo/photo-landing with 398 links
+2025-09-13 23:48:28,229 - crawler - INFO - Progress: 36/100 pages crawled, 498 in queue
+2025-09-13 23:48:29,730 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy
+2025-09-13 23:48:29,851 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy "HTTP/1.1 200 OK"
+2025-09-13 23:48:29,855 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy - Status: 200, Size: 190042 bytes, Time: 124.66ms
+2025-09-13 23:48:30,037 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:30,038 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:30,227 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy with 93 links
+2025-09-13 23:48:30,228 - crawler - INFO - Progress: 37/100 pages crawled, 497 in queue
+2025-09-13 23:48:31,734 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=mchome-mc-7030-lp-colduri
+2025-09-13 23:48:31,877 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=mchome-mc-7030-lp-colduri "HTTP/1.1 200 OK"
+2025-09-13 23:48:31,986 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=mchome-mc-7030-lp-colduri - Status: 200, Size: 2348424 bytes, Time: 251.38ms
+2025-09-13 23:48:32,184 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:32,185 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:32,724 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/upper-respiratory-infections?icid=mchome-mc-7030-lp-colduri with 105 links
+2025-09-13 23:48:32,725 - crawler - INFO - Progress: 38/100 pages crawled, 312 in queue
+2025-09-13 23:48:34,227 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/illnesses-and-infections?icid=mchome-mcservices-mcillness-infection
+2025-09-13 23:48:34,409 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/illnesses-and-infections?icid=mchome-mcservices-mcillness-infection "HTTP/1.1 200 OK"
+2025-09-13 23:48:34,516 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/illnesses-and-infections?icid=mchome-mcservices-mcillness-infection - Status: 200, Size: 2273027 bytes, Time: 287.68ms
+2025-09-13 23:48:34,892 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:34,894 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:35,515 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/illnesses-and-infections?icid=mchome-mcservices-mcillness-infection with 124 links
+2025-09-13 23:48:35,516 - crawler - INFO - Progress: 39/100 pages crawled, 321 in queue
+2025-09-13 23:48:37,018 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/injuries-and-pain?icid=mchome-mcservices-mcinjury-pain
+2025-09-13 23:48:37,122 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/injuries-and-pain?icid=mchome-mcservices-mcinjury-pain "HTTP/1.1 200 OK"
+2025-09-13 23:48:37,222 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/injuries-and-pain?icid=mchome-mcservices-mcinjury-pain - Status: 200, Size: 2252338 bytes, Time: 202.46ms
+2025-09-13 23:48:37,467 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:37,468 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:38,054 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/injuries-and-pain?icid=mchome-mcservices-mcinjury-pain with 104 links
+2025-09-13 23:48:38,055 - crawler - INFO - Progress: 40/100 pages crawled, 326 in queue
+2025-09-13 23:48:39,557 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=mchome-mcservices-mcskin-hair-nails
+2025-09-13 23:48:39,678 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=mchome-mcservices-mcskin-hair-nails "HTTP/1.1 200 OK"
+2025-09-13 23:48:39,785 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=mchome-mcservices-mcskin-hair-nails - Status: 200, Size: 2265171 bytes, Time: 226.35ms
+2025-09-13 23:48:40,015 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:40,015 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:40,627 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=mchome-mcservices-mcskin-hair-nails with 115 links
+2025-09-13 23:48:40,628 - crawler - INFO - Progress: 41/100 pages crawled, 325 in queue
+2025-09-13 23:48:42,133 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/refills-and-renewals?icid=mchome-mcservices-mcrefill-renew
+2025-09-13 23:48:42,327 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/refills-and-renewals?icid=mchome-mcservices-mcrefill-renew "HTTP/1.1 200 OK"
+2025-09-13 23:48:42,443 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/refills-and-renewals?icid=mchome-mcservices-mcrefill-renew - Status: 200, Size: 2240947 bytes, Time: 306.08ms
+2025-09-13 23:48:42,669 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:42,670 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:43,075 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/refills-and-renewals?icid=mchome-mcservices-mcrefill-renew with 92 links
+2025-09-13 23:48:43,076 - crawler - INFO - Progress: 42/100 pages crawled, 326 in queue
+2025-09-13 23:48:44,577 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=mchome-mcservices-urinary-sexual-health
+2025-09-13 23:48:44,668 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=mchome-mcservices-urinary-sexual-health "HTTP/1.1 200 OK"
+2025-09-13 23:48:44,763 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=mchome-mcservices-urinary-sexual-health - Status: 200, Size: 2265331 bytes, Time: 184.50ms
+2025-09-13 23:48:44,986 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:44,987 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:45,553 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=mchome-mcservices-urinary-sexual-health with 125 links
+2025-09-13 23:48:45,554 - crawler - INFO - Progress: 43/100 pages crawled, 325 in queue
+2025-09-13 23:48:47,055 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/vaccinations-and-injections?icid=mchome-mcservices-mcvaccine
+2025-09-13 23:48:47,147 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/vaccinations-and-injections?icid=mchome-mcservices-mcvaccine "HTTP/1.1 200 OK"
+2025-09-13 23:48:47,261 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/vaccinations-and-injections?icid=mchome-mcservices-mcvaccine - Status: 200, Size: 2249690 bytes, Time: 204.18ms
+2025-09-13 23:48:47,520 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:47,521 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:48,095 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/vaccinations-and-injections?icid=mchome-mcservices-mcvaccine with 107 links
+2025-09-13 23:48:48,096 - crawler - INFO - Progress: 44/100 pages crawled, 338 in queue
+2025-09-13 23:48:49,599 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=mchome-mcservices-weightloss
+2025-09-13 23:48:49,685 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=mchome-mcservices-weightloss "HTTP/1.1 200 OK"
+2025-09-13 23:48:49,827 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=mchome-mcservices-weightloss - Status: 200, Size: 2347377 bytes, Time: 225.61ms
+2025-09-13 23:48:50,066 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:50,066 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:50,557 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=mchome-mcservices-weightloss with 102 links
+2025-09-13 23:48:50,558 - crawler - INFO - Progress: 45/100 pages crawled, 337 in queue
+2025-09-13 23:48:52,064 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/travel-health?icid=mchome-mcservices-mctravel-health
+2025-09-13 23:48:52,274 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/travel-health?icid=mchome-mcservices-mctravel-health "HTTP/1.1 200 OK"
+2025-09-13 23:48:52,373 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/travel-health?icid=mchome-mcservices-mctravel-health - Status: 200, Size: 2243531 bytes, Time: 306.77ms
+2025-09-13 23:48:52,605 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:52,608 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:53,097 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/travel-health?icid=mchome-mcservices-mctravel-health with 96 links
+2025-09-13 23:48:53,098 - crawler - INFO - Progress: 46/100 pages crawled, 341 in queue
+2025-09-13 23:48:54,601 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/allergy-symptoms?icid=mchome-mcservices-allergies
+2025-09-13 23:48:54,892 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/allergy-symptoms?icid=mchome-mcservices-allergies "HTTP/1.1 200 OK"
+2025-09-13 23:48:54,978 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/allergy-symptoms?icid=mchome-mcservices-allergies - Status: 200, Size: 2353653 bytes, Time: 373.98ms
+2025-09-13 23:48:55,207 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:55,208 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:55,818 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/allergy-symptoms?icid=mchome-mcservices-allergies with 116 links
+2025-09-13 23:48:55,819 - crawler - INFO - Progress: 47/100 pages crawled, 341 in queue
+2025-09-13 23:48:57,324 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=mchome-mcservices-mctest-screen-physical
+2025-09-13 23:48:57,403 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=mchome-mcservices-mctest-screen-physical "HTTP/1.1 200 OK"
+2025-09-13 23:48:57,502 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=mchome-mcservices-mctest-screen-physical - Status: 200, Size: 2255954 bytes, Time: 176.24ms
+2025-09-13 23:48:57,684 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:48:57,685 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:48:58,227 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/tests-screenings-physicals?icid=mchome-mcservices-mctest-screen-physical with 114 links
+2025-09-13 23:48:58,228 - crawler - INFO - Progress: 48/100 pages crawled, 340 in queue
+2025-09-13 23:48:59,729 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/chronic-conditions?icid=mchome-mcservices-mcchronic
+2025-09-13 23:48:59,941 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/chronic-conditions?icid=mchome-mcservices-mcchronic "HTTP/1.1 200 OK"
+2025-09-13 23:49:00,021 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/chronic-conditions?icid=mchome-mcservices-mcchronic - Status: 200, Size: 2274976 bytes, Time: 289.77ms
+2025-09-13 23:49:00,262 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:00,263 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:00,991 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/chronic-conditions?icid=mchome-mcservices-mcchronic with 122 links
+2025-09-13 23:49:00,992 - crawler - INFO - Progress: 49/100 pages crawled, 353 in queue
+2025-09-13 23:49:02,498 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services?icid=mchome-mcservices-mcservice-main
+2025-09-13 23:49:02,901 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services?icid=mchome-mcservices-mcservice-main "HTTP/1.1 200 OK"
+2025-09-13 23:49:03,177 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services?icid=mchome-mcservices-mcservice-main - Status: 200, Size: 2285553 bytes, Time: 675.60ms
+2025-09-13 23:49:03,326 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:03,328 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:04,051 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services?icid=mchome-mcservices-mcservice-main with 128 links
+2025-09-13 23:49:04,052 - crawler - INFO - Progress: 50/100 pages crawled, 352 in queue
+2025-09-13 23:49:05,557 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=glp1_mchomepage
+2025-09-13 23:49:05,677 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=glp1_mchomepage "HTTP/1.1 200 OK"
+2025-09-13 23:49:05,786 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=glp1_mchomepage - Status: 200, Size: 2347377 bytes, Time: 226.26ms
+2025-09-13 23:49:06,000 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:06,001 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:06,525 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=glp1_mchomepage with 102 links
+2025-09-13 23:49:06,526 - crawler - INFO - Progress: 51/100 pages crawled, 351 in queue
+2025-09-13 23:49:08,031 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/high-blood-pressure-evaluationicid=sept_mchome_chronmodule
+2025-09-13 23:49:08,178 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/high-blood-pressure-evaluationicid=sept_mchome_chronmodule "HTTP/1.1 200 OK"
+2025-09-13 23:49:08,178 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/high-blood-pressure-evaluationicid=sept_mchome_chronmodule - Status: 200, Size: 18253 bytes, Time: 147.12ms
+2025-09-13 23:49:08,309 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:08,309 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:08,348 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/high-blood-pressure-evaluationicid=sept_mchome_chronmodule with 0 links
+2025-09-13 23:49:08,348 - crawler - INFO - Progress: 52/100 pages crawled, 350 in queue
+2025-09-13 23:49:09,851 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/why-choose-us?icid=mchome-mcproviders-mclearn-more
+2025-09-13 23:49:10,053 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/why-choose-us?icid=mchome-mcproviders-mclearn-more "HTTP/1.1 200 OK"
+2025-09-13 23:49:10,226 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/why-choose-us?icid=mchome-mcproviders-mclearn-more - Status: 200, Size: 2275931 bytes, Time: 370.45ms
+2025-09-13 23:49:10,468 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:10,468 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:11,190 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/why-choose-us?icid=mchome-mcproviders-mclearn-more with 142 links
+2025-09-13 23:49:11,191 - crawler - INFO - Progress: 53/100 pages crawled, 397 in queue
+2025-09-13 23:49:12,697 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/why-choose-us?cid=mchome-mcproviders-mclearn-more
+2025-09-13 23:49:12,781 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/why-choose-us?cid=mchome-mcproviders-mclearn-more "HTTP/1.1 200 OK"
+2025-09-13 23:49:12,907 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/why-choose-us?cid=mchome-mcproviders-mclearn-more - Status: 200, Size: 2275931 bytes, Time: 207.61ms
+2025-09-13 23:49:13,144 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:13,147 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:13,865 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/why-choose-us?cid=mchome-mcproviders-mclearn-more with 142 links
+2025-09-13 23:49:13,866 - crawler - INFO - Progress: 54/100 pages crawled, 396 in queue
+2025-09-13 23:49:15,371 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check?icid=mchome-mcinsurance-mcinsurance-check
+2025-09-13 23:49:15,514 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check?icid=mchome-mcinsurance-mcinsurance-check "HTTP/1.1 200 OK"
+2025-09-13 23:49:15,514 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check?icid=mchome-mcinsurance-mcinsurance-check - Status: 200, Size: 6614 bytes, Time: 142.98ms
+2025-09-13 23:49:15,706 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:15,706 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:15,737 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check?icid=mchome-mcinsurance-mcinsurance-check with 0 links
+2025-09-13 23:49:15,738 - crawler - INFO - Progress: 55/100 pages crawled, 395 in queue
+2025-09-13 23:49:17,243 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/info?icid=mchome-mcfaq-mcallfaq
+2025-09-13 23:49:17,338 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/info?icid=mchome-mcfaq-mcallfaq "HTTP/1.1 200 OK"
+2025-09-13 23:49:17,465 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/info?icid=mchome-mcfaq-mcallfaq - Status: 200, Size: 2256410 bytes, Time: 220.60ms
+2025-09-13 23:49:17,850 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:17,851 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:18,345 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/info?icid=mchome-mcfaq-mcallfaq with 101 links
+2025-09-13 23:49:18,346 - crawler - INFO - Progress: 56/100 pages crawled, 397 in queue
+2025-09-13 23:49:19,851 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/why-choose-us
+2025-09-13 23:49:19,948 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/why-choose-us "HTTP/1.1 200 OK"
+2025-09-13 23:49:20,087 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/why-choose-us - Status: 200, Size: 2275931 bytes, Time: 234.52ms
+2025-09-13 23:49:20,289 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:20,290 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:20,991 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/why-choose-us with 142 links
+2025-09-13 23:49:20,993 - crawler - INFO - Progress: 57/100 pages crawled, 396 in queue
+2025-09-13 23:49:22,498 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check
+2025-09-13 23:49:22,594 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check "HTTP/1.1 200 OK"
+2025-09-13 23:49:22,595 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check - Status: 200, Size: 6614 bytes, Time: 96.68ms
+2025-09-13 23:49:22,791 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:22,792 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:22,832 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/insurance-and-billing/insurance-check with 0 links
+2025-09-13 23:49:22,832 - crawler - INFO - Progress: 58/100 pages crawled, 389 in queue
+2025-09-13 23:49:24,337 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/sinus-infections-and-congestion
+2025-09-13 23:49:24,523 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/sinus-infections-and-congestion "HTTP/1.1 200 OK"
+2025-09-13 23:49:24,633 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/sinus-infections-and-congestion - Status: 200, Size: 2349415 bytes, Time: 294.71ms
+2025-09-13 23:49:25,200 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:25,202 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:25,793 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/sinus-infections-and-congestion with 109 links
+2025-09-13 23:49:25,794 - crawler - INFO - Progress: 59/100 pages crawled, 394 in queue
+2025-09-13 23:49:27,299 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/vitamin-b12-injection
+2025-09-13 23:49:27,671 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/vitamin-b12-injection "HTTP/1.1 200 OK"
+2025-09-13 23:49:27,952 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/vitamin-b12-injection - Status: 200, Size: 2352937 bytes, Time: 649.49ms
+2025-09-13 23:49:28,125 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:28,126 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:28,691 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/vitamin-b12-injection with 110 links
+2025-09-13 23:49:28,692 - crawler - INFO - Progress: 60/100 pages crawled, 388 in queue
+2025-09-13 23:49:30,194 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/titer-and-immunity-testing
+2025-09-13 23:49:30,301 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/titer-and-immunity-testing "HTTP/1.1 200 OK"
+2025-09-13 23:49:30,302 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/titer-and-immunity-testing - Status: 200, Size: 18253 bytes, Time: 107.41ms
+2025-09-13 23:49:30,455 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:30,456 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:30,488 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/titer-and-immunity-testing with 0 links
+2025-09-13 23:49:30,488 - crawler - INFO - Progress: 61/100 pages crawled, 387 in queue
+2025-09-13 23:49:31,994 - crawler - INFO - Fetching URL: https://www.cvs.com/minuteclinic/services/mouth-and-oral-pain
+2025-09-13 23:49:32,096 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/mouth-and-oral-pain "HTTP/1.1 200 OK"
+2025-09-13 23:49:32,213 - crawler - INFO - Successfully fetched https://www.cvs.com/minuteclinic/services/mouth-and-oral-pain - Status: 200, Size: 2349105 bytes, Time: 217.69ms
+2025-09-13 23:49:32,454 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:32,455 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:32,978 - crawler - INFO - Stored page data for https://www.cvs.com/minuteclinic/services/mouth-and-oral-pain with 105 links
+2025-09-13 23:49:32,979 - crawler - INFO - Progress: 62/100 pages crawled, 388 in queue
+2025-09-13 23:49:34,484 - crawler - INFO - Fetching URL: https://www.cvs.com/account/login?returnUrl=/pharmacy/v2&icid=refill-hero-signin
+2025-09-13 23:49:34,588 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account/login?returnUrl=/pharmacy/v2&icid=refill-hero-signin "HTTP/1.1 405 Method Not Allowed"
+2025-09-13 23:49:34,590 - crawler - WARNING - HTTP error 405 for https://www.cvs.com/account/login?returnUrl=/pharmacy/v2&icid=refill-hero-signin
+2025-09-13 23:49:34,590 - crawler - INFO - Fetching URL: https://www.cvs.com/retail-easy-account/create-account?page=/account/rx/rx-acc-combined-signup.jsp&icid=refill-hero-createacct
+2025-09-13 23:49:34,790 - httpx - INFO - HTTP Request: GET https://www.cvs.com/retail-easy-account/create-account?page=/account/rx/rx-acc-combined-signup.jsp&icid=refill-hero-createacct "HTTP/1.1 403 Forbidden"
+2025-09-13 23:49:34,791 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/retail-easy-account/create-account?page=/account/rx/rx-acc-combined-signup.jsp&icid=refill-hero-createacct
+2025-09-13 23:49:34,791 - crawler - INFO - Fetching URL: https://www.cvs.com/pharmacy/rxtransfer/transferv2?icid=rxrefill-transfer
+2025-09-13 23:49:34,881 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/rxtransfer/transferv2?icid=rxrefill-transfer "HTTP/1.1 302 Moved Temporarily"
+2025-09-13 23:49:34,971 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/rxtransfer/ "HTTP/1.1 200 OK"
+2025-09-13 23:49:34,971 - crawler - INFO - Successfully fetched https://www.cvs.com/pharmacy/rxtransfer/transferv2?icid=rxrefill-transfer - Status: 200, Size: 8616 bytes, Time: 180.31ms
+2025-09-13 23:49:34,979 - crawler - INFO - Stored page data for https://www.cvs.com/pharmacy/rxtransfer with 0 links
+2025-09-13 23:49:34,979 - crawler - INFO - Progress: 63/100 pages crawled, 385 in queue
+2025-09-13 23:49:36,484 - crawler - INFO - Fetching URL: https://www.cvs.com/retail-easy-account/create-account?icid=refill-section2-createaccount
+2025-09-13 23:49:36,552 - httpx - INFO - HTTP Request: GET https://www.cvs.com/retail-easy-account/create-account?icid=refill-section2-createaccount "HTTP/1.1 403 Forbidden"
+2025-09-13 23:49:36,554 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/retail-easy-account/create-account?icid=refill-section2-createaccount
+2025-09-13 23:49:36,554 - crawler - INFO - Fetching URL: https://www.cvs.com/store-locator/landing?icid=refill-section3-storelocator
+2025-09-13 23:49:36,684 - httpx - INFO - HTTP Request: GET https://www.cvs.com/store-locator/landing?icid=refill-section3-storelocator "HTTP/1.1 200 OK"
+2025-09-13 23:49:36,752 - crawler - INFO - Successfully fetched https://www.cvs.com/store-locator/landing?icid=refill-section3-storelocator - Status: 200, Size: 4285566 bytes, Time: 192.35ms
+2025-09-13 23:49:37,005 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:37,006 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:37,585 - crawler - INFO - Stored page data for https://www.cvs.com/store-locator/landing?icid=refill-section3-storelocator with 123 links
+2025-09-13 23:49:37,586 - crawler - INFO - Progress: 64/100 pages crawled, 384 in queue
+2025-09-13 23:49:39,090 - crawler - INFO - Fetching URL: https://www.cvs.com/content/prescription-savings?icid=refill-value-spm
+2025-09-13 23:49:39,173 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/prescription-savings?icid=refill-value-spm "HTTP/1.1 200 OK"
+2025-09-13 23:49:39,175 - crawler - INFO - Successfully fetched https://www.cvs.com/content/prescription-savings?icid=refill-value-spm - Status: 200, Size: 182135 bytes, Time: 84.52ms
+2025-09-13 23:49:39,414 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:39,415 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:39,974 - crawler - INFO - Stored page data for https://www.cvs.com/content/prescription-savings?icid=refill-value-spm with 90 links
+2025-09-13 23:49:39,975 - crawler - INFO - Progress: 65/100 pages crawled, 390 in queue
+2025-09-13 23:49:41,480 - crawler - INFO - Fetching URL: https://www.cvs.com/extracare/overview?icid=refill-value-rap
+2025-09-13 23:49:41,674 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/overview?icid=refill-value-rap "HTTP/1.1 200 OK"
+2025-09-13 23:49:41,676 - crawler - INFO - Successfully fetched https://www.cvs.com/extracare/overview?icid=refill-value-rap - Status: 200, Size: 314772 bytes, Time: 195.85ms
+2025-09-13 23:49:41,931 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:41,932 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:42,912 - crawler - INFO - Stored page data for https://www.cvs.com/extracare/overview?icid=refill-value-rap with 144 links
+2025-09-13 23:49:42,913 - crawler - INFO - Progress: 66/100 pages crawled, 432 in queue
+2025-09-13 23:49:44,418 - crawler - INFO - Fetching URL: https://www.cvs.com/account/login.jsp
+2025-09-13 23:49:44,461 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account/login.jsp "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:49:44,529 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account/login "HTTP/1.1 405 Method Not Allowed"
+2025-09-13 23:49:44,531 - crawler - WARNING - HTTP error 405 for https://www.cvs.com/account/login.jsp
+2025-09-13 23:49:44,531 - crawler - INFO - Fetching URL: https://www.cvs.com/account/creation?page=/account/rx/rx-acc-combined-signup.jsp
+2025-09-13 23:49:44,608 - httpx - INFO - HTTP Request: GET https://www.cvs.com/account/creation?page=/account/rx/rx-acc-combined-signup.jsp "HTTP/1.1 301 Moved Permanently"
+2025-09-13 23:49:44,689 - httpx - INFO - HTTP Request: GET https://www.cvs.com/retail-easy-account/create-account?page=/account/rx/rx-acc-combined-signup.jsp "HTTP/1.1 403 Forbidden"
+2025-09-13 23:49:44,690 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/account/creation?page=/account/rx/rx-acc-combined-signup.jsp
+2025-09-13 23:49:44,691 - crawler - INFO - Fetching URL: https://www.cvs.com/extracare/free/terms?icid=ec-home-ec-terms-disc
+2025-09-13 23:49:44,799 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/free/terms?icid=ec-home-ec-terms-disc "HTTP/1.1 403 Forbidden"
+2025-09-13 23:49:44,801 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/extracare/free/terms?icid=ec-home-ec-terms-disc
+2025-09-13 23:49:44,802 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0
+2025-09-13 23:49:44,921 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0 "HTTP/1.1 403 Forbidden"
+2025-09-13 23:49:44,922 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0
+2025-09-13 23:49:44,922 - crawler - INFO - Fetching URL: https://www.cvs.com/content/oak-street-health?icid=global-navigation
+2025-09-13 23:49:45,040 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/oak-street-health?icid=global-navigation "HTTP/1.1 200 OK"
+2025-09-13 23:49:45,058 - crawler - INFO - Successfully fetched https://www.cvs.com/content/oak-street-health?icid=global-navigation - Status: 200, Size: 194789 bytes, Time: 135.36ms
+2025-09-13 23:49:45,304 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:45,305 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:45,847 - crawler - INFO - Stored page data for https://www.cvs.com/content/oak-street-health?icid=global-navigation with 90 links
+2025-09-13 23:49:45,847 - crawler - INFO - Progress: 67/100 pages crawled, 427 in queue
+2025-09-13 23:49:47,352 - crawler - INFO - Fetching URL: https://www.cvs.com/
+2025-09-13 23:49:47,460 - httpx - INFO - HTTP Request: GET https://www.cvs.com/ "HTTP/1.1 200 OK"
+2025-09-13 23:49:47,774 - crawler - INFO - Successfully fetched https://www.cvs.com/ - Status: 200, Size: 12376909 bytes, Time: 413.42ms
+2025-09-13 23:49:48,120 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:49:48,121 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:49:49,045 - crawler - INFO - Stored page data for https://www.cvs.com/ with 169 links
+2025-09-13 23:49:49,045 - crawler - INFO - Progress: 68/100 pages crawled, 426 in queue
+2025-09-13 23:49:50,550 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone1-schedule
+2025-09-13 23:49:50,670 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone1-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:49:50,671 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone1-schedule - Status: 200, Size: 25602 bytes, Time: 120.15ms
+2025-09-13 23:49:50,678 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone1-schedule with 0 links
+2025-09-13 23:49:50,678 - crawler - INFO - Progress: 69/100 pages crawled, 421 in queue
+2025-09-13 23:49:52,179 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-banner-schedule
+2025-09-13 23:49:52,284 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-banner-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:49:52,284 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-banner-schedule - Status: 200, Size: 25602 bytes, Time: 105.12ms
+2025-09-13 23:49:52,292 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-banner-schedule with 0 links
+2025-09-13 23:49:52,293 - crawler - INFO - Progress: 70/100 pages crawled, 420 in queue
+2025-09-13 23:49:53,800 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-1
+2025-09-13 23:49:53,898 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-1 "HTTP/1.1 200 OK"
+2025-09-13 23:49:53,898 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-1 - Status: 200, Size: 25602 bytes, Time: 98.58ms
+2025-09-13 23:49:53,921 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-1 with 0 links
+2025-09-13 23:49:53,921 - crawler - INFO - Progress: 71/100 pages crawled, 419 in queue
+2025-09-13 23:49:55,427 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-2
+2025-09-13 23:49:55,584 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-2 "HTTP/1.1 200 OK"
+2025-09-13 23:49:55,585 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-2 - Status: 200, Size: 25602 bytes, Time: 158.02ms
+2025-09-13 23:49:55,592 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-2 with 0 links
+2025-09-13 23:49:55,593 - crawler - INFO - Progress: 72/100 pages crawled, 418 in queue
+2025-09-13 23:49:57,098 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-3
+2025-09-13 23:49:57,207 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-3 "HTTP/1.1 200 OK"
+2025-09-13 23:49:57,207 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-3 - Status: 200, Size: 25602 bytes, Time: 108.89ms
+2025-09-13 23:49:57,214 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=flu-lp-zone-topfaq-schedule-3 with 0 links
+2025-09-13 23:49:57,215 - crawler - INFO - Progress: 73/100 pages crawled, 417 in queue
+2025-09-13 23:49:58,717 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone3-schedule
+2025-09-13 23:49:58,822 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone3-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:49:58,822 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone3-schedule - Status: 200, Size: 25602 bytes, Time: 105.54ms
+2025-09-13 23:49:58,829 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=flu-lp-zone3-schedule with 0 links
+2025-09-13 23:49:58,829 - crawler - INFO - Progress: 74/100 pages crawled, 416 in queue
+2025-09-13 23:50:00,334 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/get-vaccinated?icid=flu-lp-explore-vaccines
+2025-09-13 23:50:00,393 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/get-vaccinated?icid=flu-lp-explore-vaccines "HTTP/1.1 200 OK"
+2025-09-13 23:50:00,395 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/get-vaccinated?icid=flu-lp-explore-vaccines - Status: 200, Size: 311815 bytes, Time: 59.96ms
+2025-09-13 23:50:02,983 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:02,985 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:04,192 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/get-vaccinated?icid=flu-lp-explore-vaccines with 153 links
+2025-09-13 23:50:04,194 - crawler - INFO - Progress: 75/100 pages crawled, 415 in queue
+2025-09-13 23:50:05,699 - crawler - INFO - Fetching URL: https://www.cvs.com/learn/health/vaccines-immunizations/vaccines-for-adults.html
+2025-09-13 23:50:05,910 - httpx - INFO - HTTP Request: GET https://www.cvs.com/learn/health/vaccines-immunizations/vaccines-for-adults.html "HTTP/1.1 403 Forbidden"
+2025-09-13 23:50:05,911 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/learn/health/vaccines-immunizations/vaccines-for-adults.html
+2025-09-13 23:50:05,911 - crawler - INFO - Fetching URL: https://www.cvs.com/learn/health/skin-health-conditions/shingles-relief.html?icid=learn-home-hero-l3-shingles
+2025-09-13 23:50:06,073 - httpx - INFO - HTTP Request: GET https://www.cvs.com/learn/health/skin-health-conditions/shingles-relief.html?icid=learn-home-hero-l3-shingles "HTTP/1.1 200 OK"
+2025-09-13 23:50:06,091 - crawler - INFO - Successfully fetched https://www.cvs.com/learn/health/skin-health-conditions/shingles-relief.html?icid=learn-home-hero-l3-shingles - Status: 200, Size: 239098 bytes, Time: 179.90ms
+2025-09-13 23:50:06,362 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:06,364 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:07,075 - crawler - INFO - Stored page data for https://www.cvs.com/learn/health/skin-health-conditions/shingles-relief.html?icid=learn-home-hero-l3-shingles with 134 links
+2025-09-13 23:50:07,076 - crawler - INFO - Progress: 76/100 pages crawled, 433 in queue
+2025-09-13 23:50:08,578 - crawler - INFO - Fetching URL: https://www.cvs.com/learn/health/vaccines-immunizations/mmr-vaccine-essential-guide.html
+2025-09-13 23:50:08,722 - httpx - INFO - HTTP Request: GET https://www.cvs.com/learn/health/vaccines-immunizations/mmr-vaccine-essential-guide.html "HTTP/1.1 403 Forbidden"
+2025-09-13 23:50:08,723 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/learn/health/vaccines-immunizations/mmr-vaccine-essential-guide.html
+2025-09-13 23:50:08,723 - crawler - INFO - Fetching URL: https://www.cvs.com/content/refill?icid=imzflu-ecv-autorefill
+2025-09-13 23:50:08,834 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/refill?icid=imzflu-ecv-autorefill "HTTP/1.1 200 OK"
+2025-09-13 23:50:08,853 - crawler - INFO - Successfully fetched https://www.cvs.com/content/refill?icid=imzflu-ecv-autorefill - Status: 200, Size: 210183 bytes, Time: 129.02ms
+2025-09-13 23:50:09,036 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:09,039 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:09,735 - crawler - INFO - Stored page data for https://www.cvs.com/content/refill?icid=imzflu-ecv-autorefill with 87 links
+2025-09-13 23:50:09,735 - crawler - INFO - Progress: 77/100 pages crawled, 431 in queue
+2025-09-13 23:50:11,237 - crawler - INFO - Fetching URL: https://www.cvs.com/content/senior-wellness?icid=imzflu-ecv-seniors
+2025-09-13 23:50:11,332 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/senior-wellness?icid=imzflu-ecv-seniors "HTTP/1.1 403 Forbidden"
+2025-09-13 23:50:11,333 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/senior-wellness?icid=imzflu-ecv-seniors
+2025-09-13 23:50:11,333 - crawler - INFO - Fetching URL: https://www.cvs.com/shop/merch/preventative-care?icid=imzflu-ecv-shop
+2025-09-13 23:50:11,415 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/preventative-care?icid=imzflu-ecv-shop "HTTP/1.1 403 Forbidden"
+2025-09-13 23:50:11,415 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/shop/merch/preventative-care?icid=imzflu-ecv-shop
+2025-09-13 23:50:11,415 - crawler - INFO - Fetching URL: https://www.cvs.com/content/vaccines-during-pregnancy?icid=flu-FAQ-PregnantVaccines
+2025-09-13 23:50:11,591 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/vaccines-during-pregnancy?icid=flu-FAQ-PregnantVaccines "HTTP/1.1 403 Forbidden"
+2025-09-13 23:50:11,592 - crawler - WARNING - HTTP error 403 for https://www.cvs.com/content/vaccines-during-pregnancy?icid=flu-FAQ-PregnantVaccines
+2025-09-13 23:50:11,592 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/flu/clinics.html
+2025-09-13 23:50:11,822 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/flu/clinics.html "HTTP/1.1 200 OK"
+2025-09-13 23:50:11,840 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/flu/clinics.html - Status: 200, Size: 180700 bytes, Time: 247.09ms
+2025-09-13 23:50:12,711 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:12,713 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:13,290 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/flu/clinics.html with 86 links
+2025-09-13 23:50:13,291 - crawler - INFO - Progress: 78/100 pages crawled, 430 in queue
+2025-09-13 23:50:14,792 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/get-vaccinated.html
+2025-09-13 23:50:14,862 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/get-vaccinated.html "HTTP/1.1 200 OK"
+2025-09-13 23:50:14,871 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/get-vaccinated.html - Status: 200, Size: 311817 bytes, Time: 78.01ms
+2025-09-13 23:50:15,083 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:15,084 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:16,129 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/get-vaccinated.html with 153 links
+2025-09-13 23:50:16,130 - crawler - INFO - Progress: 79/100 pages crawled, 429 in queue
+2025-09-13 23:50:17,636 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/CVS.com
+2025-09-13 23:50:17,821 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/CVS.com "HTTP/1.1 404 Not Found"
+2025-09-13 23:50:17,823 - crawler - WARNING - 404 Not Found: https://www.cvs.com/immunizations/CVS.com
+2025-09-13 23:50:17,823 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone1-schedule
+2025-09-13 23:50:17,971 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone1-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:17,972 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone1-schedule - Status: 200, Size: 25603 bytes, Time: 149.03ms
+2025-09-13 23:50:17,978 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone1-schedule with 0 links
+2025-09-13 23:50:17,979 - crawler - INFO - Progress: 80/100 pages crawled, 427 in queue
+2025-09-13 23:50:19,484 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/cancel/patient-lookup?lob=rximz&flow=cancel_resch&icid=immunizations-lp-zone1-manage
+2025-09-13 23:50:19,684 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/cancel/patient-lookup?lob=rximz&flow=cancel_resch&icid=immunizations-lp-zone1-manage "HTTP/1.1 200 OK"
+2025-09-13 23:50:19,685 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/cancel/patient-lookup?lob=rximz&flow=cancel_resch&icid=immunizations-lp-zone1-manage - Status: 200, Size: 25603 bytes, Time: 200.55ms
+2025-09-13 23:50:19,691 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/cancel/patient-lookup?lob=rximz&flow=cancel_resch&icid=immunizations-lp-zone1-manage with 0 links
+2025-09-13 23:50:19,691 - crawler - INFO - Progress: 81/100 pages crawled, 426 in queue
+2025-09-13 23:50:21,192 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunization-lp-banner-schedule
+2025-09-13 23:50:21,288 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunization-lp-banner-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:21,288 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunization-lp-banner-schedule - Status: 200, Size: 25603 bytes, Time: 96.15ms
+2025-09-13 23:50:21,295 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunization-lp-banner-schedule with 0 links
+2025-09-13 23:50:21,296 - crawler - INFO - Progress: 82/100 pages crawled, 425 in queue
+2025-09-13 23:50:22,801 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2A-schedule
+2025-09-13 23:50:22,931 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2A-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:22,932 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2A-schedule - Status: 200, Size: 25603 bytes, Time: 130.76ms
+2025-09-13 23:50:22,946 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2A-schedule with 0 links
+2025-09-13 23:50:22,946 - crawler - INFO - Progress: 83/100 pages crawled, 424 in queue
+2025-09-13 23:50:24,451 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2B-schedule
+2025-09-13 23:50:24,541 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2B-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:24,541 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2B-schedule - Status: 200, Size: 25603 bytes, Time: 90.07ms
+2025-09-13 23:50:24,553 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2B-schedule with 0 links
+2025-09-13 23:50:24,553 - crawler - INFO - Progress: 84/100 pages crawled, 423 in queue
+2025-09-13 23:50:26,059 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2C-schedule
+2025-09-13 23:50:26,159 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2C-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:26,160 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2C-schedule - Status: 200, Size: 25603 bytes, Time: 101.49ms
+2025-09-13 23:50:26,174 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2C-schedule with 0 links
+2025-09-13 23:50:26,174 - crawler - INFO - Progress: 85/100 pages crawled, 422 in queue
+2025-09-13 23:50:27,679 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2D-schedule
+2025-09-13 23:50:27,768 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2D-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:27,768 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2D-schedule - Status: 200, Size: 25603 bytes, Time: 88.94ms
+2025-09-13 23:50:27,778 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone2D-schedule with 0 links
+2025-09-13 23:50:27,778 - crawler - INFO - Progress: 86/100 pages crawled, 421 in queue
+2025-09-13 23:50:29,279 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule
+2025-09-13 23:50:29,399 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule "HTTP/1.1 200 OK"
+2025-09-13 23:50:29,400 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule - Status: 200, Size: 25603 bytes, Time: 120.73ms
+2025-09-13 23:50:29,410 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule with 0 links
+2025-09-13 23:50:29,410 - crawler - INFO - Progress: 87/100 pages crawled, 420 in queue
+2025-09-13 23:50:30,912 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-covid
+2025-09-13 23:50:31,031 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-covid "HTTP/1.1 200 OK"
+2025-09-13 23:50:31,032 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-covid - Status: 200, Size: 25603 bytes, Time: 119.50ms
+2025-09-13 23:50:31,039 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-covid with 0 links
+2025-09-13 23:50:31,039 - crawler - INFO - Progress: 88/100 pages crawled, 419 in queue
+2025-09-13 23:50:32,544 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/flu?icid=immunizations-lp-zone3-info-flu
+2025-09-13 23:50:32,612 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/flu?icid=immunizations-lp-zone3-info-flu "HTTP/1.1 200 OK"
+2025-09-13 23:50:32,616 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/flu?icid=immunizations-lp-zone3-info-flu - Status: 200, Size: 253199 bytes, Time: 71.79ms
+2025-09-13 23:50:33,195 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:33,197 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:34,068 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/flu?icid=immunizations-lp-zone3-info-flu with 107 links
+2025-09-13 23:50:34,068 - crawler - INFO - Progress: 89/100 pages crawled, 418 in queue
+2025-09-13 23:50:35,576 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-flu
+2025-09-13 23:50:35,675 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-flu "HTTP/1.1 200 OK"
+2025-09-13 23:50:35,676 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-flu - Status: 200, Size: 25603 bytes, Time: 99.54ms
+2025-09-13 23:50:35,687 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-flu with 0 links
+2025-09-13 23:50:35,687 - crawler - INFO - Progress: 90/100 pages crawled, 417 in queue
+2025-09-13 23:50:37,187 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/hepatitis-b?cid=immunizations-lp-zone3-info-hepb
+2025-09-13 23:50:37,262 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/hepatitis-b?cid=immunizations-lp-zone3-info-hepb "HTTP/1.1 200 OK"
+2025-09-13 23:50:37,265 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/hepatitis-b?cid=immunizations-lp-zone3-info-hepb - Status: 200, Size: 193124 bytes, Time: 77.78ms
+2025-09-13 23:50:37,519 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:37,522 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:38,104 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/hepatitis-b?cid=immunizations-lp-zone3-info-hepb with 94 links
+2025-09-13 23:50:38,104 - crawler - INFO - Progress: 91/100 pages crawled, 425 in queue
+2025-09-13 23:50:39,609 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hepb
+2025-09-13 23:50:39,729 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hepb "HTTP/1.1 200 OK"
+2025-09-13 23:50:39,729 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hepb - Status: 200, Size: 25603 bytes, Time: 119.99ms
+2025-09-13 23:50:39,739 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hepb with 0 links
+2025-09-13 23:50:39,739 - crawler - INFO - Progress: 92/100 pages crawled, 424 in queue
+2025-09-13 23:50:41,244 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/hpv?icid=immunizations-lp-zone3-info-hpv
+2025-09-13 23:50:41,377 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/hpv?icid=immunizations-lp-zone3-info-hpv "HTTP/1.1 200 OK"
+2025-09-13 23:50:41,381 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/hpv?icid=immunizations-lp-zone3-info-hpv - Status: 200, Size: 196267 bytes, Time: 136.28ms
+2025-09-13 23:50:41,608 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:41,610 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:42,289 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/hpv?icid=immunizations-lp-zone3-info-hpv with 94 links
+2025-09-13 23:50:42,291 - crawler - INFO - Progress: 93/100 pages crawled, 433 in queue
+2025-09-13 23:50:43,795 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hpv
+2025-09-13 23:50:44,020 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hpv "HTTP/1.1 200 OK"
+2025-09-13 23:50:44,021 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hpv - Status: 200, Size: 25603 bytes, Time: 225.73ms
+2025-09-13 23:50:44,038 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-hpv with 0 links
+2025-09-13 23:50:44,038 - crawler - INFO - Progress: 94/100 pages crawled, 432 in queue
+2025-09-13 23:50:45,543 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/meningitis?icid=immunizations-lp-zone3-info-meningitis
+2025-09-13 23:50:46,289 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/meningitis?icid=immunizations-lp-zone3-info-meningitis "HTTP/1.1 200 OK"
+2025-09-13 23:50:46,290 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/meningitis?icid=immunizations-lp-zone3-info-meningitis - Status: 200, Size: 196742 bytes, Time: 746.99ms
+2025-09-13 23:50:46,524 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:46,526 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:47,040 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/meningitis?icid=immunizations-lp-zone3-info-meningitis with 95 links
+2025-09-13 23:50:47,040 - crawler - INFO - Progress: 95/100 pages crawled, 440 in queue
+2025-09-13 23:50:48,546 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-meningitis
+2025-09-13 23:50:48,656 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-meningitis "HTTP/1.1 200 OK"
+2025-09-13 23:50:48,657 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-meningitis - Status: 200, Size: 25604 bytes, Time: 111.42ms
+2025-09-13 23:50:48,672 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-meningitis with 0 links
+2025-09-13 23:50:48,672 - crawler - INFO - Progress: 96/100 pages crawled, 439 in queue
+2025-09-13 23:50:50,173 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/mmr?icid=immunizations-lp-zone3-info-mmr
+2025-09-13 23:50:50,548 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/mmr?icid=immunizations-lp-zone3-info-mmr "HTTP/1.1 200 OK"
+2025-09-13 23:50:50,551 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/mmr?icid=immunizations-lp-zone3-info-mmr - Status: 200, Size: 205012 bytes, Time: 378.12ms
+2025-09-13 23:50:50,770 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:50,773 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:51,368 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/mmr?icid=immunizations-lp-zone3-info-mmr with 104 links
+2025-09-13 23:50:51,368 - crawler - INFO - Progress: 97/100 pages crawled, 446 in queue
+2025-09-13 23:50:52,874 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mmr
+2025-09-13 23:50:52,974 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mmr "HTTP/1.1 200 OK"
+2025-09-13 23:50:52,975 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mmr - Status: 200, Size: 25603 bytes, Time: 101.18ms
+2025-09-13 23:50:52,996 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mmr with 0 links
+2025-09-13 23:50:52,996 - crawler - INFO - Progress: 98/100 pages crawled, 445 in queue
+2025-09-13 23:50:54,501 - crawler - INFO - Fetching URL: https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mpox
+2025-09-13 23:50:54,615 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mpox "HTTP/1.1 200 OK"
+2025-09-13 23:50:54,615 - crawler - INFO - Successfully fetched https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mpox - Status: 200, Size: 25603 bytes, Time: 113.86ms
+2025-09-13 23:50:54,623 - crawler - INFO - Stored page data for https://www.cvs.com/scheduling/patient-lookup.html?lob=rximz&flow=vaccine&icid=immunizations-lp-zone3-schedule-mpox with 0 links
+2025-09-13 23:50:54,624 - crawler - INFO - Progress: 99/100 pages crawled, 444 in queue
+2025-09-13 23:50:56,124 - crawler - INFO - Fetching URL: https://www.cvs.com/immunizations/pneumonia?icid=immunizations-lp-zone3-info-pneumonia
+2025-09-13 23:50:56,220 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/pneumonia?icid=immunizations-lp-zone3-info-pneumonia "HTTP/1.1 200 OK"
+2025-09-13 23:50:56,223 - crawler - INFO - Successfully fetched https://www.cvs.com/immunizations/pneumonia?icid=immunizations-lp-zone3-info-pneumonia - Status: 200, Size: 201729 bytes, Time: 98.55ms
+2025-09-13 23:50:56,470 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-13 23:50:56,472 - content_processor - INFO - Generated embedding vector of dimension 1536
+2025-09-13 23:50:56,997 - crawler - INFO - Stored page data for https://www.cvs.com/immunizations/pneumonia?icid=immunizations-lp-zone3-info-pneumonia with 98 links
+2025-09-13 23:50:56,997 - crawler - INFO - Progress: 100/100 pages crawled, 453 in queue
+2025-09-13 23:50:58,503 - crawler - INFO - Crawl completed: {'pages_crawled': 100, 'pages_failed': 45, 'unique_urls_found': 145, 'elapsed_time_seconds': 255.4972369670868, 'pages_per_second': 0.39139366510206924, 'failed_urls': {'https://www.cvs.com/rx/dotm/cart?flowType=FS': 'HTTP 403', 'https://www.cvs.com/shop': 'HTTP 403', 'https://www.cvs.com/shop?icid=cvs-home-s2-l5-tiles-fs-shopall': 'HTTP 403', 'https://www.cvs.com/shop/health-medicine?icid=cvs-home-s2-l1-tiles-fs-healthmeds': 'HTTP 403', 'https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins': 'HTTP 403', 'https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare': 'HTTP 403', 'https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals': 'HTTP 403', 'https://www.cvs.com/shop/seasonal-shops/fall?icid=cvs-home-s3-l3-theme-fs-pumpkinfall': 'HTTP 403', 'https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s3-l2-theme-fs-fallepic': 'HTTP 403', 'https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap': '404 Not Found', 'https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s5-l1-bnrshop-fs-epicbeauty': 'HTTP 403', 'https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween': 'HTTP 403', 'https://www.cvs.com/shop/merch/extra-big-deals?widgetID=nlvr052j&mc=0&icid=cvs-home-s5-l4-bnrshop-fs-bigdeals': 'HTTP 403', 'https://www.cvs.com/shop/merch/skin-care-last-chance?widgetID=40eyeyap&icid=cvs-home-s5-l5-bnrshop-fs-last-chance': 'HTTP 403', 'https://www.cvs.com/shop/merch/new?widgetID=ojdve0je&mc=0&icid=cvs-home-s9-l1-trendcats-fs-new': 'HTTP 403', 'https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s9-l3-trendcats-fs-halloween': 'HTTP 403', 'https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins': 'HTTP 403', 'https://www.cvs.com/shop/health-medicine?icid=cvs-home-s9-l5-trendcats-fs-healthmeds': 'HTTP 403', 'https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual': 'HTTP 403', 'https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty': 'HTTP 403', 'https://www.cvs.com/shop/personal-care?icid=cvs-home-s9-l8-trendcats-fs-perscare': 'HTTP 403', 'https://www.cvs.com/shop/grocery?icid=cvs-home-s9-l9-trendcats-fs-grocery': 'HTTP 403', 'https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house': 'HTTP 403', 'https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s9-l11-trendcats-fs-weeklydeals': 'HTTP 403', 'https://www.cvs.com/shop?icid=cvs-home-s9-l12-trendcats-fs-shopall': 'HTTP 403', 'https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis': 'HTTP 403', 'https://www.cvs.com/content/women?icid=cvs-home-s12-l1-3crdimg-gen-commitment': 'HTTP 403', 'https://www.cvs.com/content/beauty-mark?icid=cvs-home-s12-l2-3crdimg-gen-pledge': 'HTTP 403', 'https://www.cvs.com/content/tested-trusted?icid=cvs-home-s12-l3-3crdimg-gen-testing': 'HTTP 403', 'https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms': 'HTTP 403', 'https://www.cvs.com/content/same-day-delivery': 'HTTP 403', 'https://www.cvs.com/content/tested-trusted': 'HTTP 403', 'https://www.cvs.com/account/login?returnUrl=/pharmacy/v2&icid=refill-hero-signin': 'HTTP 405', 'https://www.cvs.com/retail-easy-account/create-account?page=/account/rx/rx-acc-combined-signup.jsp&icid=refill-hero-createacct': 'HTTP 403', 'https://www.cvs.com/retail-easy-account/create-account?icid=refill-section2-createaccount': 'HTTP 403', 'https://www.cvs.com/account/login.jsp': 'HTTP 405', 'https://www.cvs.com/account/creation?page=/account/rx/rx-acc-combined-signup.jsp': 'HTTP 403', 'https://www.cvs.com/extracare/free/terms?icid=ec-home-ec-terms-disc': 'HTTP 403', 'https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0': 'HTTP 403', 'https://www.cvs.com/learn/health/vaccines-immunizations/vaccines-for-adults.html': 'HTTP 403', 'https://www.cvs.com/learn/health/vaccines-immunizations/mmr-vaccine-essential-guide.html': 'HTTP 403', 'https://www.cvs.com/content/senior-wellness?icid=imzflu-ecv-seniors': 'HTTP 403', 'https://www.cvs.com/shop/merch/preventative-care?icid=imzflu-ecv-shop': 'HTTP 403', 'https://www.cvs.com/content/vaccines-during-pregnancy?icid=flu-FAQ-PregnantVaccines': 'HTTP 403', 'https://www.cvs.com/immunizations/CVS.com': '404 Not Found'}}
+2025-09-13 23:50:58,506 - __main__ - INFO - ============================================================
+2025-09-13 23:50:58,507 - __main__ - INFO - Crawl Complete!
+2025-09-13 23:50:58,507 - __main__ - INFO - ============================================================
+2025-09-13 23:50:58,507 - __main__ - INFO - Duration: 255.50 seconds
+2025-09-13 23:50:58,507 - __main__ - INFO - Pages crawled: 100
+2025-09-13 23:50:58,507 - __main__ - INFO - Pages failed: 45
+2025-09-13 23:50:58,507 - __main__ - INFO - Unique URLs found: 145
+2025-09-13 23:50:58,507 - __main__ - INFO - Pages per second: 0.39
+2025-09-13 23:50:58,507 - __main__ - INFO - 
+Failed URLs:
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/rx/dotm/cart?flowType=FS: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop?icid=cvs-home-s2-l5-tiles-fs-shopall: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/health-medicine?icid=cvs-home-s2-l1-tiles-fs-healthmeds: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/seasonal-shops/fall?icid=cvs-home-s3-l3-theme-fs-pumpkinfall: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s3-l2-theme-fs-fallepic: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap: 404 Not Found
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/merch/epic-beauty?widgetID=nj3r2ejr&mc=0&icid=cvs-home-s5-l1-bnrshop-fs-epicbeauty: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/merch/extra-big-deals?widgetID=nlvr052j&mc=0&icid=cvs-home-s5-l4-bnrshop-fs-bigdeals: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/merch/skin-care-last-chance?widgetID=40eyeyap&icid=cvs-home-s5-l5-bnrshop-fs-last-chance: HTTP 403
+2025-09-13 23:50:58,508 - __main__ - INFO -   - https://www.cvs.com/shop/merch/new?widgetID=ojdve0je&mc=0&icid=cvs-home-s9-l1-trendcats-fs-new: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s9-l3-trendcats-fs-halloween: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/health-medicine?icid=cvs-home-s9-l5-trendcats-fs-healthmeds: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/personal-care?icid=cvs-home-s9-l8-trendcats-fs-perscare: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/grocery?icid=cvs-home-s9-l9-trendcats-fs-grocery: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s9-l11-trendcats-fs-weeklydeals: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop?icid=cvs-home-s9-l12-trendcats-fs-shopall: HTTP 403
+2025-09-13 23:50:58,509 - __main__ - INFO -   - https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/content/women?icid=cvs-home-s12-l1-3crdimg-gen-commitment: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/content/beauty-mark?icid=cvs-home-s12-l2-3crdimg-gen-pledge: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/content/tested-trusted?icid=cvs-home-s12-l3-3crdimg-gen-testing: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/content/same-day-delivery: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/content/tested-trusted: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/account/login?returnUrl=/pharmacy/v2&icid=refill-hero-signin: HTTP 405
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/retail-easy-account/create-account?page=/account/rx/rx-acc-combined-signup.jsp&icid=refill-hero-createacct: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/retail-easy-account/create-account?icid=refill-section2-createaccount: HTTP 403
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/account/login.jsp: HTTP 405
+2025-09-13 23:50:58,510 - __main__ - INFO -   - https://www.cvs.com/account/creation?page=/account/rx/rx-acc-combined-signup.jsp: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/extracare/free/terms?icid=ec-home-ec-terms-disc: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/learn/health/vaccines-immunizations/vaccines-for-adults.html: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/learn/health/vaccines-immunizations/mmr-vaccine-essential-guide.html: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/content/senior-wellness?icid=imzflu-ecv-seniors: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/shop/merch/preventative-care?icid=imzflu-ecv-shop: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/content/vaccines-during-pregnancy?icid=flu-FAQ-PregnantVaccines: HTTP 403
+2025-09-13 23:50:58,511 - __main__ - INFO -   - https://www.cvs.com/immunizations/CVS.com: 404 Not Found
+2025-09-13 23:50:58,512 - __main__ - INFO - 
+Statistics saved to: cvs_crawl_stats_20250913_235058.json
+2025-09-13 23:50:58,512 - __main__ - INFO - 
+============================================================
+2025-09-13 23:50:58,512 - __main__ - INFO - Graph Analysis
+2025-09-13 23:50:58,512 - __main__ - INFO - ============================================================
+2025-09-13 23:50:58,526 - neo4j_manager - INFO - Successfully connected to Neo4j at bolt://localhost:7687
+2025-09-13 23:50:58,537 - neo4j_manager - INFO - Created constraint/index: page_url_unique
+2025-09-13 23:50:58,538 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE CONSTRAINT page_url_unique IF NOT EXISTS FOR (e:Page) REQUIRE (e.url) IS UNIQUE` has no effect.} {description: `CONSTRAINT page_url_unique FOR (e:Page) REQUIRE (e.url) IS UNIQUE` already exists.} {position: None} for query: 'CREATE CONSTRAINT page_url_unique IF NOT EXISTS FOR (p:Page) REQUIRE p.url IS UNIQUE'
+2025-09-13 23:50:58,542 - neo4j_manager - INFO - Created constraint/index: external_url_unique
+2025-09-13 23:50:58,542 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE CONSTRAINT external_url_unique IF NOT EXISTS FOR (e:ExternalLink) REQUIRE (e.url) IS UNIQUE` has no effect.} {description: `CONSTRAINT external_url_unique FOR (e:ExternalLink) REQUIRE (e.url) IS UNIQUE` already exists.} {position: None} for query: 'CREATE CONSTRAINT external_url_unique IF NOT EXISTS FOR (e:ExternalLink) REQUIRE e.url IS UNIQUE'
+2025-09-13 23:50:58,545 - neo4j_manager - INFO - Created constraint/index: page_domain
+2025-09-13 23:50:58,545 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX page_domain IF NOT EXISTS FOR (e:Page) ON (e.domain)` has no effect.} {description: `RANGE INDEX page_domain FOR (e:Page) ON (e.domain)` already exists.} {position: None} for query: 'CREATE INDEX page_domain IF NOT EXISTS FOR (p:Page) ON (p.domain)'
+2025-09-13 23:50:58,549 - neo4j_manager - INFO - Created constraint/index: page_crawled
+2025-09-13 23:50:58,549 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX page_crawled IF NOT EXISTS FOR (e:Page) ON (e.last_crawled)` has no effect.} {description: `RANGE INDEX page_crawled FOR (e:Page) ON (e.last_crawled)` already exists.} {position: None} for query: 'CREATE INDEX page_crawled IF NOT EXISTS FOR (p:Page) ON (p.last_crawled)'
+2025-09-13 23:50:58,552 - neo4j_manager - INFO - Created constraint/index: element_type
+2025-09-13 23:50:58,553 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX element_type IF NOT EXISTS FOR (e:Element) ON (e.type)` has no effect.} {description: `RANGE INDEX element_type FOR (e:Element) ON (e.type)` already exists.} {position: None} for query: 'CREATE INDEX element_type IF NOT EXISTS FOR (e:Element) ON (e.type)'
+2025-09-13 23:50:58,558 - neo4j_manager - INFO - Created constraint/index: INDEX
+2025-09-13 23:50:58,558 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE VECTOR INDEX page_content_vector IF NOT EXISTS FOR (e:Page) ON (e.content_vector) OPTIONS {indexConfig: {`vector.dimensions`: 1536, `vector.similarity_function`: "cosine"}}` has no effect.} {description: `VECTOR INDEX page_content_vector FOR (e:Page) ON (e.content_vector)` already exists.} {position: None} for query: "CREATE VECTOR INDEX page_content_vector IF NOT EXISTS FOR (p:Page) ON p.content_vector OPTIONS {indexConfig: {`vector.dimensions`: 1536, `vector.similarity_function`: 'cosine'}}"
+2025-09-13 23:50:58,578 - __main__ - INFO - Total pages in graph: 793
+2025-09-13 23:50:58,589 - __main__ - INFO - Total internal links: 4992
+2025-09-13 23:50:58,603 - __main__ - INFO - Total external links: 174
+2025-09-13 23:50:58,641 - __main__ - INFO - 
+Top 10 most linked pages:
+2025-09-13 23:50:58,656 - __main__ - INFO -   - No title: 68 links
+2025-09-13 23:50:58,656 - __main__ - INFO -     URL: https://www.cvs.com/minuteclinic
+2025-09-13 23:50:58,656 - __main__ - INFO -   - Pharmacy and Drugstore Locations | CVS Pharmacy Lo: 67 links
+2025-09-13 23:50:58,656 - __main__ - INFO -     URL: https://www.cvs.com/store-locator/landing
+2025-09-13 23:50:58,656 - __main__ - INFO -   - No title: 67 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/mobile-cvs/apps
+2025-09-13 23:50:58,657 - __main__ - INFO -   - No title: 67 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/photo/passport-photos
+2025-09-13 23:50:58,657 - __main__ - INFO -   - No title: 67 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/photo
+2025-09-13 23:50:58,657 - __main__ - INFO -   - ExtraCare Savings | Join Today: 65 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/extracare/home
+2025-09-13 23:50:58,657 - __main__ - INFO -   - No title: 65 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/learn
+2025-09-13 23:50:58,657 - __main__ - INFO -   - No title: 65 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/shop
+2025-09-13 23:50:58,657 - __main__ - INFO -   - No title: 65 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/immunizations/get-vaccinated
+2025-09-13 23:50:58,657 - __main__ - INFO -   - Weeklyad: 65 links
+2025-09-13 23:50:58,657 - __main__ - INFO -     URL: https://www.cvs.com/weeklyad/pageview
+2025-09-13 23:50:58,657 - __main__ - INFO - 
+Pages by depth from homepage:
+2025-09-13 23:50:58,739 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Statement.ExhaustiveShortestPath} {category: PERFORMANCE} {title: Exhaustive shortest path has been planned for your query that means that shortest path graph algorithm might not be used to find the shortest path. Hence an exhaustive enumeration of all paths might be used in order to find the requested shortest path.} {description: Using shortest path with an exhaustive search fallback might cause query slow down since shortest path graph algorithms might not work for this use case. It is recommended to introduce a WITH to separate the MATCH containing the shortest path from the existential predicates on that path.} {position: line: 2, column: 38, offset: 38} for query: '\n                        MATCH path = shortestPath((home:Page {url: $home_url})-[:LINKS_TO*0..0]->(p:Page))\n                        WHERE length(path) = 0\n                        RETURN count(DISTINCT p) as count\n                    '
+2025-09-13 23:50:58,739 - __main__ - INFO -   Depth 0: 1 pages
+2025-09-13 23:50:58,829 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Statement.ExhaustiveShortestPath} {category: PERFORMANCE} {title: Exhaustive shortest path has been planned for your query that means that shortest path graph algorithm might not be used to find the shortest path. Hence an exhaustive enumeration of all paths might be used in order to find the requested shortest path.} {description: Using shortest path with an exhaustive search fallback might cause query slow down since shortest path graph algorithms might not work for this use case. It is recommended to introduce a WITH to separate the MATCH containing the shortest path from the existential predicates on that path.} {position: line: 2, column: 38, offset: 38} for query: '\n                        MATCH path = shortestPath((home:Page {url: $home_url})-[:LINKS_TO*0..1]->(p:Page))\n                        WHERE length(path) = 1\n                        RETURN count(DISTINCT p) as count\n                    '
+2025-09-13 23:50:58,829 - __main__ - INFO -   Depth 1: 112 pages
+2025-09-13 23:50:59,000 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Statement.ExhaustiveShortestPath} {category: PERFORMANCE} {title: Exhaustive shortest path has been planned for your query that means that shortest path graph algorithm might not be used to find the shortest path. Hence an exhaustive enumeration of all paths might be used in order to find the requested shortest path.} {description: Using shortest path with an exhaustive search fallback might cause query slow down since shortest path graph algorithms might not work for this use case. It is recommended to introduce a WITH to separate the MATCH containing the shortest path from the existential predicates on that path.} {position: line: 2, column: 38, offset: 38} for query: '\n                        MATCH path = shortestPath((home:Page {url: $home_url})-[:LINKS_TO*0..2]->(p:Page))\n                        WHERE length(path) = 2\n                        RETURN count(DISTINCT p) as count\n                    '
+2025-09-13 23:50:59,000 - __main__ - INFO -   Depth 2: 566 pages
+2025-09-13 23:51:00,213 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Statement.ExhaustiveShortestPath} {category: PERFORMANCE} {title: Exhaustive shortest path has been planned for your query that means that shortest path graph algorithm might not be used to find the shortest path. Hence an exhaustive enumeration of all paths might be used in order to find the requested shortest path.} {description: Using shortest path with an exhaustive search fallback might cause query slow down since shortest path graph algorithms might not work for this use case. It is recommended to introduce a WITH to separate the MATCH containing the shortest path from the existential predicates on that path.} {position: line: 2, column: 38, offset: 38} for query: '\n                        MATCH path = shortestPath((home:Page {url: $home_url})-[:LINKS_TO*0..3]->(p:Page))\n                        WHERE length(path) = 3\n                        RETURN count(DISTINCT p) as count\n                    '
+2025-09-13 23:51:00,213 - __main__ - INFO -   Depth 3: 789 pages
+2025-09-13 23:51:00,213 - neo4j_manager - INFO - Neo4j connection closed
+2025-09-13 23:51:00,213 - __main__ - INFO - 
+============================================================
+2025-09-13 23:51:00,213 - __main__ - INFO - Test completed successfully!
+2025-09-13 23:51:00,213 - __main__ - INFO - You can now explore the graph in Neo4j Browser
+2025-09-13 23:51:00,213 - __main__ - INFO - Example Cypher queries:
+2025-09-13 23:51:00,213 - __main__ - INFO -   - MATCH (n) RETURN n LIMIT 100
+2025-09-13 23:51:00,213 - __main__ - INFO -   - MATCH (p:Page) WHERE p.url CONTAINS 'pharmacy' RETURN p
+2025-09-13 23:51:00,214 - __main__ - INFO -   - MATCH path = (p1:Page)-[:LINKS_TO*1..2]->(p2:Page) RETURN path LIMIT 50
+2025-09-13 23:51:00,214 - __main__ - INFO - ============================================================
+2025-09-13 23:51:00,215 - neo4j_manager - INFO - Neo4j connection closed
+2025-09-13 23:51:00,215 - crawler - INFO - WebCrawler resources cleaned up
