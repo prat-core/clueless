@@ -1,0 +1,226 @@
+2025-09-14 00:57:03,056 - __main__ - INFO - ============================================================
+2025-09-14 00:57:03,057 - __main__ - INFO - Pinecone Vector Database Population Script
+2025-09-14 00:57:03,057 - __main__ - INFO - ============================================================
+2025-09-14 00:57:03,057 - __main__ - INFO - Target URL: https://www.cvs.com
+2025-09-14 00:57:03,057 - __main__ - INFO - Pinecone Index: cluelessly
+2025-09-14 00:57:03,057 - __main__ - INFO - OpenAI Key: sk-proj-23...
+2025-09-14 00:57:03,057 - __main__ - INFO - Pinecone Key: pcsk_446Sp...
+2025-09-14 00:57:03,057 - __main__ - INFO - ============================================================
+2025-09-14 00:57:17,493 - __main__ - INFO - Initializing Pinecone populator...
+2025-09-14 00:57:18,077 - __main__ - INFO - SimplePineconePopulator initialized for https://www.cvs.com
+2025-09-14 00:57:18,077 - __main__ - INFO - Starting crawl and Pinecone population...
+2025-09-14 00:57:18,077 - __main__ - INFO - Starting crawl from https://www.cvs.com
+2025-09-14 00:57:18,077 - __main__ - INFO - Max pages: 20, Max depth: 2
+2025-09-14 00:57:18,077 - __main__ - INFO - Fetching: https://www.cvs.com
+2025-09-14 00:57:18,331 - httpx - INFO - HTTP Request: GET https://www.cvs.com "HTTP/1.1 200 OK"
+2025-09-14 00:57:19,234 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:19,954 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com (7 chunks)
+2025-09-14 00:57:20,000 - __main__ - INFO - Progress: 1/20 pages crawled, 1 added to Pinecone, 112 in queue
+2025-09-14 00:57:21,501 - __main__ - INFO - Fetching: https://www.cvs.com/minuteclinic/virtual-care
+2025-09-14 00:57:21,816 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/virtual-care "HTTP/1.1 200 OK"
+2025-09-14 00:57:22,345 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:22,642 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/minuteclinic/virtual-care (8 chunks)
+2025-09-14 00:57:22,667 - __main__ - INFO - Progress: 2/20 pages crawled, 2 added to Pinecone, 134 in queue
+2025-09-14 00:57:24,173 - __main__ - INFO - Fetching: https://www.cvs.com/content/oak-street-health?icid=global-navigation
+2025-09-14 00:57:24,266 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/oak-street-health?icid=global-navigation "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:24,267 - __main__ - ERROR - Failed to fetch https://www.cvs.com/content/oak-street-health?icid=global-navigation: Client error '403 Forbidden' for url 'https://www.cvs.com/content/oak-street-health?icid=global-navigation'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:24,267 - __main__ - INFO - Fetching: https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms
+2025-09-14 00:57:25,209 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:25,209 - __main__ - ERROR - Failed to fetch https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms: Client error '403 Forbidden' for url 'https://www.cvs.com/extracare/free/terms?icid=cvs-home-disc-ec-terms'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:25,209 - __main__ - INFO - Fetching: https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual
+2025-09-14 00:57:25,288 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:25,289 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/sexual-wellness?icid=cvs-home-s9-l6-trendcats-fs-sexual'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:25,289 - __main__ - INFO - Fetching: https://www.cvs.com/retail/help/return_policy
+2025-09-14 00:57:25,997 - httpx - INFO - HTTP Request: GET https://www.cvs.com/retail/help/return_policy "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:25,997 - __main__ - ERROR - Failed to fetch https://www.cvs.com/retail/help/return_policy: Client error '403 Forbidden' for url 'https://www.cvs.com/retail/help/return_policy'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:25,997 - __main__ - INFO - Fetching: https://www.cvs.com/content/we-salute-nonmember
+2025-09-14 00:57:26,132 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/we-salute-nonmember "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:26,133 - __main__ - ERROR - Failed to fetch https://www.cvs.com/content/we-salute-nonmember: Client error '403 Forbidden' for url 'https://www.cvs.com/content/we-salute-nonmember'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:26,133 - __main__ - INFO - Fetching: https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house
+2025-09-14 00:57:26,289 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:26,289 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/household?icid=cvs-home-s9-l10-trendcats-fs-house'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:26,289 - __main__ - INFO - Fetching: https://www.cvs.com/learn
+2025-09-14 00:57:26,391 - httpx - INFO - HTTP Request: GET https://www.cvs.com/learn "HTTP/1.1 200 OK"
+2025-09-14 00:57:26,730 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:26,815 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/learn (2 chunks)
+2025-09-14 00:57:26,832 - __main__ - INFO - Progress: 3/20 pages crawled, 3 added to Pinecone, 147 in queue
+2025-09-14 00:57:28,333 - __main__ - INFO - Fetching: https://www.cvs.com/immunizations/pneumonia
+2025-09-14 00:57:28,395 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/pneumonia "HTTP/1.1 200 OK"
+2025-09-14 00:57:28,753 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:28,887 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/immunizations/pneumonia (7 chunks)
+2025-09-14 00:57:28,901 - __main__ - INFO - Progress: 4/20 pages crawled, 4 added to Pinecone, 156 in queue
+2025-09-14 00:57:30,407 - __main__ - INFO - Fetching: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu
+2025-09-14 00:57:30,554 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu "HTTP/1.1 200 OK"
+2025-09-14 00:57:30,555 - __main__ - WARNING - No content to add for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s3-l1-theme-imz-fallflu
+2025-09-14 00:57:30,556 - __main__ - INFO - Progress: 5/20 pages crawled, 4 added to Pinecone, 155 in queue
+2025-09-14 00:57:32,057 - __main__ - INFO - Fetching: https://www.cvs.com/extracare/home
+2025-09-14 00:57:32,169 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/home "HTTP/1.1 200 OK"
+2025-09-14 00:57:32,577 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:32,666 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/extracare/home (3 chunks)
+2025-09-14 00:57:32,705 - __main__ - INFO - Progress: 6/20 pages crawled, 5 added to Pinecone, 154 in queue
+2025-09-14 00:57:34,209 - __main__ - INFO - Fetching: https://www.cvs.com/content/refill
+2025-09-14 00:57:34,278 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/refill "HTTP/1.1 200 OK"
+2025-09-14 00:57:34,613 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:34,761 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/content/refill (9 chunks)
+2025-09-14 00:57:34,778 - __main__ - INFO - Progress: 7/20 pages crawled, 6 added to Pinecone, 163 in queue
+2025-09-14 00:57:36,282 - __main__ - INFO - Fetching: https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts
+2025-09-14 00:57:36,400 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts "HTTP/1.1 200 OK"
+2025-09-14 00:57:36,856 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:37,003 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/pharmacy?icid=cvs-home-s4-l1-rxsrvcs-rx-managescripts (5 chunks)
+2025-09-14 00:57:37,017 - __main__ - INFO - Progress: 8/20 pages crawled, 7 added to Pinecone, 181 in queue
+2025-09-14 00:57:38,523 - __main__ - INFO - Fetching: https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis
+2025-09-14 00:57:38,562 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:38,562 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis: Client error '403 Forbidden' for url 'https://www.cvs.com/shop?icid=cvs-home-s10-l1-3crd-fs-bopis'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:38,562 - __main__ - INFO - Fetching: https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin
+2025-09-14 00:57:38,813 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin "HTTP/1.1 200 OK"
+2025-09-14 00:57:39,159 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:39,375 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin (4 chunks)
+2025-09-14 00:57:39,394 - __main__ - INFO - Progress: 9/20 pages crawled, 8 added to Pinecone, 204 in queue
+2025-09-14 00:57:40,899 - __main__ - INFO - Fetching: https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=shop-gnav-deals
+2025-09-14 00:57:40,941 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=shop-gnav-deals "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:40,941 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=shop-gnav-deals: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=shop-gnav-deals'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:40,942 - __main__ - INFO - Fetching: https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty
+2025-09-14 00:57:41,019 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:41,019 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/beauty?icid=cvs-home-s9-l7-trendcats-fs-beauty'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:41,019 - __main__ - INFO - Fetching: https://www.cvs.com/pharmacy/v2
+2025-09-14 00:57:41,100 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy/v2 "HTTP/1.1 301 Moved Permanently"
+2025-09-14 00:57:41,212 - httpx - INFO - HTTP Request: GET https://www.cvs.com/pharmacy "HTTP/1.1 200 OK"
+2025-09-14 00:57:41,428 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:41,541 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/pharmacy/v2 (5 chunks)
+2025-09-14 00:57:41,553 - __main__ - INFO - Progress: 10/20 pages crawled, 9 added to Pinecone, 201 in queue
+2025-09-14 00:57:43,058 - __main__ - INFO - Fetching: https://www.cvs.com/immunizations/get-vaccinated
+2025-09-14 00:57:43,139 - httpx - INFO - HTTP Request: GET https://www.cvs.com/immunizations/get-vaccinated "HTTP/1.1 200 OK"
+2025-09-14 00:57:43,627 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:43,794 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/immunizations/get-vaccinated (16 chunks)
+2025-09-14 00:57:43,826 - __main__ - INFO - Progress: 11/20 pages crawled, 10 added to Pinecone, 261 in queue
+2025-09-14 00:57:45,329 - __main__ - INFO - Fetching: https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh
+2025-09-14 00:57:45,410 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:45,412 - __main__ - ERROR - Failed to fetch https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh: Client error '403 Forbidden' for url 'https://www.cvs.com/content/oak-street-health?icid=cvs-home-s8-l1-fullbnr-osh'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:45,412 - __main__ - INFO - Fetching: https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax
+2025-09-14 00:57:45,595 - httpx - INFO - HTTP Request: GET https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax "HTTP/1.1 200 OK"
+2025-09-14 00:57:45,596 - __main__ - WARNING - No content to add for https://www.cvs.com/scheduling/patient-lookup?lob=rximz&flow=vaccine&icid=cvs-home-s6-l2-full-imz-fnnl-generalvax
+2025-09-14 00:57:45,597 - __main__ - INFO - Progress: 12/20 pages crawled, 10 added to Pinecone, 259 in queue
+2025-09-14 00:57:47,099 - __main__ - INFO - Fetching: https://www.cvs.com/shop
+2025-09-14 00:57:47,136 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:47,137 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop: Client error '403 Forbidden' for url 'https://www.cvs.com/shop'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:47,137 - __main__ - INFO - Fetching: https://www.cvs.com/druginfo
+2025-09-14 00:57:47,208 - httpx - INFO - HTTP Request: GET https://www.cvs.com/druginfo "HTTP/1.1 301 Moved Permanently"
+2025-09-14 00:57:47,339 - httpx - INFO - HTTP Request: GET https://www.cvs.com/druginfo/ "HTTP/1.1 200 OK"
+2025-09-14 00:57:47,584 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:47,647 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/druginfo (1 chunks)
+2025-09-14 00:57:47,648 - __main__ - INFO - Progress: 13/20 pages crawled, 11 added to Pinecone, 257 in queue
+2025-09-14 00:57:49,149 - __main__ - INFO - Fetching: https://www.cvs.com/mobile-cvs/apps
+2025-09-14 00:57:49,231 - httpx - INFO - HTTP Request: GET https://www.cvs.com/mobile-cvs/apps "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:49,232 - __main__ - ERROR - Failed to fetch https://www.cvs.com/mobile-cvs/apps: Client error '403 Forbidden' for url 'https://www.cvs.com/mobile-cvs/apps'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:49,232 - __main__ - INFO - Fetching: https://www.cvs.com/shop/merch/fall-wellness?widgetID=rj01ygnl&mc=cvscontentpage&icid=cvs-home-s5-bnrshop-fs-bfw
+2025-09-14 00:57:49,328 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/fall-wellness?widgetID=rj01ygnl&mc=cvscontentpage&icid=cvs-home-s5-bnrshop-fs-bfw "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:49,329 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/merch/fall-wellness?widgetID=rj01ygnl&mc=cvscontentpage&icid=cvs-home-s5-bnrshop-fs-bfw: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/merch/fall-wellness?widgetID=rj01ygnl&mc=cvscontentpage&icid=cvs-home-s5-bnrshop-fs-bfw'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:49,329 - __main__ - INFO - Fetching: https://www.cvs.com/help/help_contact_us.jsp
+2025-09-14 00:57:49,401 - httpx - INFO - HTTP Request: GET https://www.cvs.com/help/help_contact_us.jsp "HTTP/1.1 301 Moved Permanently"
+2025-09-14 00:57:49,494 - httpx - INFO - HTTP Request: GET https://www.cvs.com/retail/help/help_contact_us "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:49,495 - __main__ - ERROR - Failed to fetch https://www.cvs.com/help/help_contact_us.jsp: Client error '403 Forbidden' for url 'https://www.cvs.com/retail/help/help_contact_us'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:49,495 - __main__ - INFO - Fetching: https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals
+2025-09-14 00:57:49,574 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:49,574 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/merch/deals?widgetID=79o3dn9g&mc=0&icid=cvs-home-s2-l4-tiles-fs-weeklydeals'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:49,574 - __main__ - INFO - Fetching: https://www.cvs.com/content/store-pickup
+2025-09-14 00:57:49,713 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/store-pickup "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:49,714 - __main__ - ERROR - Failed to fetch https://www.cvs.com/content/store-pickup: Client error '403 Forbidden' for url 'https://www.cvs.com/content/store-pickup'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:49,714 - __main__ - INFO - Fetching: https://www.cvs.com/content/transfer
+2025-09-14 00:57:49,851 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/transfer "HTTP/1.1 200 OK"
+2025-09-14 00:57:50,053 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:50,146 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/content/transfer (4 chunks)
+2025-09-14 00:57:50,161 - __main__ - INFO - Progress: 14/20 pages crawled, 12 added to Pinecone, 261 in queue
+2025-09-14 00:57:51,666 - __main__ - INFO - Fetching: https://www.cvs.com/weeklyad/pageview
+2025-09-14 00:57:52,459 - httpx - INFO - HTTP Request: GET https://www.cvs.com/weeklyad/pageview "HTTP/1.1 200 OK"
+2025-09-14 00:57:52,675 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:52,738 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/weeklyad/pageview (1 chunks)
+2025-09-14 00:57:52,751 - __main__ - INFO - Progress: 15/20 pages crawled, 13 added to Pinecone, 260 in queue
+2025-09-14 00:57:54,256 - __main__ - INFO - Fetching: https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare
+2025-09-14 00:57:54,394 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:54,395 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/personal-care?icid=cvs-home-s2-l3-tiles-fs-perscare'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:54,395 - __main__ - INFO - Fetching: https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween
+2025-09-14 00:57:54,469 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:54,469 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/seasonal-shops/halloween?icid=cvs-home-s5-l3-bnrshop-fs-halloween'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:54,469 - __main__ - INFO - Fetching: https://www.cvs.com/retail/help/help-subtopic-shipping-information
+2025-09-14 00:57:54,629 - httpx - INFO - HTTP Request: GET https://www.cvs.com/retail/help/help-subtopic-shipping-information "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:54,630 - __main__ - ERROR - Failed to fetch https://www.cvs.com/retail/help/help-subtopic-shipping-information: Client error '403 Forbidden' for url 'https://www.cvs.com/retail/help/help-subtopic-shipping-information'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:54,631 - __main__ - INFO - Fetching: https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap
+2025-09-14 00:57:54,785 - httpx - INFO - HTTP Request: GET https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap "HTTP/1.1 404 Not Found"
+2025-09-14 00:57:54,785 - __main__ - ERROR - Failed to fetch https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap: Client error '404 Not Found' for url 'https://www.cvs.com/extracare/enroll/rewards-at-pharmacy?icid=cvs-home-s4-l5-rxsrvcs-ec-fnnl-rap'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-09-14 00:57:54,785 - __main__ - INFO - Fetching: https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins
+2025-09-14 00:57:54,830 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:54,830 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/vitamins?icid=cvs-home-s9-l4-trendcats-fs-vitamins'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:54,830 - __main__ - INFO - Fetching: https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins
+2025-09-14 00:57:54,913 - httpx - INFO - HTTP Request: GET https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins "HTTP/1.1 403 Forbidden"
+2025-09-14 00:57:54,914 - __main__ - ERROR - Failed to fetch https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins: Client error '403 Forbidden' for url 'https://www.cvs.com/shop/vitamins?icid=cvs-home-s2-l2-tiles-fs-vitamins'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2025-09-14 00:57:54,914 - __main__ - INFO - Fetching: https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule
+2025-09-14 00:57:55,114 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule "HTTP/1.1 200 OK"
+2025-09-14 00:57:55,538 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:55,691 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/minuteclinic?icid=cvs-home-s1-l3-hero-mc-schedule (6 chunks)
+2025-09-14 00:57:55,721 - __main__ - INFO - Progress: 16/20 pages crawled, 14 added to Pinecone, 272 in queue
+2025-09-14 00:57:57,226 - __main__ - INFO - Fetching: https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss
+2025-09-14 00:57:57,308 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss "HTTP/1.1 200 OK"
+2025-09-14 00:57:57,595 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:57,735 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/minuteclinic/services/weight-loss-program?icid=cvs-home-s7-l3-icontxtlinks-mc-weightloss (5 chunks)
+2025-09-14 00:57:57,754 - __main__ - INFO - Progress: 17/20 pages crawled, 15 added to Pinecone, 283 in queue
+2025-09-14 00:57:59,259 - __main__ - INFO - Fetching: https://www.cvs.com/content/delivery
+2025-09-14 00:57:59,328 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/delivery "HTTP/1.1 200 OK"
+2025-09-14 00:57:59,592 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:57:59,746 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/content/delivery (6 chunks)
+2025-09-14 00:57:59,760 - __main__ - INFO - Progress: 18/20 pages crawled, 16 added to Pinecone, 294 in queue
+2025-09-14 00:58:01,265 - __main__ - INFO - Fetching: https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth
+2025-09-14 00:58:01,345 - httpx - INFO - HTTP Request: GET https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth "HTTP/1.1 200 OK"
+2025-09-14 00:58:01,692 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:58:01,859 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/minuteclinic/services/mens-and-womens-health?icid=cvs-home-s7-l5-icontxtlinks-mc-sxhealth (4 chunks)
+2025-09-14 00:58:01,877 - __main__ - INFO - Progress: 19/20 pages crawled, 17 added to Pinecone, 322 in queue
+2025-09-14 00:58:03,382 - __main__ - INFO - Fetching: https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill
+2025-09-14 00:58:03,440 - httpx - INFO - HTTP Request: GET https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill "HTTP/1.1 200 OK"
+2025-09-14 00:58:03,676 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:58:03,869 - __main__ - INFO - ✅ Added to Pinecone: https://www.cvs.com/content/refill?icid=cvs-home-s4-l2-rxsrvcs-rx-autorefill (9 chunks)
+2025-09-14 00:58:03,887 - __main__ - INFO - Progress: 20/20 pages crawled, 18 added to Pinecone, 321 in queue
+2025-09-14 00:58:05,389 - __main__ - INFO - Crawl completed: {'pages_crawled': 20, 'pages_added_to_pinecone': 18, 'pages_failed': 22, 'unique_urls_found': 42, 'elapsed_time_seconds': 47.312082052230835, 'pages_per_second': 0.4227250024194818}
+2025-09-14 00:58:05,389 - __main__ - INFO - 
+============================================================
+2025-09-14 00:58:05,389 - __main__ - INFO - CRAWL COMPLETED SUCCESSFULLY!
+2025-09-14 00:58:05,389 - __main__ - INFO - ============================================================
+2025-09-14 00:58:05,389 - __main__ - INFO - Pages crawled: 20
+2025-09-14 00:58:05,390 - __main__ - INFO - Pages added to Pinecone: 18
+2025-09-14 00:58:05,390 - __main__ - INFO - Pages failed: 22
+2025-09-14 00:58:05,390 - __main__ - INFO - Total time: 0:00:47.312280
+2025-09-14 00:58:05,390 - __main__ - INFO - Average time per page: 2.37s
+2025-09-14 00:58:05,390 - __main__ - INFO - ============================================================
+2025-09-14 00:58:05,390 - __main__ - INFO - 
+Testing Pinecone search...
+2025-09-14 00:58:05,589 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-09-14 00:58:05,614 - __main__ - INFO - Found 3 results for 'pharmacy' search
+2025-09-14 00:58:05,615 - __main__ - INFO - Result 1: Pharmacy Delivery | Rx Delivery | CVS Pharmacy
+2025-09-14 00:58:05,615 - __main__ - INFO -   URL: https://www.cvs.com/content/delivery
+2025-09-14 00:58:05,615 - __main__ - INFO -   Content preview: Pharmacy Delivery | Rx Delivery | CVS Pharmacy Schedule next day or 2-day Rx delivery at CVS Pharmac...
+2025-09-14 00:58:05,615 - __main__ - INFO - Result 2: Skin, Hair & Nail Conditions | MinuteClinic
+2025-09-14 00:58:05,615 - __main__ - INFO -   URL: https://www.cvs.com/minuteclinic/services/skin-hair-and-nails?icid=cvs-home-s7-l6-icontxtlinks-skin
+2025-09-14 00:58:05,615 - __main__ - INFO -   Content preview: (PDF) Vulnerability Disclosure Program NY Prescription Drug Price List COVID-19 Vaccine Flu Vaccine ...
+2025-09-14 00:58:05,615 - __main__ - INFO - Result 3: CVS - Online Drugstore, Pharmacy, Prescriptions & Health Information
+2025-09-14 00:58:05,615 - __main__ - INFO -   URL: https://www.cvs.com
+2025-09-14 00:58:05,615 - __main__ - INFO -   Content preview: . “The pharmacist went above and beyond helping my husband and I with our medication.” — Nancy E. “I...

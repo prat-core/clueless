@@ -6,19 +6,25 @@ from datetime import datetime
 from flask import request, jsonify
 from flask_socketio import SocketIO
 
-app = flask.Flask(__name__)
-cors = flask_cors.CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
+app = Flask(__name__)
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 try:
     from ai.neo4j_processor import neo4j_processor
     kg = neo4j_processor()
     NEO4J_AVAILABLE = True
+    from ai.smart_navigation_agent import SmartNavigationAgent
+    navigation_agent = SmartNavigationAgent()
+    AGENT_AVAILABLE = True
+    print("✅ Smart Navigation Agent available")
 except Exception as e:
-    print(f"⚠️  Neo4j not available: {e}")
-    kg = None
-    NEO4J_AVAILABLE = False
+    print(f"⚠️  Smart Navigation Agent not available: {e}")
+    navigation_agent = None
+    AGENT_AVAILABLE = False
 
 # Initialize AI processor with tool calling
 try:
@@ -79,11 +85,24 @@ def user_text_input():
         user_text = data['text']
         use_claude = data.get('use_claude', False)  # Optional Claude processing
         
-        response = {
-            'message': 'Text input received successfully',
-            'user_input': user_text,
-            'status': 'success'
-        }
+        if AGENT_AVAILABLE:
+            result = navigation_agent.process_user_input(user_text)
+            response = {
+                'message': result['message'],
+                'user_input': result['user_input'],
+                'is_navigation_prompt': result['is_navigation_prompt'],
+                'claude_confidence': result['claude_confidence'],
+                'claude_reasoning': result['claude_reasoning'],
+                'end_node': result['end_node'],
+                'semantic_confidence': result['semantic_confidence'],
+                'status': 'success'
+            }
+        else:
+            response = {
+                'message': 'Text input received successfully (Smart Navigation Agent unavailable)',
+                'user_input': user_text,
+                'status': 'success'
+            }
         
         # Optional AI processing
         if use_claude and AI_AVAILABLE:
@@ -97,11 +116,11 @@ def user_text_input():
     except Exception as e:
         return jsonify({'error': f'Error processing text input: {str(e)}'}), 500
 
-# just to check if the flask server is running
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status': 'healthy', 'message': 'Flask API is running'}), 200
 
-
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=5001)
+
+    app.run(debug=True, host='0.0.0.0', port=5000)
