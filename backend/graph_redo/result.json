@@ -1,0 +1,715 @@
+{
+  "fetch_data": {
+    "url": "https://modal.com/apps/pratyaksh-mishra22/main",
+    "original_url": "https://modal.com/apps/pratyaksh-mishra22/",
+    "html_content": "<html lang=\"en\"><head>\n<meta name=\"sentry-trace\" content=\"18aa4a4e88b1eb4273960bc738355986-f439967a3f4d94c1\">\n<meta name=\"baggage\" content=\"sentry-environment=production,sentry-release=57e95c43eba24ca793c3ea62f58f7f7f,sentry-public_key=d75f7cb747cd4fe8ac03973ae3d39fec,sentry-trace_id=18aa4a4e88b1eb4273960bc738355986\">\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <meta name=\"format-detection\" content=\"telephone=no\">\n\n    <link rel=\"icon\" href=\"https://modal.com/assets/favicon.ico\" sizes=\"any\">\n    <link rel=\"icon\" href=\"https://modal.com/assets/favicon.svg\" type=\"image/svg+xml\">\n    <link rel=\"stylesheet\" href=\"https://use.typekit.net/jcd8ppx.css\">\n\n    \n\t\t<link href=\"/_app/immutable/assets/Toaster.BWY6fThA.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/0.DrFVAiRX.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Footer.BdRQMcY2.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/A.BzpQeQuw.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/toast.P_ilG60D.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Dropdown.2QA470K6.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/DropdownItem.Db9Q5X-4.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Avatar.u7WlIczr.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/UnderlinedTabList.Da2r9MQf.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/UsageCreditsSummary.DrEN1Tna.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/chartUtils.BCSM3yTl.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Tooltip.DKWkA3EG.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/DropdownSelectItem.CuOdhsTT.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/MinimalTable.BwNgMUwq.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/MetricsRangeDropdown.DENnWLMV.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Navbar.B81BgvND.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/MarketingButton.DY8oNvIx.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/CreditCardGatePopup.obPym6Kd.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Checkbox.CSejSPzB.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/2.B85dEfRw.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/FunctionActivityThumbnail.B_vJ76XL.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/CodeSample.D4XPd01u.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/Tab.Cyh1oNgE.css\" rel=\"stylesheet\">\n\t\t<link href=\"/_app/immutable/assets/27.NFHqEtK5.css\" rel=\"stylesheet\"><!--[--><!--]--><!--[--><meta name=\"description\" content=\"Serverless cloud infrastructure for AI, ML, and data.\"> <meta property=\"og:type\" content=\"website\"> <meta property=\"og:site_name\" content=\"Modal\"> <meta property=\"og:title\" content=\"Modal\"> <meta property=\"og:description\" content=\"Serverless cloud infrastructure for AI, ML, and data.\"> <meta property=\"og:image\" content=\"https://modal.com/assets/social-image-3.jpg\"> <meta name=\"twitter:card\" content=\"summary_large_image\"><!--]--><title>Apps - pratyaksh-mishra22 | Modal</title>\n  <link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/nodes/0.Dz0Da1YL.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/BF_V4cPM.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/BfWVgy63.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/CEtzOl37.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/DNHzdeVS.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/ypQPF7zM.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/B8E6cvfJ.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/BOIjjrlh.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/BYMCiSaF.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/CZo6GiBn.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/CKd5un23.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/CFlH9dgW.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/UVLh5bm8.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/O7pVn4Sv.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/CyQnwSuA.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/BCfaGWhM.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/CyXo2TwZ.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/DDiRC9hp.js\"><link rel=\"modulepreload\" as=\"script\" crossorigin=\"\" href=\"/_app/immutable/chunks/uGuEUWxe.js\"><link rel=\"modu... [truncated, total length: 44333]",
+    "http_status": 200,
+    "response_time_ms": 3667.0358180999756,
+    "error": null
+  },
+  "parsed_data": {
+    "title": "Apps - pratyaksh-mishra22 | Modal",
+    "meta_description": "Serverless cloud infrastructure for AI, ML, and data.",
+    "meta_keywords": "",
+    "content_text": "Apps - pratyaksh-mishra22 | Modal p pratyaksh-mishra22 / main Slack Community Docs p Apps Logs Secrets Storage Notebooks New Apps Quickstart guide Live Apps Stopped Apps Live Apps Sort: Most recent © 2025 About Status Changelog Documentation Slack Community Pricing Examples",
+    "headers": {
+      "h1": [],
+      "h2": [],
+      "h3": [
+        "Apps"
+      ],
+      "h4": [],
+      "h5": [],
+      "h6": []
+    },
+    "links": [
+      {
+        "url": "https://modal.com/pratyaksh-mishra22/main/apps",
+        "text": "",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "flex",
+          "h-10",
+          "shrink-0",
+          "items-center"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"flex h-10 shrink-0 items-center\" href=\"/pratyaksh-mishra22/main/apps\"><img alt=\"Modal\" class=\"my-auto h-5\" src=\"data:image/svg+xml,%3csvg%20width='368'%20height='192'%20viewBox='0%200%20368%20192'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M148.873%204L183.513%2064L111.922%20188C110.492%20190.47%20107.853%20192%20104.993%20192H40.3325C38.9025%20192%2037.5325%20191.62%2036.3325%20190.93C35.1325%20190.24%2034.1226%20189.24%2033.4026%20188L1.0725%20132C-0.3575%20129.53%20-0.3575%20126.48%201.0725%20124L70.3625%204C71.0725%202.76%2072.0925%201.76001%2073.2925%201.07001C74.4925%200.380007%2075.8625%200%2077.2925%200H141.952C144.812%200%20147.453%201.53%20148.883%204H148.873ZM365.963%20124L296.672%204C295.962%202.76%20294.943%201.76001%20293.743%201.07001C292.543%200.380007%20291.173%200%20289.743%200H225.083C222.223%200%20219.583%201.53%20218.153%204L183.513%2064L255.103%20188C256.533%20190.47%20259.173%20192%20262.033%20192H326.693C328.122%20192%20329.492%20191.62%20330.693%20190.93C331.893%20190.24%20332.902%20189.24%20333.622%20188L365.953%20132C367.383%20129.53%20367.383%20126.48%20365.953%20124H365.963Z'%20fill='%2362DE61'/%3e%3cpath%20d='M109.623%2064H183.523L148.883%204C147.453%201.53%20144.813%200%20141.953%200H77.2925C75.8625%200%2074.4925%200.380007%2073.2925%201.07001L109.623%2064Z'%20fill='url(%23paint0_linear_342_139)'/%3e%3cpath%20d='M109.623%2064L73.2925%201.07001C72.0925%201.76001%2071.0825%202.76%2070.3625%204L1.0725%20124C-0.3575%20126.48%20-0.3575%20129.52%201.0725%20132L33.4026%20188C34.1126%20189.24%2035.1325%20190.24%2036.3325%20190.93L109.613%2064H109.623Z'%20fill='url(%23paint1_linear_342_139)'/%3e%3cpath%20d='M183.513%2064H109.613L36.3325%20190.93C37.5325%20191.62%2038.9025%20192%2040.3325%20192H104.993C107.853%20192%20110.492%20190.47%20111.922%20188L183.513%2064Z'%20fill='%2309AF58'/%3e%3cpath%20d='M365.963%20132C366.673%20130.76%20367.033%20129.38%20367.033%20128H294.372L258.042%20190.93C259.242%20191.62%20260.612%20192%20262.042%20192H326.703C329.563%20192%20332.202%20190.47%20333.632%20188L365.963%20132Z'%20fill='%2309AF58'/%3e%3cpath%20d='M225.083%200C223.653%200%20222.283%200.380007%20221.083%201.07001L294.362%20128H367.023C367.023%20126.62%20366.663%20125.24%20365.953%20124L296.672%204C295.242%201.53%20292.603%200%20289.743%200H225.073H225.083Z'%20fill='url(%23paint2_linear_342_139)'/%3e%3cpath%20d='M258.033%20190.93L294.362%20128L221.083%201.07001C219.883%201.76001%20218.873%202.76%20218.153%204L183.513%2064L255.103%20188C255.813%20189.24%20256.833%20190.24%20258.033%20190.93Z'%20fill='url(%23paint3_linear_342_139)'/%3e%3cdefs%3e%3clinearGradient%20id='paint0_linear_342_139'%20x1='155.803'%20y1='80'%20x2='101.003'%20y2='-14.93'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23BFF9B4'/%3e%3cstop%20offset='1'%20stop-color='%2380EE64'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint1_linear_342_139'%20x1='8.62251'%20y1='174.93'%20x2='100.072'%20y2='16.54'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%2380EE64'/%3e%3cstop%20offset='0.18'%20stop-color='%237BEB63'/%3e%3cstop%20offset='0.36'%20stop-color='%236FE562'/%3e%3cstop%20offset='0.55'%20stop-color='%235ADA60'/%3e%3cstop%20offset='0.74'%20stop-color='%233DCA5D'/%3e%3cstop%20offset='0.93'%20stop-color='%2318B759'/%3e%3cstop%20offset='1'%20stop-color='%2309AF58'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint2_linear_342_139'%20x1='340.243'%20y1='143.46'%20x2='248.793'%20y2='-14.93'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23BFF9B4'/%3e%3cstop%20offset='1'%20stop-color='%2380EE64'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint3_linear_342_139'%20x1='284.822'%20y1='175.47'%20x2='193.372'%20y2='17.0701'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%2380EE64'/%3e%3cstop%20offset='0.18'%20stop-color='%237BEB63'/%3e%3cstop%20offset='0.36'%20stop-color='%236FE562'/%3e%3cstop%20offset='0.55'%20stop-color='%235ADA60'/%3e%3cstop%20offset='0.74'%20stop-color='%233DCA5D'/%3e%3cstop%20offset='0.93'%20stop-color='%2318B759'/%3e%3cstop%20offset='1'%20stop-color='%2309AF58'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e\"/></a>"
+      },
+      {
+        "url": "https://modal.com/slack",
+        "text": "Slack Community",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "btn",
+          "flex",
+          "items-center",
+          "gap-x-2",
+          "p-2",
+          "md:py-1"
+        ],
+        "id": "",
+        "rel": [
+          "noopener",
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"btn flex items-center gap-x-2 p-2 md:py-1\" href=\"/slack\" rel=\"noopener noreferrer\" target=\"_blank\"><svg class=\"lucide-icon lucide lucide-slack text-c-gray-40\" fill=\"none\" height=\"16\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\" width=\"16\" xmlns=\"http://www.w3.org/2000/svg\"><!--[--><!-- --><rect height=\"8\" rx=\"1.5\" width=\"3\" x=\"13\" y=\"2\"><!-- --></rect><!-- --><!-- --><path d=\"M19 8.5V10h1.5A1.5 1.5 0 1 0 19 8.5\"><!-- --></path><!-- --><!-- --><rect height=\"8\" rx=\"1.5\" width=\"3\" x=\"8\" y=\"14\"><!-- --></rect><!-- --><!-- --><path d=\"M5 15.5V14H3.5A1.5 1.5 0 1 0 5 15.5\"><!-- --></path><!-- --><!-- --><rect height=\"3\" rx=\"1.5\" width=\"8\" x=\"14\" y=\"13\"><!-- --></rect><!-- --><!-- --><path d=\"M15.5 19H14v1.5a1.5 1.5 0 1 0 1.5-1.5\"><!-- --></path><!-- --><!-- --><rect height=\"3\" rx=\"1.5\" width=\"8\" x=\"2\" y=\"8\"><!-- --></rect><!-- --><!-- --><path d=\"M8.5 5H10V3.5A1.5 1.5 0 1 0 8.5 5\"><!-- --></path><!-- --><!--]--><!-- --><!-- --><!-- --><!-- --></svg><!-- --> <span class=\"text-c-gray-60 hidden text-sm font-medium md:inline\">Slack Community</span></a>"
+      },
+      {
+        "url": "https://modal.com/docs",
+        "text": "Docs",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "btn",
+          "ml-2",
+          "mr-4",
+          "flex",
+          "items-center",
+          "space-x-2",
+          "p-2",
+          "md:py-1"
+        ],
+        "id": "",
+        "rel": [
+          "noopener",
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"btn ml-2 mr-4 flex items-center space-x-2 p-2 md:py-1\" href=\"/docs\" rel=\"noopener noreferrer\" target=\"_blank\"><svg class=\"lucide-icon lucide lucide-book text-c-gray-40\" fill=\"none\" height=\"16\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\" width=\"16\" xmlns=\"http://www.w3.org/2000/svg\"><!--[--><!-- --><path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20\"><!-- --></path><!-- --><!--]--><!-- --><!-- --><!-- --><!-- --></svg><!-- --> <span class=\"text-c-gray-60 hidden text-sm font-medium md:inline\">Docs</span></a>"
+      },
+      {
+        "url": "https://modal.com/apps/pratyaksh-mishra22/main",
+        "text": "Apps",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "outer",
+          "svelte-1tw0106"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "tab",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a aria-selected=\"true\" class=\"outer svelte-1tw0106\" href=\"/apps/pratyaksh-mishra22/main\" role=\"tab\"><div class=\"inner svelte-1tw0106 active\"><!-- --><!-- -->Apps <!--[!--><!--[!--><!--]--><!--]--><!-- --></div></a>"
+      },
+      {
+        "url": "https://modal.com/logs/pratyaksh-mishra22/main",
+        "text": "Logs",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "outer",
+          "svelte-1tw0106"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "tab",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a aria-selected=\"false\" class=\"outer svelte-1tw0106\" href=\"/logs/pratyaksh-mishra22/main\" role=\"tab\"><div class=\"inner svelte-1tw0106\"><!-- --><!-- -->Logs <!--[!--><!--[!--><!--]--><!--]--><!-- --></div></a>"
+      },
+      {
+        "url": "https://modal.com/secrets/pratyaksh-mishra22/main",
+        "text": "Secrets",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "outer",
+          "svelte-1tw0106"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "tab",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a aria-selected=\"false\" class=\"outer svelte-1tw0106\" href=\"/secrets/pratyaksh-mishra22/main\" role=\"tab\"><div class=\"inner svelte-1tw0106\"><!-- --><!-- -->Secrets <!--[!--><!--[!--><!--]--><!--]--><!-- --></div></a>"
+      },
+      {
+        "url": "https://modal.com/storage/pratyaksh-mishra22/main",
+        "text": "Storage",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "outer",
+          "svelte-1tw0106"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "tab",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a aria-selected=\"false\" class=\"outer svelte-1tw0106\" href=\"/storage/pratyaksh-mishra22/main\" role=\"tab\"><div class=\"inner svelte-1tw0106\"><!-- --><!-- -->Storage <!--[!--><!--[!--><!--]--><!--]--><!-- --></div></a>"
+      },
+      {
+        "url": "https://modal.com/notebooks/pratyaksh-mishra22/main",
+        "text": "Notebooks  New",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "outer",
+          "svelte-1tw0106"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "tab",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a aria-selected=\"false\" class=\"outer svelte-1tw0106\" href=\"/notebooks/pratyaksh-mishra22/main\" role=\"tab\"><div class=\"inner svelte-1tw0106\"><!-- --><!-- -->Notebooks <!--[!--><!--[--><!-- --><span class=\"inline-flex shrink-0 items-center whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-normal text-c-pink-80 [&amp;_.icon]:text-c-pink-60 bg-c-pink-10 overflow-hidden text-ellipsis\"><!--[!--><!--]--> <!-- -->New<!-- --><!-- --></span><!-- --><!--]--><!--]--><!-- --></div></a>"
+      },
+      {
+        "url": "https://modal.com/company",
+        "text": "About",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"/company\">About</a>"
+      },
+      {
+        "url": "https://status.modal.com/",
+        "text": "Status",
+        "title": "",
+        "is_external": true,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [
+          "noopener",
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"https://status.modal.com/\" rel=\"noopener noreferrer\" target=\"_blank\">Status</a>"
+      },
+      {
+        "url": "https://modal.com/docs/reference/changelog",
+        "text": "Changelog",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"/docs/reference/changelog\">Changelog</a>"
+      },
+      {
+        "url": "https://modal.com/docs/guide",
+        "text": "Documentation",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"/docs/guide\">Documentation</a>"
+      },
+      {
+        "url": "https://modal.com/slack",
+        "text": "Slack Community",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [
+          "noopener",
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"/slack\" rel=\"noopener noreferrer\" target=\"_blank\">Slack Community</a>"
+      },
+      {
+        "url": "https://modal.com/pricing",
+        "text": "Pricing",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"/pricing\">Pricing</a>"
+      },
+      {
+        "url": "https://modal.com/docs/examples",
+        "text": "Examples",
+        "title": "",
+        "is_external": false,
+        "class": [
+          "link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [],
+        "target": "",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"link svelte-8gkfw2\" href=\"/docs/examples\">Examples</a>"
+      },
+      {
+        "url": "https://www.linkedin.com/company/modal-labs/",
+        "text": "",
+        "title": "",
+        "is_external": true,
+        "class": [
+          "social-link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"social-link svelte-8gkfw2\" href=\"https://www.linkedin.com/company/modal-labs/\" rel=\"noreferrer\" target=\"_blank\"><svg class=\"lucide-icon lucide lucide-linkedin fill-current stroke-none\" fill=\"none\" height=\"20\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><!--[--><!-- --><path d=\"M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z\"><!-- --></path><!-- --><!-- --><rect height=\"12\" width=\"4\" x=\"2\" y=\"9\"><!-- --></rect><!-- --><!-- --><circle cx=\"4\" cy=\"4\" r=\"2\"><!-- --></circle><!-- --><!--]--><!-- --><!-- --><!-- --><!-- --></svg><!-- --></a>"
+      },
+      {
+        "url": "https://x.com/modal",
+        "text": "",
+        "title": "",
+        "is_external": true,
+        "class": [
+          "social-link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"social-link svelte-8gkfw2\" href=\"https://x.com/modal\" rel=\"noreferrer\" target=\"_blank\"><svg class=\"lucide-icon lucide lucide-twitter fill-current stroke-none\" fill=\"none\" height=\"20\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><!--[--><!-- --><path d=\"M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z\"><!-- --></path><!-- --><!--]--><!-- --><!-- --><!-- --><!-- --></svg><!-- --></a>"
+      },
+      {
+        "url": "https://github.com/modal-labs",
+        "text": "",
+        "title": "",
+        "is_external": true,
+        "class": [
+          "social-link",
+          "svelte-8gkfw2"
+        ],
+        "id": "",
+        "rel": [
+          "noreferrer"
+        ],
+        "target": "_blank",
+        "tabindex": "",
+        "aria_label": "",
+        "role": "",
+        "js_events": {},
+        "data_attributes": {},
+        "download": "",
+        "type": "",
+        "raw_html": "<a class=\"social-link svelte-8gkfw2\" href=\"https://github.com/modal-labs\" rel=\"noreferrer\" target=\"_blank\"><svg class=\"lucide-icon lucide lucide-github fill-current stroke-none\" fill=\"none\" height=\"20\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\" width=\"20\" xmlns=\"http://www.w3.org/2000/svg\"><!--[--><!-- --><path d=\"M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4\"><!-- --></path><!-- --><!-- --><path d=\"M9 18c-4.51 2-5-2-7-2\"><!-- --></path><!-- --><!--]--><!-- --><!-- --><!-- --><!-- --></svg><!-- --></a>"
+      }
+    ],
+    "clickable_elements": [
+      {
+        "type": "button",
+        "text": "p pratyaksh-mishra22",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "btn",
+          "w-full",
+          "gap-x-2",
+          "px-2",
+          "py-1.5",
+          "text-white"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "main",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "btn",
+          "w-full",
+          "gap-x-2",
+          "px-2",
+          "py-1.5",
+          "text-white"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "p",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "Quickstart guide",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "btn",
+          "hidden",
+          "space-x-2",
+          "sm:flex"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "Live Apps",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "text-c-gray-80",
+          "group",
+          "flex",
+          "flex-row",
+          "items-center",
+          "gap-2",
+          "whitespace-nowrap",
+          "rounded-lg",
+          "px-2",
+          "py-1.5",
+          "text-sm",
+          "font-medium",
+          "transition-colors",
+          "svelte-1q6z6je",
+          "active"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "Stopped Apps",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "text-c-gray-80",
+          "group",
+          "flex",
+          "flex-row",
+          "items-center",
+          "gap-2",
+          "whitespace-nowrap",
+          "rounded-lg",
+          "px-2",
+          "py-1.5",
+          "text-sm",
+          "font-medium",
+          "transition-colors",
+          "svelte-1q6z6je",
+          "inactive"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "Live Apps",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "w-fit"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "button",
+        "text": "Sort: Most recent",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {},
+        "id": "",
+        "class": [
+          "w-fit"
+        ],
+        "aria_label": "",
+        "role": "",
+        "disabled": false
+      },
+      {
+        "type": "clickable_element",
+        "tag": "span",
+        "text": "p pratyaksh-mishra22",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {
+          "data-state": "closed",
+          "data-melt-dropdown-menu-trigger": ""
+        },
+        "id": "zjLSTFR8mP",
+        "class": [
+          "flex",
+          "svelte-l4ouh2"
+        ],
+        "role": "",
+        "aria_label": "",
+        "tabindex": "0"
+      },
+      {
+        "type": "clickable_element",
+        "tag": "span",
+        "text": "main",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {
+          "data-state": "closed",
+          "data-melt-dropdown-menu-trigger": ""
+        },
+        "id": "emmglynJtO",
+        "class": [
+          "flex",
+          "svelte-l4ouh2"
+        ],
+        "role": "",
+        "aria_label": "",
+        "tabindex": "0"
+      },
+      {
+        "type": "clickable_element",
+        "tag": "span",
+        "text": "p",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {
+          "data-state": "closed",
+          "data-melt-dropdown-menu-trigger": ""
+        },
+        "id": "EVvSyG2TLF",
+        "class": [
+          "flex",
+          "svelte-l4ouh2"
+        ],
+        "role": "",
+        "aria_label": "",
+        "tabindex": "0"
+      },
+      {
+        "type": "clickable_element",
+        "tag": "span",
+        "text": "Live Apps",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {
+          "data-state": "closed",
+          "data-melt-dropdown-menu-trigger": ""
+        },
+        "id": "emaVDEpQSQ",
+        "class": [
+          "flex",
+          "svelte-l4ouh2"
+        ],
+        "role": "",
+        "aria_label": "",
+        "tabindex": "0"
+      },
+      {
+        "type": "clickable_element",
+        "tag": "span",
+        "text": "Sort: Most recent",
+        "onclick": "",
+        "js_events": {},
+        "data_attributes": {
+          "data-state": "closed",
+          "data-melt-dropdown-menu-trigger": ""
+        },
+        "id": "sMykeCV_dH",
+        "class": [
+          "flex",
+          "svelte-l4ouh2"
+        ],
+        "role": "",
+        "aria_label": "",
+        "tabindex": "0"
+      }
+    ],
+    "images": [
+      {
+        "src": "data:image/svg+xml,%3csvg%20width='368'%20height='192'%20viewBox='0%200%20368%20192'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M148.873%204L183.513%2064L111.922%20188C110.492%20190.47%20107.853%20192%20104.993%20192H40.3325C38.9025%20192%2037.5325%20191.62%2036.3325%20190.93C35.1325%20190.24%2034.1226%20189.24%2033.4026%20188L1.0725%20132C-0.3575%20129.53%20-0.3575%20126.48%201.0725%20124L70.3625%204C71.0725%202.76%2072.0925%201.76001%2073.2925%201.07001C74.4925%200.380007%2075.8625%200%2077.2925%200H141.952C144.812%200%20147.453%201.53%20148.883%204H148.873ZM365.963%20124L296.672%204C295.962%202.76%20294.943%201.76001%20293.743%201.07001C292.543%200.380007%20291.173%200%20289.743%200H225.083C222.223%200%20219.583%201.53%20218.153%204L183.513%2064L255.103%20188C256.533%20190.47%20259.173%20192%20262.033%20192H326.693C328.122%20192%20329.492%20191.62%20330.693%20190.93C331.893%20190.24%20332.902%20189.24%20333.622%20188L365.953%20132C367.383%20129.53%20367.383%20126.48%20365.953%20124H365.963Z'%20fill='%2362DE61'/%3e%3cpath%20d='M109.623%2064H183.523L148.883%204C147.453%201.53%20144.813%200%20141.953%200H77.2925C75.8625%200%2074.4925%200.380007%2073.2925%201.07001L109.623%2064Z'%20fill='url(%23paint0_linear_342_139)'/%3e%3cpath%20d='M109.623%2064L73.2925%201.07001C72.0925%201.76001%2071.0825%202.76%2070.3625%204L1.0725%20124C-0.3575%20126.48%20-0.3575%20129.52%201.0725%20132L33.4026%20188C34.1126%20189.24%2035.1325%20190.24%2036.3325%20190.93L109.613%2064H109.623Z'%20fill='url(%23paint1_linear_342_139)'/%3e%3cpath%20d='M183.513%2064H109.613L36.3325%20190.93C37.5325%20191.62%2038.9025%20192%2040.3325%20192H104.993C107.853%20192%20110.492%20190.47%20111.922%20188L183.513%2064Z'%20fill='%2309AF58'/%3e%3cpath%20d='M365.963%20132C366.673%20130.76%20367.033%20129.38%20367.033%20128H294.372L258.042%20190.93C259.242%20191.62%20260.612%20192%20262.042%20192H326.703C329.563%20192%20332.202%20190.47%20333.632%20188L365.963%20132Z'%20fill='%2309AF58'/%3e%3cpath%20d='M225.083%200C223.653%200%20222.283%200.380007%20221.083%201.07001L294.362%20128H367.023C367.023%20126.62%20366.663%20125.24%20365.953%20124L296.672%204C295.242%201.53%20292.603%200%20289.743%200H225.073H225.083Z'%20fill='url(%23paint2_linear_342_139)'/%3e%3cpath%20d='M258.033%20190.93L294.362%20128L221.083%201.07001C219.883%201.76001%20218.873%202.76%20218.153%204L183.513%2064L255.103%20188C255.813%20189.24%20256.833%20190.24%20258.033%20190.93Z'%20fill='url(%23paint3_linear_342_139)'/%3e%3cdefs%3e%3clinearGradient%20id='paint0_linear_342_139'%20x1='155.803'%20y1='80'%20x2='101.003'%20y2='-14.93'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23BFF9B4'/%3e%3cstop%20offset='1'%20stop-color='%2380EE64'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint1_linear_342_139'%20x1='8.62251'%20y1='174.93'%20x2='100.072'%20y2='16.54'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%2380EE64'/%3e%3cstop%20offset='0.18'%20stop-color='%237BEB63'/%3e%3cstop%20offset='0.36'%20stop-color='%236FE562'/%3e%3cstop%20offset='0.55'%20stop-color='%235ADA60'/%3e%3cstop%20offset='0.74'%20stop-color='%233DCA5D'/%3e%3cstop%20offset='0.93'%20stop-color='%2318B759'/%3e%3cstop%20offset='1'%20stop-color='%2309AF58'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint2_linear_342_139'%20x1='340.243'%20y1='143.46'%20x2='248.793'%20y2='-14.93'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%23BFF9B4'/%3e%3cstop%20offset='1'%20stop-color='%2380EE64'/%3e%3c/linearGradient%3e%3clinearGradient%20id='paint3_linear_342_139'%20x1='284.822'%20y1='175.47'%20x2='193.372'%20y2='17.0701'%20gradientUnits='userSpaceOnUse'%3e%3cstop%20stop-color='%2380EE64'/%3e%3cstop%20offset='0.18'%20stop-color='%237BEB63'/%3e%3cstop%20offset='0.36'%20stop-color='%236FE562'/%3e%3cstop%20offset='0.55'%20stop-color='%235ADA60'/%3e%3cstop%20offset='0.74'%20stop-color='%233DCA5D'/%3e%3cstop%20offset='0.93'%20stop-color='%2318B759'/%3e%3cstop%20offset='1'%20stop-color='%2309AF58'/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e",
+        "alt": "Modal",
+        "title": ""
+      },
+      {
+        "src": "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='28'%20height='28'%20viewBox='0%200%2028%2028'%20fill='none'%3e%3cg%20clip-path='url(%23clip0_765_1580)'%3e%3crect%20width='28'%20height='28'%20fill='%237B8DC0'%20/%3e%3cg%20filter='url(%23filter0_f_765_1580)'%3e%3cpath%20d='M41.3033%2019.099C54.9381%2025.5466%2066.2664%2040.3047%2040.5587%2045.4882L41.3033%2019.099C36.4056%2016.783%2031.2103%2015.5392%2027.3271%2016.1967C20.2036%2017.4029%2013.8729%2018.5753%208.27189%2019.7144L41.1795%2050.4137C49.0451%2051.2733%2051.371%2051.5791%2042.2053%2051.3707L41.1795%2050.4137C13.8432%2047.426%20-80.4047%2037.7485%208.27189%2019.7144L-17.3562%20-4.1939L42.2053%20-12.8701L41.3033%2019.099Z'%20fill='%232F4EB7'%20/%3e%3c/g%3e%3cg%20filter='url(%23filter1_f_765_1580)'%3e%3cpath%20d='M15.0569%201.51177C3.12792%2066.8387%20-32.43%2025.6577%20-20.9806%20-8.09877L15.0569%201.51177C17.8354%20-13.7044%2040.7627%2026.636%2063.2129%20-10.0886L35.1915%2061.5792L15.0569%201.51177Z'%20fill='%23B16ED5'%20/%3e%3c/g%3e%3c/g%3e%3cdefs%3e%3cfilter%20id='filter0_f_765_1580'%20x='-32.379'%20y='-16.3424'%20width='91.7929'%20height='71.2482'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3e%3cfeFlood%20flood-opacity='0'%20result='BackgroundImageFix'%20/%3e%3cfeBlend%20mode='normal'%20in='SourceGraphic'%20in2='BackgroundImageFix'%20result='shape'%20/%3e%3cfeGaussianBlur%20stdDeviation='1.73612'%20result='effect1_foregroundBlur_765_1580'%20/%3e%3c/filter%3e%3cfilter%20id='filter1_f_765_1580'%20x='-26.6936'%20y='-13.5609'%20width='93.3787'%20height='78.6122'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3e%3cfeFlood%20flood-opacity='0'%20result='BackgroundImageFix'%20/%3e%3cfeBlend%20mode='normal'%20in='SourceGraphic'%20in2='BackgroundImageFix'%20result='shape'%20/%3e%3cfeGaussianBlur%20stdDeviation='1.73612'%20result='effect1_foregroundBlur_765_1580'%20/%3e%3c/filter%3e%3cclipPath%20id='clip0_765_1580'%3e%3crect%20width='28'%20height='28'%20fill='white'%20/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e",
+        "alt": "User avatar",
+        "title": ""
+      },
+      {
+        "src": "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='28'%20height='28'%20viewBox='0%200%2028%2028'%20fill='none'%3e%3cg%20clip-path='url(%23clip0_765_1580)'%3e%3crect%20width='28'%20height='28'%20fill='%237B8DC0'%20/%3e%3cg%20filter='url(%23filter0_f_765_1580)'%3e%3cpath%20d='M41.3033%2019.099C54.9381%2025.5466%2066.2664%2040.3047%2040.5587%2045.4882L41.3033%2019.099C36.4056%2016.783%2031.2103%2015.5392%2027.3271%2016.1967C20.2036%2017.4029%2013.8729%2018.5753%208.27189%2019.7144L41.1795%2050.4137C49.0451%2051.2733%2051.371%2051.5791%2042.2053%2051.3707L41.1795%2050.4137C13.8432%2047.426%20-80.4047%2037.7485%208.27189%2019.7144L-17.3562%20-4.1939L42.2053%20-12.8701L41.3033%2019.099Z'%20fill='%232F4EB7'%20/%3e%3c/g%3e%3cg%20filter='url(%23filter1_f_765_1580)'%3e%3cpath%20d='M15.0569%201.51177C3.12792%2066.8387%20-32.43%2025.6577%20-20.9806%20-8.09877L15.0569%201.51177C17.8354%20-13.7044%2040.7627%2026.636%2063.2129%20-10.0886L35.1915%2061.5792L15.0569%201.51177Z'%20fill='%23B16ED5'%20/%3e%3c/g%3e%3c/g%3e%3cdefs%3e%3cfilter%20id='filter0_f_765_1580'%20x='-32.379'%20y='-16.3424'%20width='91.7929'%20height='71.2482'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3e%3cfeFlood%20flood-opacity='0'%20result='BackgroundImageFix'%20/%3e%3cfeBlend%20mode='normal'%20in='SourceGraphic'%20in2='BackgroundImageFix'%20result='shape'%20/%3e%3cfeGaussianBlur%20stdDeviation='1.73612'%20result='effect1_foregroundBlur_765_1580'%20/%3e%3c/filter%3e%3cfilter%20id='filter1_f_765_1580'%20x='-26.6936'%20y='-13.5609'%20width='93.3787'%20height='78.6122'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3e%3cfeFlood%20flood-opacity='0'%20result='BackgroundImageFix'%20/%3e%3cfeBlend%20mode='normal'%20in='SourceGraphic'%20in2='BackgroundImageFix'%20result='shape'%20/%3e%3cfeGaussianBlur%20stdDeviation='1.73612'%20result='effect1_foregroundBlur_765_1580'%20/%3e%3c/filter%3e%3cclipPath%20id='clip0_765_1580'%3e%3crect%20width='28'%20height='28'%20fill='white'%20/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e",
+        "alt": "User avatar",
+        "title": ""
+      },
+      {
+        "src": "https://modal.com/_app/immutable/assets/logotype.CAx-nu9G.svg",
+        "alt": "Modal logo",
+        "title": ""
+      }
+    ],
+    "structured_data": [],
+    "content_length": 274,
+    "link_count": 18,
+    "image_count": 4
+  },
+  "test_metadata": {
+    "test_url": "https://modal.com/apps/pratyaksh-mishra22/",
+    "fetch_status": "success",
+    "parse_status": "success"
+  }
+}
