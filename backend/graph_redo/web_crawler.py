@@ -104,14 +104,14 @@ class WebCrawler:
             options = Options()
 
             # Use specific Firefox profile to preserve cookies and sessions
-            profile_path = os.path.expanduser("~/.mozilla/firefox")
-            specific_profile = os.path.join(profile_path, "708iiqgx.Prat")
+            profile_path = os.path.expanduser("/Users/ritesh/Library/Application Support/Firefox/Profiles/")
+            specific_profile = os.path.join(profile_path, "ra0lmepf.default-release")
 
             if os.path.exists(specific_profile):
                 options.add_argument("-profile")
                 options.add_argument(specific_profile)
 
-            # Create Firefox driver with profile
+           # Create Firefox driver with profile
             self.selenium_driver = webdriver.Firefox(options=options)
 
         return self.selenium_driver

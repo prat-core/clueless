@@ -258,13 +258,13 @@ class NavigationTool:
         else:
             return 'click'
     
-    def process_navigation_query(self, user_query: str, start_location: Optional[str] = None) -> Dict[str, Any]:
+    def process_navigation_query(self, user_query: str, current_url: Optional[str] = None) -> Dict[str, Any]:
         """
         Main method to process navigation queries through the complete pipeline
         
         Args:
             user_query: User's navigation request
-            start_location: Optional starting location (defaults to current page)
+            current_url: Optional current page URL (defaults to current page)
             
         Returns:
             Complete navigation response with path and metadata
@@ -291,17 +291,17 @@ class NavigationTool:
             target_node_id = best_match['node_id']
             
             # Step 4: Determine starting location
-            if not start_location:
+            if not current_url:
                 # Try to get current page from context or use a default
-                start_location = self._get_current_location()
+                current_url = self._get_current_location()
             
             # Step 5: Get navigation path
-            navigation_path = self.get_navigation_path(start_location, target_node_id)
+            navigation_path = self.get_navigation_path(current_url, target_node_id)
             
             if not navigation_path:
                 return {
                     'status': 'error',
-                    'message': f'No navigation path found from {start_location} to {target_node_id}',
+                    'message': f'No navigation path found from {current_url} to {target_node_id}',
                     'intent': intent_data,
                     'target_found': best_match,
                     'user_query': user_query,
@@ -324,10 +324,20 @@ class NavigationTool:
             # Step 6: Format step-by-step response for frontend
             step_by_step_response = self._format_step_by_step_response(navigation_path, user_query)
             
-            # Step 7: Return complete navigation response
+            # Step 7: Convert navigation path to HTML elements for startGuide
+            raw_nodes = []
+            for step in navigation_path:
+                if 'node_data' in step and step['node_data']:
+                    raw_nodes.append(step['node_data'])
+            
+            # Convert to HTML elements
+            html_elements = convert_nodes_to_html_list(raw_nodes)
+            
+            # Step 8: Return complete navigation response
             response = {
                 'status': 'success',
                 'response': step_by_step_response,  # Main response for frontend display
+                'html_elements': html_elements,  # HTML elements for startGuide function
                 'navigation_path': navigation_path,  # Raw path data for debugging
                 'intent': intent_data,
                 'target_match': {
@@ -338,7 +348,7 @@ class NavigationTool:
                 'alternative_targets': similar_nodes[1:],  # Other potential matches
                 'metadata': {
                     'total_steps': len(navigation_path),
-                    'start_location': start_location,
+                    'start_location': current_url,
                     'target_location': target_node_id,
                     'processing_time': datetime.now().isoformat()
                 },
@@ -410,7 +420,8 @@ class NavigationTool:
         """
         # TODO: Implement logic to get actual current location
         # This could come from browser extension, session data, etc.
-        return "https://www.cvs.com"  # Default starting point - actual CVS homepage
+        # For now, return None so the frontend can pass the current URL
+        return None
     
     def close(self):
         """Close connections and cleanup resources"""
