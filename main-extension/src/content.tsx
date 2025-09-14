@@ -710,37 +710,44 @@ const Content: React.FC = () => {
       if (data.tool_used === 'navigation_tool' && data.status === 'success' && data.response) {
         responseContent = formatNavigationResponse(data.response);
         
-        // Automatically get HTML elements and start guide for navigation responses
-        try {
-          console.log('🚀 Navigation response detected, fetching HTML elements...');
-          const htmlResponse = await fetch('http://localhost:5001/get-html-elements', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_query: userMessage,
-            }),
-          });
-          
-          if (htmlResponse.ok) {
-            const htmlData = await htmlResponse.json();
+        // Check if HTML elements are directly in the response
+        if (data.html_elements && data.html_elements.length > 0) {
+          console.log('🎯 Navigation response with HTML elements:', data.html_elements);
+          await startGuide(data.html_elements);
+          responseContent += '\n\n🎯 **Interactive guide started!** Follow the highlighted elements on the page.';
+        } else {
+          // Fallback: Try to fetch HTML elements separately
+          try {
+            console.log('🚀 Navigation response detected, fetching HTML elements...');
+            const htmlResponse = await fetch('http://localhost:5001/get-html-elements', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                user_query: userMessage,
+              }),
+            });
             
-            if (htmlData.status === 'success' && htmlData.html_elements && htmlData.html_elements.length > 0) {
-              console.log('✅ Got HTML elements, starting guide:', htmlData.html_elements);
-              await startGuide(htmlData.html_elements);
+            if (htmlResponse.ok) {
+              const htmlData = await htmlResponse.json();
               
-              // Add a note to the response that the guide has started
-              responseContent += '\n\n🎯 **Interactive guide started!** Follow the highlighted elements on the page.';
+              if (htmlData.status === 'success' && htmlData.html_elements && htmlData.html_elements.length > 0) {
+                console.log('✅ Got HTML elements, starting guide:', htmlData.html_elements);
+                await startGuide(htmlData.html_elements);
+                
+                // Add a note to the response that the guide has started
+                responseContent += '\n\n🎯 **Interactive guide started!** Follow the highlighted elements on the page.';
+              } else {
+                console.log('⚠️ No HTML elements received or empty list');
+              }
             } else {
-              console.log('⚠️ No HTML elements received or empty list');
+              console.log('⚠️ Failed to fetch HTML elements:', htmlResponse.status);
             }
-          } else {
-            console.log('⚠️ Failed to fetch HTML elements:', htmlResponse.status);
+          } catch (htmlError) {
+            console.error('❌ Error fetching HTML elements:', htmlError);
+            // Don't break the main flow if HTML element fetching fails
           }
-        } catch (htmlError) {
-          console.error('❌ Error fetching HTML elements:', htmlError);
-          // Don't break the main flow if HTML element fetching fails
         }
       }
       
